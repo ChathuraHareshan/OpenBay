@@ -20,7 +20,7 @@
         <mapping class="lk.karu.openbay.entity.Color"/>
         <mapping class="lk.karu.openbay.entity.Product"/>
         <mapping class="lk.karu.openbay.entity.ProductImage"/>
-        <mapping class="lk.karu.openbay.entity.ProductImage"/>
+        <mapping class="lk.karu.openbay.entity.ProductVariant"/>
         <mapping class="lk.karu.openbay.entity.Size"/>
 
     </session-factory>

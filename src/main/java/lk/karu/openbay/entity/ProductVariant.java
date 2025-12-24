@@ -34,6 +34,9 @@ public class ProductVariant {
     @OneToMany(mappedBy = "variant", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductImage> images;
 
+    private double price;
+
+
 
     public Long getId() {
         return id;
@@ -81,5 +84,13 @@ public class ProductVariant {
 
     public void setImages(List<ProductImage> images) {
         this.images = images;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

@@ -15,7 +15,6 @@ public class Product extends BaseEntity {
     private String name;
     private String description;
 
-    private double price;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
@@ -49,13 +48,6 @@ public class Product extends BaseEntity {
         this.description = description;
     }
 
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
 
     public Category getCategory() {
         return category;
