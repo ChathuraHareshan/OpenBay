@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Molla - Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/login.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
+            background-color: #f9f9f9;
+            line-height: 1;
+
+            background-image: url('assets/images/backgrounds/1.png');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+    </style>
+
+</head>
+
+<body>
+<div class="login-container">
+    <div class="login-wrapper">
+        <!-- Left side with branding and info -->
+        <div class="login-left">
+            <!-- SVG Decorations -->
+<!--             <div class="svg-decoration svg-1">-->
+<!--                <svg viewBox="0 0 100 100">-->
+<!--                    <circle cx="50" cy="50" r="45" stroke="#cc9966" stroke-width="2" fill="none"/>-->
+<!--                    <path d="M30,50 Q50,30 70,50 T90,50" stroke="#cc9966" stroke-width="2" fill="none"/>-->
+<!--                </svg>-->
+<!--            </div>-->
+<!--            <div class="svg-decoration svg-2">-->
+<!--                <svg viewBox="0 0 100 100">-->
+<!--                    <rect x="20" y="20" width="60" height="60" rx="10" fill="#cc9966"/>-->
+<!--                </svg>-->
+<!--            </div>-->
+<!--            <div class="svg-decoration svg-3">-->
+<!--                <svg viewBox="0 0 100 100">-->
+<!--                    <polygon points="50,10 90,90 10,90" fill="#cc9966"/>-->
+<!--                </svg>-->
+<!--            </div>-->
+
+            <!-- Logo Area -->
+            <div class="logo-area">
+                <img src="assets/2.png" width="200" alt="">
+            </div>
+
+            <!-- Welcome Text -->
+            <div class="welcome-text">
+                <h1>Welcome Back</h1>
+                <p>Sign in to your account to access exclusive features, track your orders, and manage your
+                    preferences.</p>
+            </div>
+
+            <!-- Features List -->
+            <ul class="features-list">
+                <li>
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                    d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,7C13.4,7 14.8,8.1 14.8,9.5V11C15.4,11 16,11.6 16,12.3V15.8C16,16.4 15.4,17 14.7,17H9.2C8.6,17 8,16.4 8,15.7V12.2C8,11.6 8.6,11 9.2,11V9.5C9.2,8.1 10.6,7 12,7M12,8.2C11.2,8.2 10.5,8.7 10.5,9.5V11H13.5V9.5C13.5,8.7 12.8,8.2 12,8.2Z" />
+                        </svg>
+                    </div>
+                    <div class="feature-text">
+                        <h4>Secure Login</h4>
+                        <p>Your information is protected with industry-standard encryption.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                    d="M13,9H18.5L13,3.5V9M6,2H14L20,8V20C20,21.1 19.1,22 18,22H6C4.89,22 4,21.1 4,20V4C4,2.89 4.89,2 6,2M15,18V16H6V18H15M18,14V12H6V14H18Z" />
+                        </svg>
+                    </div>
+                    <div class="feature-text">
+                        <h4>Fast Checkout</h4>
+                        <p>Save your details for quicker purchases and order tracking.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                    d="M12,15C12.81,15 13.5,14.7 14.11,14.11C14.7,13.5 15,12.81 15,12C15,11.19 14.7,10.5 14.11,9.89C13.5,9.3 12.81,9 12,9C11.19,9 10.5,9.3 9.89,9.89C9.3,10.5 9,11.19 9,12C9,12.81 9.3,13.5 9.89,14.11C10.5,14.7 11.19,15 12,15M12,2C14.75,2 17.1,3 19.05,4.95C21,6.9 22,9.25 22,12V13.45C22,14.45 21.65,15.3 21,16C20.3,16.67 19.5,17 18.5,17C17.3,17 16.31,16.5 15.56,15.5C14.56,16.5 13.38,17 12,17C10.63,17 9.45,16.5 8.46,15.54C7.5,14.55 7,13.38 7,12C7,10.63 7.5,9.45 8.46,8.46C9.45,7.5 10.63,7 12,7C13.38,7 14.55,7.5 15.54,8.46C16.5,9.45 17,10.63 17,12V13.45C17,13.86 17.16,14.22 17.46,14.53C17.76,14.84 18.11,15 18.5,15C18.92,15 19.27,14.84 19.57,14.53C19.87,14.22 20,13.86 20,13.45V12C20,9.81 19.23,7.93 17.65,6.35C16.07,4.77 14.19,4 12,4C9.81,4 7.93,4.77 6.35,6.35C4.77,7.93 4,9.81 4,12C4,14.19 4.77,16.07 6.35,17.65C7.93,19.23 9.81,20 12,20H17V22H12C9.25,22 6.9,21 4.95,19.05C3,17.1 2,14.75 2,12C2,9.25 3,6.9 4.95,4.95C6.9,3 9.25,2 12,2Z" />
+                        </svg>
+                    </div>
+                    <div class="feature-text">
+                        <h4>Personalized Experience</h4>
+                        <p>Get recommendations tailored to your shopping preferences.</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Right side with forms -->
+        <div class="login-right">
+            <!-- Form Tabs -->
+            <div class="form-tab">
+                <ul class="nav nav-pills nav-fill" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="signin-tab-2" data-bs-toggle="pill" href="#signin-2"
+                           role="tab" aria-controls="signin-2" aria-selected="true">Sign In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="register-tab-2" data-bs-toggle="pill" href="#register-2" role="tab"
+                           aria-controls="register-2" aria-selected="false">Register</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="tab-content">
+                <!-- Sign In Form -->
+                <div class="tab-pane fade show active" id="signin-2" role="tabpanel" aria-labelledby="signin-tab-2">
+                    <form action="#">
+                        <div class="form-group">
+                            <label>Username or email address <span style="color: red">*</span></label>
+                            <input type="text" class="form-control" id="singin-email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Password <span style="color: red">*</span></label>
+                            <input type="password" class="form-control" id="singin-password" required>
+                        </div>
+
+                        <div class="form-footer">
+
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="signin-remember">
+                                <label class="form-check-label" >Remember Me</label>
+                            </div>
+
+                            <a href="#" class="forgot-link">Forgot Your Password?</a>
+                        </div>
+
+                        <button type="button" class="btn btn-outline-primary-2 mt-4" onclick="SignIn();">
+                            <span>LOG IN</span>
+                            <i class="fas fa-arrow-right ms-2"></i>
+                        </button>
+
+
+                    </form>
+
+                    <div class="form-choice">
+                        <p class="text-center">or sign in with</p>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <a href="#" class="btn btn-login btn-g">
+                                    <i class="fab fa-google"></i>
+                                    Login With Google
+                                </a>
+                            </div>
+                            <div class="col-sm-6">
+                                <a href="#" class="btn btn-login btn-f">
+                                    <i class="fab fa-facebook-f"></i>
+                                    Login With Facebook
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Register Form -->
+                <div class="tab-pane fade" id="register-2" role="tabpanel" aria-labelledby="register-tab-2">
+                    <form action="#">
+                        <div class="form-group">
+                            <label>First Name <span style="color: red">*</span></label>
+                            <input type="text" class="form-control" id="fname" name="register-email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Last Name <span style="color: red">*</span></label>
+                            <input type="text" class="form-control" id="lname" name="register-email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Your email address <span style="color: red">*</span></label>
+                            <input type="email" class="form-control" id="register-email" name="register-email"
+                                   required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Password <span style="color: red">*</span></label>
+                            <input type="password" class="form-control" id="register-password"
+                                   name="register-password" required>
+                        </div>
+
+                        <div class="form-footer">
+
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="register-policy-2" required>
+                                <label class="form-check-label" for="register-policy-2">I agree to the <a href="#"
+                                                                                                          class="privacyLabel">privacy policy</a> <span
+                                        style="color: red">*</span></label>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-outline-primary-2 mt-4" onclick="signUp();">
+                            <span>SIGN UP</span>
+                            <i class="fas fa-arrow-right ms-2"></i>
+                        </button>
+                    </form>
+
+                    <div class="form-choice">
+                        <p class="text-center">or sign in with</p>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <a href="#" class="btn btn-login btn-g">
+                                    <i class="fab fa-google"></i>
+                                    Login With Google
+                                </a>
+                            </div>
+                            <div class="col-sm-6">
+                                <a href="#" class="btn btn-login btn-f">
+                                    <i class="fab fa-facebook-f"></i>
+                                    Login With Facebook
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/notiflix-aio-3.2.8.min.js"></script>
+<script src="assets/js/sign-up.js"></script>
+<script src="assets/js/sign-in.js"></script>
+
+
+
+</body>
+
+</html>

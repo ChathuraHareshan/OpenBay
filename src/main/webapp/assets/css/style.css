@@ -18450,7 +18450,9 @@ button:focus {
 }
 
 .icon-viacoin:before {
-    content: '\f237'
+    content: '\f237';
+    color: #ffffff;
+
 }
 
 .icon-medium:before {

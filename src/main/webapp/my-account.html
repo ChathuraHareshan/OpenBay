@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Dashboard - E-Commerce Site</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/myAccount.css">
+
+
+</head>
+<body class="body">
+
+<!-- Mobile Menu Toggle -->
+<button class="mobile-menu-toggle" id="mobileMenuToggle">
+    <i class="fas fa-bars"></i> Menu
+</button>
+
+<!-- Mobile Tab Navigation -->
+<div class="mobile-tab-nav" id="mobileTabNav">
+    <a href="#" class="mobile-tab-item active"  data-tab="dashboard">
+        <i class="fas fa-chart-line"></i> Dashboard
+    </a>
+    <a href="#" class="mobile-tab-item" id="profile-anchor-mobile" data-tab="profile">
+        <i class="fas fa-user"></i> Profile
+    </a>
+    <a href="#" class="mobile-tab-item" id="address-anchor-mobile" data-tab="address">
+        <i class="fas fa-map-marker-alt"></i> Address
+    </a>
+    <a href="#" class="mobile-tab-item" data-tab="password">
+        <i class="fas fa-key"></i> Password
+    </a>
+    <a href="#" class="mobile-tab-item" data-tab="orders">
+        <i class="fas fa-shopping-bag"></i> Orders
+    </a>
+    <a href="#" class="mobile-tab-item" data-tab="products">
+        <i class="fas fa-box"></i> Products
+    </a>
+    <a href="#" class="mobile-tab-item" data-tab="add-product">
+        <i class="fas fa-plus-circle"></i> Add Product
+    </a>
+</div>
+
+<div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="profile-summary">
+            <div class="profile-img-wrapper">
+                <div class="profile-img-container">
+                    <img src="https://ui-avatars.com/api/?name=Chathura+Hareshan&background=1cc0a0&color=fff&size=100"
+                         alt="Profile"
+                         class="profile-img"
+                         id="profileImage">
+                    <div class="profile-img-edit">
+                        <i class="fas fa-pen"></i>
+                    </div>
+                </div>
+                <input type="file" id="profilePhotoInput" accept="image/*" style="display: none;">
+            </div>
+            <h2 class="user-name">Chathura Hareshan</h2>
+            <p class="user-email">chathura.hareshan142@gmail.com</p>
+            <button class="btn btn-primary btn-small" id="updatePhotoBtn">Update Photo</button>
+        </div>
+
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="#" class="nav-link active" data-tab="dashboard">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="profile-anchor" data-tab="profile">
+                    <i class="fas fa-user"></i> Profile
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="address-anchor" data-tab="address">
+                    <i class="fas fa-map-marker-alt"></i> Address
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-tab="password">
+                    <i class="fas fa-key"></i> Password Reset
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-tab="orders">
+                    <i class="fas fa-shopping-bag"></i> Orders
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-tab="products">
+                    <i class="fas fa-box"></i> My Products
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-tab="add-product">
+                    <i class="fas fa-plus-circle"></i> Add Product
+                </a>
+            </li>
+        </ul>
+
+        <div class="footer">
+            <p>&copy; 2025 OpenBay</p>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-header">
+
+            <h1 class="content-title"><i class="fas fa-chart-line"></i> Dashboard Overview</h1>
+
+            <div class="breadcrumb">
+                <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                <span class="separator">›</span>
+                <a>My Account</a>
+                <span class="separator">›</span>
+                <span class="current">My Account</span>
+            </div>
+
+        </div>
+
+
+
+        <div class="tab-content-container">
+            <!-- Dashboard Tab -->
+            <div id="dashboard" class="tab-content active">
+                <div class="dashboard-cards">
+                    <div class="card">
+                        <div class="card-title">Recent Orders</div>
+                        <div class="card-value">12</div>
+                        <div class="card-change positive">
+                            <i class="fas fa-arrow-up"></i> 8% from last month
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Total Sales</div>
+                        <div class="card-value">$2,450</div>
+                        <div class="card-change positive">
+                            <i class="fas fa-arrow-up"></i> 12% from last month
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Products Listed</div>
+                        <div class="card-value">24</div>
+                        <div class="card-change positive">
+                            <i class="fas fa-arrow-up"></i> 3 new this week
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Total Profit</div>
+                        <div class="card-value">$1,280</div>
+                        <div class="card-change negative">
+                            <i class="fas fa-arrow-down"></i> 2% from last month
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recent-orders">
+                    <h3 class="section-title">Recent Orders</h3>
+                    <ul class="order-list">
+                        <li class="order-item">
+                            <span class="order-id">ORD-78945</span>
+                            <span>July 15, 2023</span>
+                            <span>$128.50</span>
+                            <span class="order-status status-delivered">Delivered</span>
+                        </li>
+                        <li class="order-item">
+                            <span class="order-id">ORD-78944</span>
+                            <span>July 12, 2023</span>
+                            <span>$89.99</span>
+                            <span class="order-status status-pending">Pending</span>
+                        </li>
+                        <li class="order-item">
+                            <span class="order-id">ORD-78943</span>
+                            <span>July 10, 2023</span>
+                            <span>$245.75</span>
+                            <span class="order-status status-processing">Processing</span>
+                        </li>
+                        <li class="order-item">
+                            <span class="order-id">ORD-78942</span>
+                            <span>July 8, 2023</span>
+                            <span>$67.20</span>
+                            <span class="order-status status-delivered">Delivered</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="recent-products">
+                    <h3 class="section-title">Recently Added Products</h3>
+                    <ul class="product-list">
+                        <li class="product-item">
+                            <span class="product-name">Wireless Bluetooth Headphones</span>
+                            <span>$59.99</span>
+                            <span class="product-status status-active">Active</span>
+                        </li>
+                        <li class="product-item">
+                            <span class="product-name">Smart Fitness Watch</span>
+                            <span>$129.99</span>
+                            <span class="product-status status-active">Active</span>
+                        </li>
+                        <li class="product-item">
+                            <span class="product-name">USB-C Fast Charger</span>
+                            <span>$24.99</span>
+                            <span class="product-status status-pending">Pending Review</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Profile Tab -->
+            <div id="profile" class="tab-content">
+                <form>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" class="form-control" >
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" class="form-control" >
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="primaryLineOne" >Address Line One</label>
+                            <input type="text" id="primaryLineOne" class="form-control" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="primaryLineTwo" >Address Line Two</label>
+                            <input type="text" id="primaryLineTwo" class="form-control" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="PrimaryCity">City</label>
+                            <select id="PrimaryCity" class="form-control" disabled>
+                                <option value="0">Select City</option>
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="primaryPCode" >Postal Code</label>
+                            <input type="text" id="primaryPCode" class="form-control" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="primaryMobile">Phone Number</label>
+                        <input type="tel" id="primaryMobile" class="form-control" disabled>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-primary" onclick="saveChanges();">Save Changes</button>
+                        <button type="button" class="btn btn-secondary" id="cancelProfile">Cancel</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Address Tab -->
+            <div id="address" class="tab-content">
+                <div class="tab-content-inner">
+                    <div class="address-cards" id="addressList">
+
+<!--                        <div class="address-card primary">-->
+<!--                            <div class="address-card-badge">-->
+<!--                                <i class="fas fa-star"></i> Primary Address-->
+<!--                            </div>-->
+<!--                            <div class="address-card-body">-->
+<!--                                <h4 class="address-card-title">Home Address</h4>-->
+<!--                                <div class="address-card-content">-->
+<!--                                    <p><i class="fas fa-user"></i> Chathura Hareshan</p>-->
+<!--                                    <p><i class="fas fa-home"></i> 39/A, Mahawaththa kotugoda</p>-->
+<!--                                    <p><i class="fas fa-map-marker"></i> Ja ela</p>-->
+<!--                                    <p><i class="fas fa-phone"></i> 0769771090</p>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="address-card-actions">-->
+<!--                                <button class="btn btn-outline btn-small" onclick="editAddress(1)">-->
+<!--                                    <i class="fas fa-edit"></i> Edit-->
+<!--                                </button>-->
+<!--                                <button class="btn btn-danger btn-small" onclick="deleteAddress(1)">-->
+<!--                                    <i class="fas fa-trash"></i> Delete-->
+<!--                                </button>-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+<!--                        <div class="address-card">-->
+<!--                            <div class="address-card-badge">-->
+<!--                                Secondary-->
+<!--                            </div>-->
+<!--                            <div class="address-card-body">-->
+<!--                                <h4 class="address-card-title">Work Address</h4>-->
+<!--                                <div class="address-card-content">-->
+<!--                                    <p><i class="fas fa-user"></i> Chathura Hareshan</p>-->
+<!--                                    <p><i class="fas fa-home"></i> 39, Mahawaththa kotugoda</p>-->
+<!--                                    <p><i class="fas fa-map-marker"></i> Ja ela</p>-->
+<!--                                    <p><i class="fas fa-phone"></i> 0769771090</p>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="address-card-actions">-->
+<!--                                <button class="btn btn-primary btn-small" onclick="setPrimaryAddress(2)">-->
+<!--                                    <i class="fas fa-star"></i> Make Primary-->
+<!--                                </button>-->
+<!--                                <button class="btn btn-outline btn-small" onclick="editAddress(2)">-->
+<!--                                    <i class="fas fa-edit"></i> Edit-->
+<!--                                </button>-->
+<!--                                <button class="btn btn-outline btn-small" onclick="deleteAddress(2)">-->
+<!--                                    <i class="fas fa-trash"></i> Delete-->
+<!--                                </button>-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+                        <!-- Add New Address Card (Clickable) -->
+                        <div class="address-card add-new" id="addAddressCard">
+                            <div class="add-new-content">
+                                <i class="fas fa-plus-circle"></i>
+                                <h4>Add New Address</h4>
+                                <p>Click to add a new shipping address</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Edit Address Modal -->
+                    <div class="modal-overlay" id="editAddressModal" style="display: none;">
+                        <div class="modal-container">
+                            <div class="modal-header">
+                                <h3 class="modal-title">
+                                    <i class="fas fa-edit"></i> Edit Address
+                                </h3>
+                                <button class="modal-close" id="closeEditModal" onclick="closeEditModal();" >
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+
+                            <div class="modal-body">
+                                <form id="editAddressForm">
+
+
+                                    <div class="form-group">
+                                        <label for="editAddressLine1">Address Line 1 *</label>
+                                        <input type="text" id="editAddressLine1" class="form-control" placeholder="House number, street" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="editAddressLine2">Address Line 2 (Optional)</label>
+                                        <input type="text" id="editAddressLine2" class="form-control" placeholder="Apartment, suite, unit">
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="editCity">City *</label>
+                                            <select id="editCity" class="form-control" required>
+                                                <option value="0">Select city</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="editPostalCode">Postal Code *</label>
+                                            <input type="text" id="editPostalCode" class="form-control" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+
+                                        <div class="form-group">
+                                            <label for="editPhone">Phone Number *</label>
+                                            <input type="tel" id="editPhone" class="form-control" required>
+                                        </div>
+                                    </div>
+
+
+                                </form>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" id="cancelEditModal" onclick="closeEditModal();">Cancel</button>
+                                <button type="button" class="btn btn-primary" id="saveEditAddress" onclick="saveEditAddress();">Save Changes</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Add/Edit Address Form (Hidden by default) -->
+                    <div class="address-form-container" id="addressFormContainer" style="display: none;">
+                        <div class="address-form-header">
+                            <h3 class="section-title" id="addressFormTitle">Add New Address</h3>
+                            <button class="btn btn-secondary btn-small" id="closeAddressForm">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+
+                        <form id="addressForm">
+
+                            <div class="form-group">
+                                <label for="newAddressLine1">Address Line 1</label>
+                                <input type="text" id="newAddressLine1" class="form-control" placeholder="House number, street" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="newAddressLine2">Address Line 2 (Optional)</label>
+                                <input type="text" id="newAddressLine2" class="form-control" placeholder="Apartment, suite, unit">
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="newCity">City</label>
+                                    <select id="newCity" class="form-control" >
+                                        <option value="0">Select City</option>
+
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="newPostalCode">Postal Code</label>
+                                    <input type="text" id="newPostalCode" class="form-control" required>
+                                </div>
+                            </div>
+
+
+                                <div class="form-group">
+                                    <label for="newMobile">Phone Number</label>
+                                    <input type="tel" id="newMobile" class="form-control" placeholder="077"  required>
+                                </div>
+
+
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary" id="saveAddressBtn" onclick="addNewAddress();">Save Address</button>
+                                <button type="button" class="btn btn-secondary" id="cancelAddressBtn">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Password Reset Tab -->
+            <div id="password" class="tab-content">
+                <form>
+                    <div class="form-group">
+                        <label for="currentPassword">Current Password</label>
+                        <input type="password" id="currentPassword" class="form-control" placeholder="Enter your current password">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="newPassword">New Password</label>
+                            <input type="password" id="newPassword" class="form-control" placeholder="Enter new password">
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm New Password</label>
+                            <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm new password">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="password-requirements">
+                            <p><strong>Password Requirements:</strong></p>
+                            <ul>
+                                <li>At least 8 characters long</li>
+                                <li>Contains at least one uppercase letter</li>
+                                <li>Contains at least one number</li>
+                                <li>Contains at least one special character</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-primary" onclick="changePassword();">Change Password</button>
+                        <button type="button" class="btn btn-secondary" id="cancelPassword">Cancel</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Orders Tab -->
+            <div id="orders" class="tab-content">
+                <div class="recent-orders">
+                    <h3 class="section-title">All Orders</h3>
+                    <ul class="order-list">
+                        <li class="order-item">
+                            <span class="order-id">ORD-78945</span>
+                            <span>July 15, 2023</span>
+                            <span>$128.50</span>
+                            <span class="order-status status-delivered">Delivered</span>
+                            <button class="btn btn-primary btn-small">View Details</button>
+                        </li>
+                        <li class="order-item">
+                            <span class="order-id">ORD-78944</span>
+                            <span>July 12, 2023</span>
+                            <span>$89.99</span>
+                            <span class="order-status status-pending">Pending</span>
+                            <button class="btn btn-primary btn-small">Track Order</button>
+                        </li>
+                        <li class="order-item">
+                            <span class="order-id">ORD-78943</span>
+                            <span>July 10, 2023</span>
+                            <span>$245.75</span>
+                            <span class="order-status status-processing">Processing</span>
+                            <button class="btn btn-primary btn-small">Track Order</button>
+                        </li>
+                        <li class="order-item">
+                            <span class="order-id">ORD-78942</span>
+                            <span>July 8, 2023</span>
+                            <span>$67.20</span>
+                            <span class="order-status status-delivered">Delivered</span>
+                            <button class="btn btn-primary btn-small">View Details</button>
+                        </li>
+                        <li class="order-item">
+                            <span class="order-id">ORD-78941</span>
+                            <span>July 5, 2023</span>
+                            <span>$150.00</span>
+                            <span class="order-status status-delivered">Delivered</span>
+                            <button class="btn btn-primary btn-small">View Details</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- My Products Tab -->
+            <div id="products" class="tab-content">
+                <div class="section-title">My Products</div>
+
+                <div class="products-grid">
+                    <div class="product-card">
+                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Wireless Headphones" class="product-img">
+                        <div class="product-info">
+                            <h3 class="product-title">Wireless Bluetooth Headphones</h3>
+                            <p class="product-price">$59.99</p>
+                            <p>Noise-cancelling over-ear headphones with 30hr battery</p>
+                            <div class="product-actions">
+                                <button class="btn btn-primary btn-small">Edit</button>
+                                <button class="btn btn-secondary btn-small">View</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Smart Watch" class="product-img">
+                        <div class="product-info">
+                            <h3 class="product-title">Smart Fitness Watch</h3>
+                            <p class="product-price">$129.99</p>
+                            <p>Track heart rate, sleep, and workouts with GPS</p>
+                            <div class="product-actions">
+                                <button class="btn btn-primary btn-small">Edit</button>
+                                <button class="btn btn-secondary btn-small">View</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <img src="https://images.unsplash.com/photo-1583394838336-acd977736f90?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Charger" class="product-img">
+                        <div class="product-info">
+                            <h3 class="product-title">USB-C Fast Charger</h3>
+                            <p class="product-price">$24.99</p>
+                            <p>65W PD fast charging for laptops and phones</p>
+                            <div class="product-actions">
+                                <button class="btn btn-primary btn-small">Edit</button>
+                                <button class="btn btn-secondary btn-small">View</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Product Tab -->
+            <div id="add-product" class="tab-content">
+                <div class="section-title">Add New Product</div>
+
+                <form >
+                    <div class="form-group">
+                        <label for="productName">Product Name *</label>
+                        <input type="text" id="productName" class="form-control" placeholder="Enter product name" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="productPrice">Price ($) *</label>
+                            <input type="number" id="productPrice" class="form-control" placeholder="0.00" step="0.01" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productCategory">Category *</label>
+                            <select id="productCategory" class="form-control" required>
+                                <option value="">Select category</option>
+                                <option value="electronics">Electronics</option>
+                                <option value="clothing">Clothing</option>
+                                <option value="home">Home & Kitchen</option>
+                                <option value="books">Books</option>
+                                <option value="sports">Sports & Outdoors</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productDescription">Description *</label>
+                        <textarea id="productDescription" class="form-control" placeholder="Describe your product in detail" rows="4" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Product Images *</label>
+                        <div class="file-upload" id="fileUploadArea">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p class="file-upload-text">Drag & drop images here or click to browse</p>
+                            <p class="file-upload-text" style="font-size: 0.8rem;">Supported formats: JPG, PNG, GIF (Max 5MB each)</p>
+                        </div>
+                        <input type="file" id="productImages" multiple accept="image/*" style="display: none;">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="productStock">Stock Quantity *</label>
+                            <input type="number" id="productStock" class="form-control" placeholder="0" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productSKU">SKU (Stock Keeping Unit)</label>
+                            <input type="text" id="productSKU" class="form-control" placeholder="Optional">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input type="checkbox" id="productActive" class="form-check-input" checked>
+                            <label for="productActive" class="form-check-label">List product immediately (make it active)</label>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Add Product</button>
+                        <button type="button" class="btn btn-secondary" id="cancelAddProduct">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="assets/js/userAccount.js"></script>
+<script src="assets/js/notiflix-aio-3.2.8.min.js"></script>
+
+<script>
+
+    // function closeEditModal() {
+    //     const modal = document.getElementById('editAddressModal');
+    //     if (modal) {
+    //         modal.style.display = 'none';
+    //         document.body.style.overflow = '';
+    //         currentEditingAddressId = null;
+    //         document.getElementById('editAddressForm').reset();
+    //     }
+    // }
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const navLinks = document.querySelectorAll('.nav-link');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const mobileTabItems = document.querySelectorAll('.mobile-tab-item');
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const sidebar = document.querySelector('.sidebar');
+
+        const mobileOverlay = document.createElement('div');
+        mobileOverlay.className = 'mobile-sidebar-overlay';
+        document.body.appendChild(mobileOverlay);
+
+        function switchTab(tabId) {
+            navLinks.forEach(item => item.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+            mobileTabItems.forEach(item => item.classList.remove('active'));
+
+            const activeTab = document.getElementById(tabId);
+            if (activeTab) {
+                activeTab.classList.add('active');
+
+                setTimeout(() => {
+                    activeTab.scrollTop = 0;
+                }, 10);
+            }
+
+            document.querySelector(`.nav-link[data-tab="${tabId}"]`)?.classList.add('active');
+
+            document.querySelector(`.mobile-tab-item[data-tab="${tabId}"]`)?.classList.add('active');
+
+            updateContentHeader(tabId);
+            updateBreadcrumb(tabId);
+
+            closeMobileMenu();
+        }
+
+        // Desktop navigation
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const tabId = this.getAttribute('data-tab');
+                switchTab(tabId);
+            });
+        });
+
+        // Mobile tab navigation
+        mobileTabItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const tabId = this.getAttribute('data-tab');
+                switchTab(tabId);
+            });
+        });
+
+        // Mobile menu toggle
+        function openMobileMenu() {
+            sidebar.classList.add('active');
+            mobileOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileMenu() {
+            sidebar.classList.remove('active');
+            mobileOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        if (mobileMenuToggle) {
+            mobileMenuToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                openMobileMenu();
+            });
+        }
+
+        // Close sidebar when clicking overlay
+        mobileOverlay.addEventListener('click', function() {
+            closeMobileMenu();
+        });
+
+        // Close sidebar with escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeMobileMenu();
+            }
+        });
+
+        // Function to update content header
+        function updateContentHeader(tabId) {
+            const contentTitle = document.querySelector('.content-title');
+            const titles = {
+                'dashboard': '<i class="fas fa-chart-line"></i> Dashboard Overview',
+                'profile': '<i class="fas fa-user"></i> Personal Information',
+                'address': '<i class="fas fa-map-marker-alt"></i> Address Details',
+                'password': '<i class="fas fa-key"></i> Password Reset',
+                'orders': '<i class="fas fa-shopping-bag"></i> My Orders',
+                'products': '<i class="fas fa-box"></i> My Products',
+                'add-product': '<i class="fas fa-plus-circle"></i> Add New Product'
+            };
+
+            if (titles[tabId] && contentTitle) {
+                contentTitle.innerHTML = titles[tabId];
+            }
+        }
+
+        // Function to update breadcrumb
+        function updateBreadcrumb(tabId) {
+            const breadcrumb = document.querySelector('.breadcrumb .current');
+            const tabNames = {
+                'dashboard': 'Dashboard',
+                'profile': 'Profile',
+                'address': 'Address',
+                'password': 'Password',
+                'orders': 'Orders',
+                'products': 'My Products',
+                'add-product': 'Add Product'
+            };
+
+            if (breadcrumb && tabNames[tabId]) {
+                breadcrumb.textContent = tabNames[tabId];
+            }
+        }
+
+
+        // Profile picture upload functionality
+        const profileImgContainer = document.querySelector('.profile-img-container');
+        const profileImage = document.getElementById('profileImage');
+        const profilePhotoInput = document.getElementById('profilePhotoInput');
+
+        if (profileImgContainer && profilePhotoInput) {
+            profileImgContainer.addEventListener('click', function(e) {
+                e.stopPropagation();
+                profilePhotoInput.click();
+            });
+
+            profilePhotoInput.addEventListener('change', function(e) {
+                if (e.target.files && e.target.files[0]) {
+                    const file = e.target.files[0];
+
+                    if (!file.type.match('image.*')) {
+                        alert('Please select an image file (JPG, PNG, GIF, etc.)');
+                        return;
+                    }
+
+                    if (file.size > 5 * 1024 * 1024) {
+                        alert('Image size should be less than 5MB');
+                        return;
+                    }
+
+                    const reader = new FileReader();
+
+                    reader.onload = function(event) {
+                        profileImage.src = event.target.result;
+                        alert('Profile photo updated successfully!');
+                    };
+
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        document.getElementById('updatePhotoBtn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (profilePhotoInput) {
+                profilePhotoInput.click();
+            }
+        });
+
+        // File upload for product images
+        const fileUploadArea = document.getElementById('fileUploadArea');
+        const fileInput = document.getElementById('productImages');
+
+        if (fileUploadArea && fileInput) {
+            fileUploadArea.addEventListener('click', function() {
+                fileInput.click();
+            });
+
+            fileUploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.style.borderColor = 'var(--primary-color)';
+                this.style.backgroundColor = 'var(--primary-light)';
+            });
+
+            fileUploadArea.addEventListener('dragleave', function() {
+                this.style.borderColor = 'var(--medium-gray)';
+                this.style.backgroundColor = 'transparent';
+            });
+
+            fileUploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.style.borderColor = 'var(--medium-gray)';
+                this.style.backgroundColor = 'transparent';
+
+                if (e.dataTransfer.files.length) {
+                    fileInput.files = e.dataTransfer.files;
+                    alert(`${e.dataTransfer.files.length} file(s) selected`);
+                }
+            });
+
+            fileInput.addEventListener('change', function() {
+                if (this.files.length) {
+                    alert(`${this.files.length} file(s) selected`);
+                }
+            });
+        }
+
+        // Initialize
+        switchTab('dashboard');
+        updateDeleteButtons();
+
+        // Fix mobile scrolling issue
+        function fixMobileScrolling() {
+            const tabContainer = document.querySelector('.tab-content-container');
+            const activeTab = document.querySelector('.tab-content.active');
+
+            if (tabContainer && activeTab) {
+                // Ensure tab container has proper height
+                tabContainer.style.height = 'calc(100% - 70px)';
+
+                // Ensure active tab content is visible
+                activeTab.style.minHeight = '100%';
+
+                // Fix for mobile browsers
+                setTimeout(() => {
+                    tabContainer.scrollTop = 0;
+                }, 100);
+            }
+        }
+
+        // Call fix on tab switch
+        const originalSwitchTab = switchTab;
+        switchTab = function(tabId) {
+            originalSwitchTab(tabId);
+            setTimeout(fixMobileScrolling, 50);
+        };
+
+        // Also fix on window resize
+        window.addEventListener('resize', fixMobileScrolling);
+
+        // Fix initial load
+        setTimeout(fixMobileScrolling, 300);
+    });
+</script>
+</body>
+</html>

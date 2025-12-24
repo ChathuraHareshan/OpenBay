@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Molla - Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/login.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
+            background-color: #f9f9f9;
+            line-height: 1;
+
+            background-image: url('assets/images/backgrounds/1.png');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+    </style>
+
+</head>
+
+<body>
+<div class="login-container">
+    <div class="login-wrapper">
+        <!-- Left side with branding and info -->
+        <div class="login-left">
+
+
+            <!-- Logo Area -->
+            <div class="logo-area">
+                <img src="assets/2.png" width="200" alt="">
+            </div>
+
+            <!-- Welcome Text -->
+            <div class="welcome-text">
+                <h1>Verify Your Account</h1>
+                <p>Please verify your email to secure your account and unlock all features. Click the button below to
+                    complete the process.
+                </p>
+                <img src="assets/images/svg/verify.svg" >
+            </div>
+        </div>
+
+        <!-- Right side with forms -->
+        <div class="login-right">
+            <!-- Form Tabs -->
+            <div class="form-tab">
+                <ul class="nav nav-pills nav-fill" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="signin-tab-2" data-bs-toggle="pill" href="#signin-2"
+                           role="tab" aria-controls="signin-2" aria-selected="true">Verify Account</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="signin-2" role="tabpanel" aria-labelledby="signin-tab-2">
+                    <form action="#">
+
+                        <div class="form-group">
+                            <label>Verification Code <span style="color: red">*</span></label>
+                            <input type="text" class="form-control" id="verificationCode" required>
+                        </div>
+
+
+
+                        <button type="button" class="btn btn-outline-primary-2 mt-4" onclick="verifyAccount();">
+                            <span>VERIFY & CONTINUE</span>
+                            <i class="fas fa-arrow-right ms-2"></i>
+                        </button>
+
+
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/verify-account.js"></script>
+<script src="assets/js/notiflix-aio-3.2.8.min.js"></script>
+
+
+</body>
+
+</html>
