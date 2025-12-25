@@ -6,8 +6,6 @@
     <title>Account Dashboard - E-Commerce Site</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/myAccount.css">
-
-
 </head>
 <body class="body">
 
@@ -18,7 +16,7 @@
 
 <!-- Mobile Tab Navigation -->
 <div class="mobile-tab-nav" id="mobileTabNav">
-    <a href="#" class="mobile-tab-item active"  data-tab="dashboard">
+    <a href="#" class="mobile-tab-item active" data-tab="dashboard">
         <i class="fas fa-chart-line"></i> Dashboard
     </a>
     <a href="#" class="mobile-tab-item" id="profile-anchor-mobile" data-tab="profile">
@@ -108,9 +106,7 @@
     <!-- Main Content -->
     <main class="main-content">
         <div class="content-header">
-
             <h1 class="content-title"><i class="fas fa-chart-line"></i> Dashboard Overview</h1>
-
             <div class="breadcrumb">
                 <a href="index.html"><i class="fas fa-home"></i> Home</a>
                 <span class="separator">›</span>
@@ -118,10 +114,7 @@
                 <span class="separator">›</span>
                 <span class="current">My Account</span>
             </div>
-
         </div>
-
-
 
         <div class="tab-content-container">
             <!-- Dashboard Tab -->
@@ -215,21 +208,21 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="firstName">First Name</label>
-                            <input type="text" id="firstName" class="form-control" >
+                            <input type="text" id="firstName" class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="lastName">Last Name</label>
-                            <input type="text" id="lastName" class="form-control" >
+                            <input type="text" id="lastName" class="form-control">
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="primaryLineOne" >Address Line One</label>
+                            <label for="primaryLineOne">Address Line One</label>
                             <input type="text" id="primaryLineOne" class="form-control" disabled>
                         </div>
                         <div class="form-group">
-                            <label for="primaryLineTwo" >Address Line Two</label>
+                            <label for="primaryLineTwo">Address Line Two</label>
                             <input type="text" id="primaryLineTwo" class="form-control" disabled>
                         </div>
                     </div>
@@ -239,11 +232,10 @@
                             <label for="PrimaryCity">City</label>
                             <select id="PrimaryCity" class="form-control" disabled>
                                 <option value="0">Select City</option>
-
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="primaryPCode" >Postal Code</label>
+                            <label for="primaryPCode">Postal Code</label>
                             <input type="text" id="primaryPCode" class="form-control" disabled>
                         </div>
                     </div>
@@ -264,56 +256,6 @@
             <div id="address" class="tab-content">
                 <div class="tab-content-inner">
                     <div class="address-cards" id="addressList">
-
-<!--                        <div class="address-card primary">-->
-<!--                            <div class="address-card-badge">-->
-<!--                                <i class="fas fa-star"></i> Primary Address-->
-<!--                            </div>-->
-<!--                            <div class="address-card-body">-->
-<!--                                <h4 class="address-card-title">Home Address</h4>-->
-<!--                                <div class="address-card-content">-->
-<!--                                    <p><i class="fas fa-user"></i> Chathura Hareshan</p>-->
-<!--                                    <p><i class="fas fa-home"></i> 39/A, Mahawaththa kotugoda</p>-->
-<!--                                    <p><i class="fas fa-map-marker"></i> Ja ela</p>-->
-<!--                                    <p><i class="fas fa-phone"></i> 0769771090</p>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="address-card-actions">-->
-<!--                                <button class="btn btn-outline btn-small" onclick="editAddress(1)">-->
-<!--                                    <i class="fas fa-edit"></i> Edit-->
-<!--                                </button>-->
-<!--                                <button class="btn btn-danger btn-small" onclick="deleteAddress(1)">-->
-<!--                                    <i class="fas fa-trash"></i> Delete-->
-<!--                                </button>-->
-<!--                            </div>-->
-<!--                        </div>-->
-
-<!--                        <div class="address-card">-->
-<!--                            <div class="address-card-badge">-->
-<!--                                Secondary-->
-<!--                            </div>-->
-<!--                            <div class="address-card-body">-->
-<!--                                <h4 class="address-card-title">Work Address</h4>-->
-<!--                                <div class="address-card-content">-->
-<!--                                    <p><i class="fas fa-user"></i> Chathura Hareshan</p>-->
-<!--                                    <p><i class="fas fa-home"></i> 39, Mahawaththa kotugoda</p>-->
-<!--                                    <p><i class="fas fa-map-marker"></i> Ja ela</p>-->
-<!--                                    <p><i class="fas fa-phone"></i> 0769771090</p>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="address-card-actions">-->
-<!--                                <button class="btn btn-primary btn-small" onclick="setPrimaryAddress(2)">-->
-<!--                                    <i class="fas fa-star"></i> Make Primary-->
-<!--                                </button>-->
-<!--                                <button class="btn btn-outline btn-small" onclick="editAddress(2)">-->
-<!--                                    <i class="fas fa-edit"></i> Edit-->
-<!--                                </button>-->
-<!--                                <button class="btn btn-outline btn-small" onclick="deleteAddress(2)">-->
-<!--                                    <i class="fas fa-trash"></i> Delete-->
-<!--                                </button>-->
-<!--                            </div>-->
-<!--                        </div>-->
-
                         <!-- Add New Address Card (Clickable) -->
                         <div class="address-card add-new" id="addAddressCard">
                             <div class="add-new-content">
@@ -331,15 +273,13 @@
                                 <h3 class="modal-title">
                                     <i class="fas fa-edit"></i> Edit Address
                                 </h3>
-                                <button class="modal-close" id="closeEditModal" onclick="closeEditModal();" >
+                                <button class="modal-close" id="closeEditModal" onclick="closeEditModal();">
                                     <i class="fas fa-times"></i>
                                 </button>
                             </div>
 
                             <div class="modal-body">
                                 <form id="editAddressForm">
-
-
                                     <div class="form-group">
                                         <label for="editAddressLine1">Address Line 1 *</label>
                                         <input type="text" id="editAddressLine1" class="form-control" placeholder="House number, street" required>
@@ -364,14 +304,11 @@
                                     </div>
 
                                     <div class="form-row">
-
                                         <div class="form-group">
                                             <label for="editPhone">Phone Number *</label>
                                             <input type="tel" id="editPhone" class="form-control" required>
                                         </div>
                                     </div>
-
-
                                 </form>
                             </div>
 
@@ -392,7 +329,6 @@
                         </div>
 
                         <form id="addressForm">
-
                             <div class="form-group">
                                 <label for="newAddressLine1">Address Line 1</label>
                                 <input type="text" id="newAddressLine1" class="form-control" placeholder="House number, street" required>
@@ -406,9 +342,8 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="newCity">City</label>
-                                    <select id="newCity" class="form-control" >
+                                    <select id="newCity" class="form-control">
                                         <option value="0">Select City</option>
-
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -417,16 +352,13 @@
                                 </div>
                             </div>
 
-
-                                <div class="form-group">
-                                    <label for="newMobile">Phone Number</label>
-                                    <input type="tel" id="newMobile" class="form-control" placeholder="077"  required>
-                                </div>
-
-
+                            <div class="form-group">
+                                <label for="newMobile">Phone Number</label>
+                                <input type="tel" id="newMobile" class="form-control" placeholder="077" required>
+                            </div>
 
                             <div class="form-actions">
-                                <button type="submit" class="btn btn-primary" id="saveAddressBtn" onclick="addNewAddress();">Save Address</button>
+                                <button type="button" class="btn btn-primary" id="saveAddressBtn" onclick="addNewAddress();">Save Address</button>
                                 <button type="button" class="btn btn-secondary" id="cancelAddressBtn">Cancel</button>
                             </div>
                         </form>
@@ -519,7 +451,6 @@
             <!-- My Products Tab -->
             <div id="products" class="tab-content">
                 <div class="section-title">My Products</div>
-
                 <div class="products-grid">
                     <div class="product-card">
                         <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Wireless Headphones" class="product-img">
@@ -565,67 +496,161 @@
             <!-- Add Product Tab -->
             <div id="add-product" class="tab-content">
                 <div class="section-title">Add New Product</div>
+                <form id="addProductForm">
+                    <!-- Step 1: Basic Product Info -->
+                    <div class="form-step" id="step1">
+                        <h3 class="step-title">Step 1: Basic Information</h3>
 
-                <form >
-                    <div class="form-group">
-                        <label for="productName">Product Name *</label>
-                        <input type="text" id="productName" class="form-control" placeholder="Enter product name" required>
-                    </div>
-
-                    <div class="form-row">
                         <div class="form-group">
-                            <label for="productPrice">Price ($) *</label>
-                            <input type="number" id="productPrice" class="form-control" placeholder="0.00" step="0.01" min="0" required>
+                            <label for="productTitle">Product Title *</label>
+                            <input type="text" id="productTitle" class="form-control" placeholder="Enter product title" required>
                         </div>
+
                         <div class="form-group">
-                            <label for="productCategory">Category *</label>
-                            <select id="productCategory" class="form-control" required>
-                                <option value="">Select category</option>
-                                <option value="electronics">Electronics</option>
-                                <option value="clothing">Clothing</option>
-                                <option value="home">Home & Kitchen</option>
-                                <option value="books">Books</option>
-                                <option value="sports">Sports & Outdoors</option>
-                            </select>
+                            <label for="productDescription">Description *</label>
+                            <textarea id="productDescription" class="form-control" placeholder="Describe your product in detail" rows="4" required></textarea>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="productCategory">Category *</label>
+                                <select id="productCategory" class="form-control" required>
+                                    <option value="0">Select category</option>
+<!--                                    <option value="clothing">Clothing</option>-->
+<!--                                    <option value="shoes">Shoes</option>-->
+<!--                                    <option value="electronics">Electronics</option>-->
+<!--                                    <option value="accessories">Accessories</option>-->
+<!--                                    <option value="home">Home & Kitchen</option>-->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="productSKU">Product SKU</label>
+                                <input type="text" id="productSKU" class="form-control" placeholder="PROD-001">
+                            </div>
+                        </div>
+
+                        <div class="step-actions">
+                            <button type="button" class="btn btn-primary" id="nextToStep2">
+                                Next: Add Colors <i class="fas fa-arrow-right"></i>
+                            </button>
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="productDescription">Description *</label>
-                        <textarea id="productDescription" class="form-control" placeholder="Describe your product in detail" rows="4" required></textarea>
+                    <!-- Step 2: Color Variations -->
+                    <div class="form-step" id="step2" style="display: none;">
+                        <div class="step-header">
+                            <h3 class="step-title">Step 2: Add Color Variations</h3>
+                            <button type="button" class="btn btn-text" id="backToStep1">
+                                <i class="fas fa-arrow-left"></i> Back to Basic Info
+                            </button>
+                        </div>
+
+                        <div class="color-selection-section">
+                            <div class="section-header">
+                                <h4>Select Colors for Your Product</h4>
+                                <button type="button" class="btn btn-outline btn-small" id="addColorBtn">
+                                    <i class="fas fa-plus"></i> Add Color
+                                </button>
+                            </div>
+
+                            <!-- Color Selection Options -->
+                            <div class="color-selection-panel" id="colorSelectionPanel" style="display: none;">
+                                <div class="panel-header">
+                                    <h5>Select a Color</h5>
+                                    <button type="button" class="btn btn-text btn-small" id="closeColorPanel">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+
+                                <div class="color-options-grid" id="colorOptionsGrid">
+                                    <!-- Colors will be populated here -->
+                                </div>
+
+                                <div class="custom-color-section">
+                                    <h6>Or Create Custom Color</h6>
+                                    <div class="custom-color-input">
+                                        <input type="color" id="customColorPicker" class="color-picker-input">
+                                        <input type="text" id="customColorName" class="form-control" placeholder="Enter color name">
+                                        <button type="button" class="btn btn-outline btn-small" id="addCustomColorBtn">
+                                            Add
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Selected Colors List -->
+                            <div class="selected-colors-container" id="selectedColorsContainer">
+                                <div class="empty-state">
+                                    <i class="fas fa-palette"></i>
+                                    <p>No colors added yet. Click "Add Color" to select colors for your product.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step-actions">
+                            <button type="button" class="btn btn-secondary" id="backToStep1Bottom">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </button>
+                            <button type="button" class="btn btn-primary" id="nextToStep3">
+                                Next: Add Sizes & Prices <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label>Product Images *</label>
-                        <div class="file-upload" id="fileUploadArea">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            <p class="file-upload-text">Drag & drop images here or click to browse</p>
-                            <p class="file-upload-text" style="font-size: 0.8rem;">Supported formats: JPG, PNG, GIF (Max 5MB each)</p>
+                    <!-- Step 3: Add Sizes for Each Color -->
+                    <div class="form-step" id="step3" style="display: none;">
+                        <div class="step-header">
+                            <h3 class="step-title">Step 3: Add Sizes & Prices</h3>
+                            <button type="button" class="btn btn-text" id="backToStep2">
+                                <i class="fas fa-arrow-left"></i> Back to Colors
+                            </button>
                         </div>
-                        <input type="file" id="productImages" multiple accept="image/*" style="display: none;">
+
+                        <div class="color-sizes-container" id="colorSizesContainer">
+                            <!-- Color sections will be added here dynamically -->
+                            <div class="empty-state">
+                                <i class="fas fa-ruler-combined"></i>
+                                <p>Please add colors in the previous step first.</p>
+                            </div>
+                        </div>
+
+                        <div class="step-actions">
+                            <button type="button" class="btn btn-secondary" id="backToStep2Bottom">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </button>
+                            <button type="button" class="btn btn-primary" id="nextToStep4">
+                                Next: Add Images <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
                     </div>
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="productStock">Stock Quantity *</label>
-                            <input type="number" id="productStock" class="form-control" placeholder="0" min="0" required>
+                    <!-- Step 4: Add Images for Each Color -->
+                    <div class="form-step" id="step4" style="display: none;">
+                        <div class="step-header">
+                            <h3 class="step-title">Step 4: Add Product Images</h3>
+                            <button type="button" class="btn btn-text" id="backToStep3">
+                                <i class="fas fa-arrow-left"></i> Back to Sizes
+                            </button>
                         </div>
-                        <div class="form-group">
-                            <label for="productSKU">SKU (Stock Keeping Unit)</label>
-                            <input type="text" id="productSKU" class="form-control" placeholder="Optional">
-                        </div>
-                    </div>
 
-                    <div class="form-group">
-                        <div class="form-check">
-                            <input type="checkbox" id="productActive" class="form-check-input" checked>
-                            <label for="productActive" class="form-check-label">List product immediately (make it active)</label>
+                        <div class="color-images-container" id="colorImagesContainer">
+                            <!-- Color image sections will be added here dynamically -->
+                            <div class="empty-state">
+                                <i class="fas fa-images"></i>
+                                <p>Please add colors and sizes in the previous steps first.</p>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Add Product</button>
-                        <button type="button" class="btn btn-secondary" id="cancelAddProduct">Cancel</button>
+                        <!-- Form Actions -->
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" id="backToStep3Bottom">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </button>
+                            <button type="button" class="btn btn-primary" id="saveProductBtn">
+                                <i class="fas fa-save"></i> Save Product
+                            </button>
+                            <button type="button" class="btn btn-outline" id="cancelBtn">Cancel</button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -633,54 +658,51 @@
     </main>
 </div>
 
-<script src="assets/js/userAccount.js"></script>
-<script src="assets/js/notiflix-aio-3.2.8.min.js"></script>
-
 <script>
-
-    // function closeEditModal() {
-    //     const modal = document.getElementById('editAddressModal');
-    //     if (modal) {
-    //         modal.style.display = 'none';
-    //         document.body.style.overflow = '';
-    //         currentEditingAddressId = null;
-    //         document.getElementById('editAddressForm').reset();
-    //     }
-    // }
-
-
+    // Tab switching functionality
     document.addEventListener('DOMContentLoaded', function() {
         const navLinks = document.querySelectorAll('.nav-link');
         const tabContents = document.querySelectorAll('.tab-content');
         const mobileTabItems = document.querySelectorAll('.mobile-tab-item');
         const mobileMenuToggle = document.getElementById('mobileMenuToggle');
         const sidebar = document.querySelector('.sidebar');
+        const addAddressCard = document.getElementById('addAddressCard');
+        const addressFormContainer = document.getElementById('addressFormContainer');
+        const closeAddressForm = document.getElementById('closeAddressForm');
+        const cancelAddressBtn = document.getElementById('cancelAddressBtn');
 
         const mobileOverlay = document.createElement('div');
         mobileOverlay.className = 'mobile-sidebar-overlay';
         document.body.appendChild(mobileOverlay);
 
         function switchTab(tabId) {
+            // Hide all tab contents
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Remove active class from all nav links
             navLinks.forEach(item => item.classList.remove('active'));
-            tabContents.forEach(content => content.classList.remove('active'));
             mobileTabItems.forEach(item => item.classList.remove('active'));
 
+            // Show the selected tab
             const activeTab = document.getElementById(tabId);
             if (activeTab) {
                 activeTab.classList.add('active');
-
                 setTimeout(() => {
                     activeTab.scrollTop = 0;
                 }, 10);
             }
 
+            // Activate the corresponding nav link
             document.querySelector(`.nav-link[data-tab="${tabId}"]`)?.classList.add('active');
-
             document.querySelector(`.mobile-tab-item[data-tab="${tabId}"]`)?.classList.add('active');
 
+            // Update header and breadcrumb
             updateContentHeader(tabId);
             updateBreadcrumb(tabId);
 
+            // Close mobile menu
             closeMobileMenu();
         }
 
@@ -770,7 +792,6 @@
             }
         }
 
-
         // Profile picture upload functionality
         const profileImgContainer = document.querySelector('.profile-img-container');
         const profileImage = document.getElementById('profileImage');
@@ -815,80 +836,47 @@
             }
         });
 
-        // File upload for product images
-        const fileUploadArea = document.getElementById('fileUploadArea');
-        const fileInput = document.getElementById('productImages');
-
-        if (fileUploadArea && fileInput) {
-            fileUploadArea.addEventListener('click', function() {
-                fileInput.click();
-            });
-
-            fileUploadArea.addEventListener('dragover', function(e) {
+        // Address functionality
+        if (addAddressCard) {
+            addAddressCard.addEventListener('click', function(e) {
                 e.preventDefault();
-                this.style.borderColor = 'var(--primary-color)';
-                this.style.backgroundColor = 'var(--primary-light)';
-            });
-
-            fileUploadArea.addEventListener('dragleave', function() {
-                this.style.borderColor = 'var(--medium-gray)';
-                this.style.backgroundColor = 'transparent';
-            });
-
-            fileUploadArea.addEventListener('drop', function(e) {
-                e.preventDefault();
-                this.style.borderColor = 'var(--medium-gray)';
-                this.style.backgroundColor = 'transparent';
-
-                if (e.dataTransfer.files.length) {
-                    fileInput.files = e.dataTransfer.files;
-                    alert(`${e.dataTransfer.files.length} file(s) selected`);
-                }
-            });
-
-            fileInput.addEventListener('change', function() {
-                if (this.files.length) {
-                    alert(`${this.files.length} file(s) selected`);
+                if (addressFormContainer) {
+                    addressFormContainer.style.display = 'block';
+                    document.getElementById('addressFormTitle').textContent = 'Add New Address';
+                    document.getElementById('addressForm').reset();
+                    addressFormContainer.scrollIntoView({ behavior: 'smooth' });
                 }
             });
         }
 
-        // Initialize
+        if (closeAddressForm) {
+            closeAddressForm.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (addressFormContainer) {
+                    addressFormContainer.style.display = 'none';
+                }
+            });
+        }
+
+        if (cancelAddressBtn) {
+            cancelAddressBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (addressFormContainer) {
+                    addressFormContainer.style.display = 'none';
+                }
+            });
+        }
+
+        // Initialize with dashboard tab
         switchTab('dashboard');
-        updateDeleteButtons();
-
-        // Fix mobile scrolling issue
-        function fixMobileScrolling() {
-            const tabContainer = document.querySelector('.tab-content-container');
-            const activeTab = document.querySelector('.tab-content.active');
-
-            if (tabContainer && activeTab) {
-                // Ensure tab container has proper height
-                tabContainer.style.height = 'calc(100% - 70px)';
-
-                // Ensure active tab content is visible
-                activeTab.style.minHeight = '100%';
-
-                // Fix for mobile browsers
-                setTimeout(() => {
-                    tabContainer.scrollTop = 0;
-                }, 100);
-            }
-        }
-
-        // Call fix on tab switch
-        const originalSwitchTab = switchTab;
-        switchTab = function(tabId) {
-            originalSwitchTab(tabId);
-            setTimeout(fixMobileScrolling, 50);
-        };
-
-        // Also fix on window resize
-        window.addEventListener('resize', fixMobileScrolling);
-
-        // Fix initial load
-        setTimeout(fixMobileScrolling, 300);
     });
+
 </script>
+
+<!-- External JavaScript files -->
+<script src="assets/js/userAccount.js"></script>
+<script src="assets/js/notiflix-aio-3.2.8.min.js"></script>
+<script src="assets/js/addProduct.js"></script>
+
 </body>
 </html>

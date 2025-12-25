@@ -18,4 +18,29 @@ public class ContentController {
         return Response.ok().entity(loadAllCities).build();
     }
 
+    @Path("/category")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response loadCategory(){
+        String loadAllCategory = new ContentService().loadAllCategory();
+        return Response.ok().entity(loadAllCategory).build();
+    }
+
+    @GET
+    @Path("/colors")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response loadColors() {
+        String colorsJson = new ContentService().loadAllColors();
+        return Response.ok().entity(colorsJson).build();
+    }
+
+    @GET
+    @Path("/sizes")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response loadSizes() {
+        String sizesJson = new ContentService().loadAllSizes();
+        return Response.ok().entity(sizesJson).build();
+    }
+
+
 }

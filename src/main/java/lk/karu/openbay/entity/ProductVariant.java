@@ -2,41 +2,29 @@ package lk.karu.openbay.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(
-        name = "product_variants",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"product_id", "color_id", "size_id"})
-        }
-)
+@Table(name = "product_variant")
 public class ProductVariant {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int stock;
+    private String colorName;
+    private String colorHex;
 
     @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
+    @JoinColumn(name = "product_id")
     private Product product;
 
-    @ManyToOne
-    @JoinColumn(name = "color_id", nullable = false)
-    private Color color;
+    @OneToMany(mappedBy = "variant", cascade = CascadeType.ALL)
+    private List<VariantSize> sizes = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "size_id", nullable = false)
-    private Size size;
-
-    @OneToMany(mappedBy = "variant", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProductImage> images;
-
-    private double price;
-
-
+    @OneToMany(mappedBy = "variant", cascade = CascadeType.ALL)
+    private List<VariantImage> images = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -46,12 +34,20 @@ public class ProductVariant {
         this.id = id;
     }
 
-    public int getStock() {
-        return stock;
+    public String getColorName() {
+        return colorName;
     }
 
-    public void setStock(int stock) {
-        this.stock = stock;
+    public void setColorName(String colorName) {
+        this.colorName = colorName;
+    }
+
+    public String getColorHex() {
+        return colorHex;
+    }
+
+    public void setColorHex(String colorHex) {
+        this.colorHex = colorHex;
     }
 
     public Product getProduct() {
@@ -62,35 +58,20 @@ public class ProductVariant {
         this.product = product;
     }
 
-    public Color getColor() {
-        return color;
+    public List<VariantSize> getSizes() {
+        return sizes;
     }
 
-    public void setColor(Color color) {
-        this.color = color;
+    public void setSizes(List<VariantSize> sizes) {
+        this.sizes = sizes;
     }
 
-    public Size getSize() {
-        return size;
-    }
-
-    public void setSize(Size size) {
-        this.size = size;
-    }
-
-    public List<ProductImage> getImages() {
+    public List<VariantImage> getImages() {
         return images;
     }
 
-    public void setImages(List<ProductImage> images) {
+    public void setImages(List<VariantImage> images) {
         this.images = images;
     }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
 }
+

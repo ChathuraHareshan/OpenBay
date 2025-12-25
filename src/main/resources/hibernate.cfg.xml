@@ -13,15 +13,17 @@
         <property name="hibernate.show_sql">true</property>
 
         <mapping class="lk.karu.openbay.entity.Address"/>
-        <mapping class="lk.karu.openbay.entity.City"/>
-        <mapping class="lk.karu.openbay.entity.Status"/>
-        <mapping class="lk.karu.openbay.entity.User"/>
         <mapping class="lk.karu.openbay.entity.Category"/>
+        <mapping class="lk.karu.openbay.entity.City"/>
         <mapping class="lk.karu.openbay.entity.Color"/>
         <mapping class="lk.karu.openbay.entity.Product"/>
-        <mapping class="lk.karu.openbay.entity.ProductImage"/>
+        <mapping class="lk.karu.openbay.entity.VariantImage"/>
+        <mapping class="lk.karu.openbay.entity.VariantSize"/>
         <mapping class="lk.karu.openbay.entity.ProductVariant"/>
+        <mapping class="lk.karu.openbay.entity.Status"/>
+        <mapping class="lk.karu.openbay.entity.User"/>
         <mapping class="lk.karu.openbay.entity.Size"/>
+
 
     </session-factory>
 </hibernate-configuration>

@@ -1,0 +1,24 @@
+package lk.karu.openbay.dto;
+
+public class ProductImageDTO {
+    private String fileName;
+    private String fileType;
+    private String base64Data;
+    private Long fileSize;
+
+    // Constructors
+    public ProductImageDTO() {}
+
+    // Getters and Setters
+    public String getFileName() { return fileName; }
+    public void setFileName(String fileName) { this.fileName = fileName; }
+
+    public String getFileType() { return fileType; }
+    public void setFileType(String fileType) { this.fileType = fileType; }
+
+    public String getBase64Data() { return base64Data; }
+    public void setBase64Data(String base64Data) { this.base64Data = base64Data; }
+
+    public Long getFileSize() { return fileSize; }
+    public void setFileSize(Long fileSize) { this.fileSize = fileSize; }
+}

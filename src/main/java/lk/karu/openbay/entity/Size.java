@@ -1,6 +1,5 @@
 package lk.karu.openbay.entity;
 
-
 import jakarta.persistence.*;
 
 @Entity

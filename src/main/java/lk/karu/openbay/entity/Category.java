@@ -16,8 +16,8 @@ public class Category implements Serializable {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    private List<Product> products;
+//    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+//    private List<Product> products;
 
 
     public int getId() {
@@ -36,11 +36,5 @@ public class Category implements Serializable {
         this.name = name;
     }
 
-    public List<Product> getProducts() {
-        return products;
-    }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
 }

@@ -568,6 +568,7 @@ async function loadUserData() {
 }
 
 async function getCities() {
+    console.log("category");
     try {
         const response = await fetch("api/data/cities");
         if (response.ok) {
@@ -608,6 +609,31 @@ async function getCities() {
         Notiflix.Notify.failure(e.message);
     }
 }
+
+// async function getCategory(){
+//     try {
+//         const response = await fetch("api/data/category");
+//         if (response.ok) {
+//             const data = await response.json();
+//
+//             const category1 = document.getElementById("productCategory");
+//
+//             data.Category.forEach(category => {
+//
+//                     const opt2 = document.createElement("option");
+//                     opt2.value = category.id;
+//                     opt2.textContent = category.name;
+//                     category1.appendChild(opt2);
+//
+//             });
+//
+//         } else {
+//             Notiflix.Notify.failure("Category loading failed!");
+//         }
+//     } catch (e) {
+//         Notiflix.Notify.failure(e.message);
+//     }
+// }
 
 async function changePassword() {
 
