@@ -3,7 +3,9 @@ package lk.karu.openbay.entity;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "product_variant")
@@ -21,10 +23,10 @@ public class ProductVariant {
     private Product product;
 
     @OneToMany(mappedBy = "variant", cascade = CascadeType.ALL)
-    private List<VariantSize> sizes = new ArrayList<>();
+    private Set<VariantSize> sizes = new HashSet<>();
 
     @OneToMany(mappedBy = "variant", cascade = CascadeType.ALL)
-    private List<VariantImage> images = new ArrayList<>();
+    private Set<VariantImage> images = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -58,19 +60,19 @@ public class ProductVariant {
         this.product = product;
     }
 
-    public List<VariantSize> getSizes() {
+    public Set<VariantSize> getSizes() {
         return sizes;
     }
 
-    public void setSizes(List<VariantSize> sizes) {
+    public void setSizes(Set<VariantSize> sizes) {
         this.sizes = sizes;
     }
 
-    public List<VariantImage> getImages() {
+    public Set<VariantImage> getImages() {
         return images;
     }
 
-    public void setImages(List<VariantImage> images) {
+    public void setImages(Set<VariantImage> images) {
         this.images = images;
     }
 }

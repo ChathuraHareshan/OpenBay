@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.jsp.tagext.TryCatchFinally;
 import jakarta.ws.rs.core.Context;
 import lk.karu.openbay.dto.UserDTO;
+import lk.karu.openbay.entity.Admin;
 import lk.karu.openbay.entity.Status;
 import lk.karu.openbay.entity.User;
 import lk.karu.openbay.mail.VerificationMail;
@@ -19,6 +20,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 public class UserService {
+
 
     public String RegisterUser(UserDTO userDTO) {
 

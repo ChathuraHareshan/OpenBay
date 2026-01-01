@@ -13,6 +13,7 @@
         <property name="hibernate.show_sql">true</property>
 
         <mapping class="lk.karu.openbay.entity.Address"/>
+        <mapping class="lk.karu.openbay.entity.Admin"/>
         <mapping class="lk.karu.openbay.entity.Category"/>
         <mapping class="lk.karu.openbay.entity.City"/>
         <mapping class="lk.karu.openbay.entity.Color"/>

@@ -9,6 +9,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import lk.karu.openbay.annotation.IsAdmin;
 import lk.karu.openbay.annotation.IsUser;
 import lk.karu.openbay.dto.ProductDTO;
 import lk.karu.openbay.service.ProductService;
@@ -17,7 +18,7 @@ import lk.karu.openbay.util.AppUtil;
 @Path("/product")
 public class ProductController {
 
-    @IsUser
+    @IsAdmin
     @Path("/add-product")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)

@@ -1,17 +1,108 @@
 package lk.karu.openbay.service;
 
 import com.google.gson.JsonObject;
-import lk.karu.openbay.entity.Category;
-import lk.karu.openbay.entity.City;
-import lk.karu.openbay.entity.Color;
-import lk.karu.openbay.entity.Size;
+import com.google.protobuf.Message;
+import lk.karu.openbay.dto.ColorDTO;
+import lk.karu.openbay.dto.ProductDTO;
+import lk.karu.openbay.dto.TopProductDTO;
+import lk.karu.openbay.entity.*;
 import lk.karu.openbay.util.AppUtil;
 import lk.karu.openbay.util.HibernateUtil;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ContentService {
+    private static final int MAX_RESULT = 10;
+
+    public String loadTopProduct() {
+
+        JsonObject responseObject = new JsonObject();
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
+        List<TopProductDTO> homeProductList = new ArrayList<>();
+
+        try {
+
+            List<Product> products = session.createQuery(
+                    "SELECT DISTINCT p FROM Product p " +
+                            "LEFT JOIN FETCH p.variants v " +
+                            "LEFT JOIN FETCH v.sizes " +
+                            "LEFT JOIN FETCH v.images " +
+                            "LEFT JOIN FETCH p.category",
+                    Product.class
+            ).setMaxResults(8).getResultList(); // home page limit
+
+            for (Product product : products) {
+
+                TopProductDTO dto = new TopProductDTO();
+                dto.setProductId(product.getId());
+                dto.setTitle(product.getTitle());
+                dto.setCategory(product.getCategory().getName());
+
+                // MIN / MAX PRICE
+                double minPrice = Double.MAX_VALUE;
+                double maxPrice = 0;
+
+                for (ProductVariant variant : product.getVariants()) {
+                    for (VariantSize size : variant.getSizes()) {
+                        double price = size.getPrice();
+
+                        if (price < minPrice) {
+                            minPrice = price;
+                        }
+                        if (price > maxPrice) {
+                            maxPrice = price;
+                        }
+                    }
+                }
+
+                dto.setMinPrice(minPrice == Double.MAX_VALUE ? 0 : minPrice);
+                dto.setMaxPrice(maxPrice);
+
+                // GET ONLY 2 IMAGES
+                List<String> images = new ArrayList<>();
+
+                for (ProductVariant variant : product.getVariants()) {
+                    for (VariantImage image : variant.getImages()) {
+                        if (images.size() < 2) {
+                            images.add(image.getFilePath());
+                        }
+                    }
+                    if (images.size() == 2) break;
+                }
+
+                dto.setImages(images);
+
+                // COLORS FROM VARIANTS
+                List<ColorDTO> colorDTOList = new ArrayList<>();
+
+                for (ProductVariant variant : product.getVariants()) {
+                    ColorDTO colorDTO = new ColorDTO();
+                    colorDTO.setName(variant.getColorName());
+                    colorDTO.setHexCode(variant.getColorHex());
+                    colorDTOList.add(colorDTO);
+                }
+
+                dto.setColors(colorDTOList);
+
+                homeProductList.add(dto);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        responseObject.add("newArrivals",
+                AppUtil.GSON.toJsonTree(homeProductList));
+
+        return AppUtil.GSON.toJson(responseObject);
+    }
+
 
     public String loadAllCities(){
         JsonObject responseObject = new JsonObject();

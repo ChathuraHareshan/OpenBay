@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- index.html  21 Nov 2019 03:44:50 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+    <title>Otika - Admin Dashboard Template</title>
+    <!-- General CSS Files -->
+    <link rel="stylesheet" href="assets/css/app.min.css">
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="assets/css/adminPanel.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <!-- Custom style CSS -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="assets/css/custom.css">
+    <link rel='shortcut icon' type='image/x-icon' href='assets/icon.png'/>
+
+    <link rel="stylesheet" href="assets/richtexteditor/rte_theme_default.css"/>
+    <script type="text/javascript" src="assets/richtexteditor/rte.js"></script>
+    <script type="text/javascript" src='assets/richtexteditor/plugins/all_plugins.js'></script>
+    <style>
+        /* Minimal CSS for dynamic content */
+        .dynamic-content {
+            display: none;
+        }
+
+        .dynamic-content.active {
+            display: block;
+        }
+
+        .menu-active {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        /* Add Product Styles */
+        .color-circle {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            vertical-align: middle;
+            border: 1px solid #ddd;
+        }
+
+        .color-option {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 12px;
+            margin: 4px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .color-option:hover {
+            background-color: #f8f9fa;
+        }
+
+        .color-option.selected {
+            border-color: #6777ef;
+            background-color: rgba(103, 119, 239, 0.1);
+        }
+
+        .selected-color-item {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 12px;
+            margin: 4px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            border: 1px solid #e9ecef;
+        }
+
+        .selected-color-item .color-circle {
+            width: 16px;
+            height: 16px;
+            margin-right: 6px;
+        }
+
+        .size-price-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .size-price-table th {
+            background-color: #f8f9fa;
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #dee2e6;
+            font-weight: 600;
+        }
+
+        .size-price-table td {
+            padding: 8px;
+            border: 1px solid #dee2e6;
+        }
+
+        .image-upload-area {
+            border: 2px dashed #dee2e6;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            margin: 15px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .image-upload-area:hover {
+            border-color: #6777ef;
+            background-color: rgba(103, 119, 239, 0.05);
+        }
+
+        .image-gallery-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .image-card {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid #ddd;
+        }
+
+        .image-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .image-card:hover .image-overlay {
+            opacity: 1;
+        }
+
+        .remove-image-btn {
+            background: #ff4444;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .color-section {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title i {
+            margin-right: 8px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="loader"></div>
+<div id="app">
+    <div class="main-wrapper main-wrapper-1">
+        <div class="navbar-bg"></div>
+
+        <nav class="navbar navbar-expand-lg main-navbar sticky">
+            <!-- Your original navbar code remains EXACTLY the same -->
+            <div class="form-inline mr-auto">
+                <ul class="navbar-nav mr-3">
+                    <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg collapse-btn"> <i
+                            data-feather="align-justify"></i></a></li>
+                    <li><a href="#" class="nav-link nav-link-lg fullscreen-btn">
+                        <i data-feather="maximize"></i>
+                    </a></li>
+                </ul>
+            </div>
+            <ul class="navbar-nav navbar-right">
+                <li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown"
+                                                             class="nav-link nav-link-lg message-toggle"><i
+                        data-feather="mail"></i>
+                    <span class="badge headerBadge1">
+                6 </span> </a>
+                    <div class="dropdown-menu dropdown-list dropdown-menu-right pullDown">
+                        <div class="dropdown-header">
+                            Messages
+                            <div class="float-right">
+                                <a href="#">Mark All As Read</a>
+                            </div>
+                        </div>
+                        <div class="dropdown-list-content dropdown-list-message">
+                            <a href="#" class="dropdown-item"> <span class="dropdown-item-avatar text-white"> <img
+                                    alt="image" src="assets/img/users/user-1.png"
+                                    class="rounded-circle">
+                  </span> <span class="dropdown-item-desc"> <span class="message-user">John
+                      Deo</span>
+                    <span class="time messege-text">Please check your mail !!</span>
+                    <span class="time">2 Min Ago</span>
+                  </span>
+                            </a> <a href="#" class="dropdown-item"> <span class="dropdown-item-avatar text-white">
+                    <img alt="image" src="assets/img/users/user-2.png" class="rounded-circle">
+                  </span> <span class="dropdown-item-desc"> <span class="message-user">Sarah
+                      Smith</span> <span class="time messege-text">Request for leave
+                      application</span>
+                    <span class="time">5 Min Ago</span>
+                  </span>
+                        </a> <a href="#" class="dropdown-item"> <span class="dropdown-item-avatar text-white">
+                    <img alt="image" src="assets/img/users/user-5.png" class="rounded-circle">
+                  </span> <span class="dropdown-item-desc"> <span class="message-user">Jacob
+                      Ryan</span> <span class="time messege-text">Your payment invoice is
+                      generated.</span> <span class="time">12 Min Ago</span>
+                  </span>
+                        </a> <a href="#" class="dropdown-item"> <span class="dropdown-item-avatar text-white">
+                    <img alt="image" src="assets/img/users/user-4.png" class="rounded-circle">
+                  </span> <span class="dropdown-item-desc"> <span class="message-user">Lina
+                      Smith</span> <span class="time messege-text">hii John, I have upload
+                      doc
+                      related to task.</span> <span class="time">30
+                      Min Ago</span>
+                  </span>
+                        </a> <a href="#" class="dropdown-item"> <span class="dropdown-item-avatar text-white">
+                    <img alt="image" src="assets/img/users/user-3.png" class="rounded-circle">
+                  </span> <span class="dropdown-item-desc"> <span class="message-user">Jalpa
+                      Joshi</span> <span class="time messege-text">Please do as specify.
+                      Let me
+                      know if you have any query.</span> <span class="time">1
+                      Days Ago</span>
+                  </span>
+                        </a> <a href="#" class="dropdown-item"> <span class="dropdown-item-avatar text-white">
+                    <img alt="image" src="assets/img/users/user-2.png" class="rounded-circle">
+                  </span> <span class="dropdown-item-desc"> <span class="message-user">Sarah
+                      Smith</span> <span class="time messege-text">Client Requirements</span>
+                    <span class="time">2 Days Ago</span>
+                  </span>
+                        </a>
+                        </div>
+                        <div class="dropdown-footer text-center">
+                            <a href="#">View All <i class="fas fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+                </li>
+                <li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown"
+                                                             class="nav-link notification-toggle nav-link-lg"><i
+                        data-feather="bell" class="bell"></i>
+                </a>
+                    <div class="dropdown-menu dropdown-list dropdown-menu-right pullDown">
+                        <div class="dropdown-header">
+                            Notifications
+                            <div class="float-right">
+                                <a href="#">Mark All As Read</a>
+                            </div>
+                        </div>
+                        <div class="dropdown-list-content dropdown-list-icons">
+                            <a href="#" class="dropdown-item dropdown-item-unread"> <span
+                                    class="dropdown-item-icon bg-primary text-white"> <i class="fas fa-code"></i>
+                  </span> <span class="dropdown-item-desc"> Template update is
+                    available now! <span class="time">2 Min
+                      Ago</span>
+                  </span>
+                            </a> <a href="#" class="dropdown-item"> <span class="dropdown-item-icon bg-info text-white"> <i
+                                class="far fa-user"></i>
+                  </span> <span class="dropdown-item-desc"> <b>You</b> and <b>Dedik
+                      Sugiharto</b> are now friends <span class="time">10 Hours
+                      Ago</span>
+                  </span>
+                        </a> <a href="#" class="dropdown-item"> <span class="dropdown-item-icon bg-success text-white"> <i
+                                class="fas fa-check"></i>
+                  </span> <span class="dropdown-item-desc"> <b>Kusnaedi</b> has
+                    moved task <b>Fix bug header</b> to <b>Done</b> <span class="time">12
+                      Hours
+                      Ago</span>
+                  </span>
+                        </a> <a href="#" class="dropdown-item"> <span
+                                class="dropdown-item-icon bg-danger text-white"> <i
+                                class="fas fa-exclamation-triangle"></i>
+                  </span> <span class="dropdown-item-desc"> Low disk space. Let's
+                    clean it! <span class="time">17 Hours Ago</span>
+                  </span>
+                        </a> <a href="#" class="dropdown-item"> <span class="dropdown-item-icon bg-info text-white"> <i
+                                class="fas fa-bell"></i>
+                  </span> <span class="dropdown-item-desc"> Welcome to Otika
+                    template! <span class="time">Yesterday</span>
+                  </span>
+                        </a>
+                        </div>
+                        <div class="dropdown-footer text-center">
+                            <a href="#">View All <i class="fas fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+                </li>
+                <li class="dropdown"><a href="#" data-toggle="dropdown"
+                                        class="nav-link dropdown-toggle nav-link-lg nav-link-user"> <img alt="image"
+                                                                                                         src="assets/img/user.png"
+                                                                                                         class="user-img-radious-style">
+                    <span class="d-sm-none d-lg-inline-block"></span></a>
+                    <div class="dropdown-menu dropdown-menu-right pullDown">
+                        <div class="dropdown-title">Hello Sarah Smith</div>
+                        <a href="profile.html" class="dropdown-item has-icon"> <i class="far fa-user"></i> Profile
+                        </a> <a href="timeline.html" class="dropdown-item has-icon"> <i class="fas fa-bolt"></i>
+                        Activities
+                    </a> <a href="#" class="dropdown-item has-icon"> <i class="fas fa-cog"></i>
+                        Settings
+                    </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="auth-login.html" class="dropdown-item has-icon text-danger"> <i
+                                class="fas fa-sign-out-alt"></i>
+                            Logout
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="main-sidebar sidebar-style-2">
+            <aside id="sidebar-wrapper">
+                <div class="sidebar-brand">
+                    <a href="#" onclick="showDashboard(event)"> <img alt="image" src="assets/icon.png" class="header-logo"/> <span
+                            class="logo-name">OpenBay</span>
+                    </a>
+                </div>
+
+                <ul class="sidebar-menu">
+                    <li class="menu-header">Main</li>
+                    <li class="dropdown active">
+                        <a href="#" onclick="showDashboard(event)" class="nav-link menu-dashboard"><i
+                                data-feather="monitor"></i><span>Dashboard</span></a>
+                    </li>
+
+                    <li class="menu-header">Product Section</li>
+
+                    <li class="dropdown">
+                        <a href="#" onclick="showAddProduct(event)" class="nav-link menu-add-product"><i
+                                data-feather="copy"></i><span>Add Product</span></a>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" onclick="showProductList(event)" class="nav-link menu-product-list"><i
+                                data-feather="list"></i><span>Product List</span></a>
+                    </li>
+                </ul>
+            </aside>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Original Dashboard Content - Stays exactly the same -->
+            <section class="section dynamic-content active" id="dashboard-content">
+                <!-- Your original dashboard content remains here -->
+                <div class="row ">
+                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="card">
+                            <div class="card-statistic-4">
+                                <div class="align-items-center justify-content-between">
+                                    <div class="row ">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                                            <div class="card-content">
+                                                <h5 class="font-15">New Booking</h5>
+                                                <h2 class="mb-3 font-18">258</h2>
+                                                <p class="mb-0"><span class="col-green">10%</span> Increase</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                                            <div class="banner-img">
+                                                <img src="assets/img/banner/1.png" alt="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="card">
+                            <div class="card-statistic-4">
+                                <div class="align-items-center justify-content-between">
+                                    <div class="row ">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                                            <div class="card-content">
+                                                <h5 class="font-15"> Customers</h5>
+                                                <h2 class="mb-3 font-18">1,287</h2>
+                                                <p class="mb-0"><span class="col-orange">09%</span> Decrease</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                                            <div class="banner-img">
+                                                <img src="assets/img/banner/2.png" alt="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="card">
+                            <div class="card-statistic-4">
+                                <div class="align-items-center justify-content-between">
+                                    <div class="row ">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                                            <div class="card-content">
+                                                <h5 class="font-15">New Project</h5>
+                                                <h2 class="mb-3 font-18">128</h2>
+                                                <p class="mb-0"><span class="col-green">18%</span>
+                                                    Increase</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                                            <div class="banner-img">
+                                                <img src="assets/img/banner/3.png" alt="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="card">
+                            <div class="card-statistic-4">
+                                <div class="align-items-center justify-content-between">
+                                    <div class="row ">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                                            <div class="card-content">
+                                                <h5 class="font-15">Revenue</h5>
+                                                <h2 class="mb-3 font-18">$48,697</h2>
+                                                <p class="mb-0"><span class="col-green">42%</span> Increase</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                                            <div class="banner-img">
+                                                <img src="assets/img/banner/4.png" alt="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section dynamic-content" id="add-product-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Add New Product</h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- Basic Information -->
+                        <div class="section-title">
+                            <i class="fas fa-info-circle"></i> Basic Information
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="productTitle">Product Title *</label>
+                                <input type="text" id="productTitle" class="form-control" placeholder="Enter product title" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="productCategory">Category *</label>
+                                <select id="productCategory" class="form-control" required>
+                                    <option value="0">Select category</option>
+                                    <!-- Categories will be loaded dynamically -->
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="productDescription">Description *</label>
+                            <textarea id="productDescription" class="form-control"  rows="4" required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="productSKU">Product SKU (Optional)</label>
+                            <input type="text" id="productSKU" class="form-control" placeholder="PROD-001">
+                        </div>
+
+                        <hr class="my-4">
+
+                        <!-- Color Selection -->
+                        <div class="section-title">
+                            <i class="fas fa-palette"></i> Color Variations
+                        </div>
+
+                        <div class="form-group">
+                            <label>Select Colors</label>
+                            <div>
+                                <button type="button" class="btn btn-outline btn-sm mb-3" id="addColorBtn">
+                                    <i class="fas fa-plus"></i> Add Color
+                                </button>
+
+                                <!-- Color Selection Panel (Hidden by default) -->
+                                <div class="card mb-3" id="colorSelectionPanel" style="display: none;">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-0">Select a Color</h5>
+                                        <button type="button" class="btn btn-text btn-sm" id="closeColorPanel">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row" id="colorOptionsGrid">
+                                            <!-- Color options will be loaded here -->
+                                        </div>
+                                        <div class="mt-3">
+                                            <h6>Custom Color</h6>
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <input type="color" id="customColorPicker" class="form-control" style="height: 40px;">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <input type="text" id="customColorName" class="form-control" placeholder="Enter color name">
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <button type="button" class="btn btn-outline btn-block" id="addCustomColorBtn">
+                                                        Add Custom
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Selected Colors -->
+                                <div id="selectedColorsContainer" class="mb-3">
+                                    <div class="empty-state">
+                                        <i class="fas fa-palette"></i>
+                                        <p>No colors added yet. Click "Add Color" to select colors for your product.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <!-- Size and Price for Each Color -->
+                        <div class="section-title">
+                            <i class="fas fa-ruler-combined"></i> Sizes & Prices
+                        </div>
+
+                        <div id="colorSizesContainer">
+                            <div class="empty-state">
+                                <i class="fas fa-ruler-combined"></i>
+                                <p>Please add colors first to set sizes and prices.</p>
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <!-- Images for Each Color -->
+                        <div class="section-title">
+                            <i class="fas fa-images"></i> Product Images
+                        </div>
+
+                        <div id="colorImagesContainer">
+                            <div class="empty-state">
+                                <i class="fas fa-images"></i>
+                                <p>Please add colors first to upload images.</p>
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="form-actions mt-4">
+                            <button type="button" class="btn btn-secondary" onclick="showDashboard(event)">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                            <button type="button" class="btn btn-primary" id="saveProductBtn">
+                                <i class="fas fa-save"></i> Save Product
+                            </button>
+                            <button type="button" class="btn btn-outline" id="cancelBtn">Reset Form</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section dynamic-content" id="product-list-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Product List</h4>
+                    </div>
+                    <div class="card-body">
+                        <p>Product list content will go here.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Sidebar -->
+            <div class="settingSidebar">
+                <!-- Your original settings sidebar -->
+            </div>
+        </div>
+
+        <footer class="main-footer">
+            <div class="footer-left">
+                <a href="templateshub.net">Templateshub</a>
+            </div>
+            <div class="footer-right">
+            </div>
+        </footer>
+    </div>
+</div>
+
+
+<script>
+
+    function showDashboard(event) {
+        if (event) event.preventDefault();
+
+        // Hide all dynamic content sections
+        document.querySelectorAll('.dynamic-content').forEach(section => {
+            section.classList.remove('active');
+        });
+
+        // Show dashboard content
+        document.getElementById('dashboard-content').classList.add('active');
+
+        // Update menu active state
+        document.querySelectorAll('.sidebar-menu a').forEach(link => {
+            link.classList.remove('menu-active');
+            // Remove active class from parent li
+            link.closest('.dropdown').classList.remove('active');
+        });
+
+        const dashboardMenu = document.querySelector('.menu-dashboard');
+        if (dashboardMenu) {
+            dashboardMenu.classList.add('menu-active');
+            // Add active class to parent li
+            dashboardMenu.closest('.dropdown').classList.add('active');
+        }
+    }
+
+    function showAddProduct(event) {
+        if (event) event.preventDefault();
+
+        // Hide all dynamic content sections
+        document.querySelectorAll('.dynamic-content').forEach(section => {
+            section.classList.remove('active');
+        });
+
+        // Show add product content
+        document.getElementById('add-product-content').classList.add('active');
+
+        // Update menu active state
+        document.querySelectorAll('.sidebar-menu a').forEach(link => {
+            link.classList.remove('menu-active');
+            // Remove active class from parent li
+            link.closest('.dropdown').classList.remove('active');
+        });
+
+        const addProductMenu = document.querySelector('.menu-add-product');
+        if (addProductMenu) {
+            addProductMenu.classList.add('menu-active');
+            // Add active class to parent li
+            addProductMenu.closest('.dropdown').classList.add('active');
+        }
+
+        // Initialize add product form if function exists
+        if (typeof loadProductData === 'function') {
+            loadProductData();
+        }
+    }
+
+    function showProductList(event) {
+        if (event) event.preventDefault();
+
+        // Hide all dynamic content sections
+        document.querySelectorAll('.dynamic-content').forEach(section => {
+            section.classList.remove('active');
+        });
+
+        // Show product list content
+        document.getElementById('product-list-content').classList.add('active');
+
+        // Update menu active state
+        document.querySelectorAll('.sidebar-menu a').forEach(link => {
+            link.classList.remove('menu-active');
+            // Remove active class from parent li
+            link.closest('.dropdown').classList.remove('active');
+        });
+
+        const productListMenu = document.querySelector('.menu-product-list');
+        if (productListMenu) {
+            productListMenu.classList.add('menu-active');
+            // Add active class to parent li
+            productListMenu.closest('.dropdown').classList.add('active');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        showDashboard({preventDefault: () => {}});
+
+        if (typeof feather !== 'undefined') {
+            feather.replace();
+        }
+    });
+</script>
+
+<!-- Check the path in your adminPanel.html -->
+<script>
+    // Initialize RTE with correct paths
+    const rte = new RichTextEditor("#description", {
+        contentCssUrl: "/path/to/correct/richtexteditor_content.css",
+        // OR use CDN
+        contentCssUrl: "https://cdn.jsdelivr.net/npm/richtexteditor@latest/runtime/richtexteditor_content.css"
+    });
+</script>
+
+<script src="assets/js/app.min.js"></script>
+<script src="assets/bundles/apexcharts/apexcharts.min.js"></script>
+<script src="assets/js/page/index.js"></script>
+<script src="assets/js/adminPanel.js"></script>
+<script src="assets/js/custom.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/notiflix@3.2.6/dist/notiflix-aio-3.2.6.min.js"></script>
+
+<script src="assets/js/addProduct.js"></script>
+
+
+</body>
+</html>

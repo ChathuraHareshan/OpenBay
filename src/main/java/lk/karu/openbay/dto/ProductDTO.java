@@ -3,14 +3,26 @@ package lk.karu.openbay.dto;
 import java.util.List;
 
 public class ProductDTO {
+    private Long productId;
     private String title;
     private String description;
     private String category;
     private String sku;
     private List<ProductVariantDTO> variants;
 
+
     // Constructors
     public ProductDTO() {}
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
+
+
 
     // Getters and Setters
     public String getTitle() { return title; }

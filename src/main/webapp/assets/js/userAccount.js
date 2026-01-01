@@ -544,13 +544,14 @@ async function loadUserData() {
             // let replacedText = String(data.user.sinceAt).replace("-", " ");
             // let since = replacedText.split(" ");
             // document.getElementById("since").innerHTML = `Smart Trade Member Since ${since[1]} ${since[0]}`;
-            document.getElementById("firstName").value = data.user.fname;
-            document.getElementById("lastName").value = data.user.lname;
-            document.getElementById("primaryLineOne").value = data.user.lineOne || "";
-            document.getElementById("primaryLineTwo").value = data.user.lineTwo ? data.user.lineTwo : "";
-            document.getElementById("primaryPCode").value = data.user.postalCode ? data.user.postalCode : "";
-            document.getElementById("PrimaryCity").value = data.user.cityId ? data.user.cityId : 0;
-            document.getElementById("primaryMobile").value = data.user.mobile;
+            document.getElementById("firstName").value = data.user.fname ?? "";
+            document.getElementById("lastName").value = data.user.lname ?? "";
+            document.getElementById("primaryLineOne").value = data.user.lineOne ?? "";
+            document.getElementById("primaryLineTwo").value = data.user.lineTwo ?? "";
+            document.getElementById("primaryPCode").value = data.user.postalCode ?? "";
+            document.getElementById("PrimaryCity").value = data.user.cityId ?? 0;
+            document.getElementById("primaryMobile").value = data.user.mobile ?? "";
+
             // document.getElementById("currentPassword").value = data.user.password;
 
             // console.log("USER DATA:", data.user);
@@ -610,31 +611,6 @@ async function getCities() {
     }
 }
 
-// async function getCategory(){
-//     try {
-//         const response = await fetch("api/data/category");
-//         if (response.ok) {
-//             const data = await response.json();
-//
-//             const category1 = document.getElementById("productCategory");
-//
-//             data.Category.forEach(category => {
-//
-//                     const opt2 = document.createElement("option");
-//                     opt2.value = category.id;
-//                     opt2.textContent = category.name;
-//                     category1.appendChild(opt2);
-//
-//             });
-//
-//         } else {
-//             Notiflix.Notify.failure("Category loading failed!");
-//         }
-//     } catch (e) {
-//         Notiflix.Notify.failure(e.message);
-//     }
-// }
-
 async function changePassword() {
 
     Notiflix.Loading.pulse("Wait...", {
@@ -693,5 +669,41 @@ async function changePassword() {
 
 
 
+
+}
+
+async function logout() {
+
+    Notiflix.Loading.pulse("Wait...", {
+        clickToClose: false,
+        svgColor: '#0284c7'
+    });
+
+    try {
+        const response = await fetch("api/users/logout", {
+            method: "GET",
+            credentials: "include"
+        });
+        if (response.ok) {
+            Notiflix.Report.success(
+                'OpenBay',
+                "Logout successful",
+                'Okay',
+                () => {
+                    window.location = "login.html"
+                },
+            );
+        } else {
+            Notiflix.Notify.failure("Something went wrong. Log Out process failed!", {
+                position: 'center-top'
+            });
+        }
+    } catch (e) {
+        Notiflix.Notify.failure(e.message, {
+            position: 'center-top'
+        });
+    } finally {
+        Notiflix.Loading.remove();
+    }
 
 }

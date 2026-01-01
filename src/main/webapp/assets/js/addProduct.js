@@ -1,4 +1,3 @@
-// Product data structure
 let productData = {
     basicInfo: {},
     colors: [],
@@ -8,10 +7,7 @@ let productData = {
 let colorOptions = [];
 let commonSizes = [];
 
-
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Load data from database
+function loadProductData() {
     loadColors();
     loadSizes();
     loadCategories();
@@ -21,9 +17,8 @@ document.addEventListener('DOMContentLoaded', function() {
         initializeColorOptions();
         setupEventListeners();
     }, 500);
-});
+}
 
-// Load colors from database
 async function loadColors() {
     try {
         const response = await fetch("api/data/colors");
@@ -37,22 +32,21 @@ async function loadColors() {
                 }));
 
                 console.log("Colors loaded:", colorOptions);
+                initializeColorOptions();
             } else {
                 Notiflix.Notify.failure("Failed to load colors: " + data.message);
-                // Fallback to default colors
-                colorOptions = getDefaultColors();
+                initializeColorOptions();
             }
         } else {
             Notiflix.Notify.failure("Colors loading failed!");
-            colorOptions = getDefaultColors();
+            initializeColorOptions();
         }
     } catch (e) {
         Notiflix.Notify.failure("Error loading colors: " + e.message);
-        colorOptions = getDefaultColors();
+        initializeColorOptions();
     }
 }
 
-// Load sizes from database
 async function loadSizes() {
     try {
         const response = await fetch("api/data/sizes");
@@ -76,133 +70,45 @@ async function loadSizes() {
     }
 }
 
-// Load categories from database (like your example)
-// Load categories from database
 async function loadCategories() {
-
-    console.log("category");
     try {
         const response = await fetch("api/data/category");
         if (response.ok) {
             const data = await response.json();
-            console.log(data);
+            console.log("Categories data:", data);
 
             const productCategory = document.getElementById("productCategory");
 
-            data.categories.forEach(category => {
+            // Clear existing options except the first one
+            while (productCategory.options.length > 1) {
+                productCategory.remove(1);
+            }
 
+            if (data.categories && Array.isArray(data.categories)) {
+                data.categories.forEach(category => {
                     const opt = document.createElement("option");
                     opt.value = category.id;
                     opt.textContent = category.name;
                     productCategory.appendChild(opt);
-
-            });
-
+                });
+            }
         } else {
-            Notiflix.Notify.failure("category loading failed!");
+            Notiflix.Notify.failure("Category loading failed!");
         }
     } catch (e) {
         Notiflix.Notify.failure(e.message);
     }
-
 }
 
-// Fallback default colors (in case API fails)
-// function getDefaultColors() {
-//     return [
-//         { name: 'Red', value: '#ff0000' },
-//         { name: 'Blue', value: '#0000ff' },
-//         { name: 'Green', value: '#00ff00' },
-//         { name: 'Black', value: '#000000' },
-//         { name: 'White', value: '#ffffff' },
-//         { name: 'Gray', value: '#808080' },
-//         { name: 'Yellow', value: '#ffff00' },
-//         { name: 'Purple', value: '#800080' },
-//         { name: 'Orange', value: '#ffa500' },
-//         { name: 'Pink', value: '#ffc0cb' },
-//         { name: 'Brown', value: '#a52a2a' },
-//         { name: 'Navy Blue', value: '#000080' },
-//         { name: 'Sky Blue', value: '#87ceeb' },
-//         { name: 'Maroon', value: '#800000' },
-//         { name: 'Beige', value: '#f5f5dc' },
-//         { name: 'Khaki', value: '#f0e68c' }
-//     ];
-// }
-
-// Fallback default sizes (in case API fails)
-// function getDefaultSizes() {
-//     return ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'One Size'];
-// }
-
-// Rest of your existing functions remain the same...
-// function initializeColorOptions() {
-//     const colorGrid = document.getElementById('colorOptionsGrid');
-//     if (!colorGrid) return;
-//
-//     // Clear existing options
-//     colorGrid.innerHTML = '';
-//
-//     // Add colors from database
-//     colorOptions.forEach(color => {
-//         const colorOption = document.createElement('div');
-//         colorOption.className = 'color-option';
-//         colorOption.innerHTML = `
-//             <div class="color-circle" style="background-color: ${color.value};"></div>
-//             <span class="color-name">${color.name}</span>
-//         `;
-//         colorOption.addEventListener('click', () => selectColor(color.name, color.value));
-//         colorGrid.appendChild(colorOption);
-//     });
-// }
-
-
-
-// Update the size datalist initialization
-window.addEventListener('load', function() {
-    if (!document.getElementById('sizeOptionsList')) {
-        const sizeDatalist = document.createElement('datalist');
-        sizeDatalist.id = 'sizeOptionsList';
-
-        // Add sizes from database
-        commonSizes.forEach(size => {
-            const option = document.createElement('option');
-            option.value = size;
-            sizeDatalist.appendChild(option);
-        });
-
-        document.body.appendChild(sizeDatalist);
-    }
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-document.addEventListener('DOMContentLoaded', function() {
-    initializeColorOptions();
-    setupEventListeners();
-});
 
 function initializeColorOptions() {
     const colorGrid = document.getElementById('colorOptionsGrid');
     if (!colorGrid) return;
 
+    // Clear existing options
+    colorGrid.innerHTML = '';
+
+    // Add colors from database
     colorOptions.forEach(color => {
         const colorOption = document.createElement('div');
         colorOption.className = 'color-option';
@@ -216,79 +122,55 @@ function initializeColorOptions() {
 }
 
 function setupEventListeners() {
-    // Step navigation
-    document.getElementById('nextToStep2')?.addEventListener('click', goToStep2);
-    document.getElementById('backToStep1')?.addEventListener('click', () => goToStep(1));
-    document.getElementById('backToStep1Bottom')?.addEventListener('click', () => goToStep(1));
-    document.getElementById('nextToStep3')?.addEventListener('click', goToStep3);
-    document.getElementById('backToStep2')?.addEventListener('click', () => goToStep(2));
-    document.getElementById('backToStep2Bottom')?.addEventListener('click', () => goToStep(2));
-    document.getElementById('nextToStep4')?.addEventListener('click', goToStep4);
-    document.getElementById('backToStep3')?.addEventListener('click', () => goToStep(3));
-    document.getElementById('backToStep3Bottom')?.addEventListener('click', () => goToStep(3));
-
     // Color management
-    document.getElementById('addColorBtn')?.addEventListener('click', () => {
-        const panel = document.getElementById('colorSelectionPanel');
-        if (panel) panel.style.display = 'block';
-    });
+    const addColorBtn = document.getElementById('addColorBtn');
+    if (addColorBtn) {
+        addColorBtn.addEventListener('click', () => {
+            const panel = document.getElementById('colorSelectionPanel');
+            if (panel) panel.style.display = 'block';
+        });
+    }
 
-    document.getElementById('closeColorPanel')?.addEventListener('click', () => {
-        const panel = document.getElementById('colorSelectionPanel');
-        if (panel) panel.style.display = 'none';
-        const colorNameInput = document.getElementById('customColorName');
-        if (colorNameInput) colorNameInput.value = '';
-    });
+    const closeColorPanel = document.getElementById('closeColorPanel');
+    if (closeColorPanel) {
+        closeColorPanel.addEventListener('click', () => {
+            const panel = document.getElementById('colorSelectionPanel');
+            if (panel) panel.style.display = 'none';
+            const colorNameInput = document.getElementById('customColorName');
+            if (colorNameInput) colorNameInput.value = '';
+        });
+    }
 
-    document.getElementById('addCustomColorBtn')?.addEventListener('click', addCustomColor);
+    const addCustomColorBtn = document.getElementById('addCustomColorBtn');
+    if (addCustomColorBtn) {
+        addCustomColorBtn.addEventListener('click', addCustomColor);
+    }
 
     // Form submission
-    document.getElementById('saveProductBtn')?.addEventListener('click', saveProduct);
-    document.getElementById('cancelBtn')?.addEventListener('click', resetForm);
-}
+    const saveProductBtn = document.getElementById('saveProductBtn');
+    if (saveProductBtn) {
+        saveProductBtn.addEventListener('click', saveProduct);
+    }
 
-// Step Navigation Functions
-function goToStep(stepNumber) {
-    // Hide all steps
-    document.querySelectorAll('.form-step').forEach(step => {
-        step.style.display = 'none';
-    });
-
-    // Show current step
-    const stepElement = document.getElementById(`step${stepNumber}`);
-    if (stepElement) {
-        stepElement.style.display = 'block';
-        productData.currentStep = stepNumber;
-
-        // Update data when moving between steps
-        if (stepNumber === 1) {
-            saveBasicInfo();
-        } else if (stepNumber === 3) {
-            generateSizeSections();
-        } else if (stepNumber === 4) {
-            generateImageSections();
-        }
+    const cancelBtn = document.getElementById('cancelBtn');
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', resetForm);
     }
 }
 
-function goToStep2() {
-    if (validateStep1()) {
-        saveBasicInfo();
-        goToStep(2);
-    }
-}
-
-function goToStep3() {
-    if (validateStep2()) {
-        goToStep(3);
-    }
-}
-
-function goToStep4() {
-    if (validateStep3()) {
-        goToStep(4);
-    }
-}
+// function goToStep(stepNumber) {
+//     // For admin panel, we show everything at once, but we can use this to update data
+//     productData.currentStep = stepNumber;
+//
+//     // Update data when moving between steps
+//     if (stepNumber === 1) {
+//         saveBasicInfo();
+//     } else if (stepNumber === 3) {
+//         generateSizeSections();
+//     } else if (stepNumber === 4) {
+//         generateImageSections();
+//     }
+// }
 
 // Step 1: Basic Info
 function validateStep1() {
@@ -308,7 +190,7 @@ function validateStep1() {
         return false;
     }
 
-    if (!category) {
+    if (!category || category === '0') {
         alert('Please select a category');
         document.getElementById('productCategory')?.focus();
         return false;
@@ -317,16 +199,25 @@ function validateStep1() {
     return true;
 }
 
+
+const editor1 = new RichTextEditor("productDescription");
+
 function saveBasicInfo() {
-    productData.basicInfo = {
-        title: document.getElementById('productTitle').value,
-        description: document.getElementById('productDescription').value,
-        category: document.getElementById('productCategory').value,
-        sku: document.getElementById('productSKU').value || ''
-    };
+    const titleEl = document.getElementById('productTitle');
+    const descEl =  editor1.getHTMLCode();
+    const categoryEl = document.getElementById('productCategory');
+    const skuEl = document.getElementById('productSKU');
+
+    if (titleEl && descEl && categoryEl) {
+        productData.basicInfo = {
+            title: titleEl.value,
+            description: descEl,
+            category: categoryEl.value,
+            sku: skuEl ? skuEl.value || '' : ''
+        };
+    }
 }
 
-// Step 2: Color Selection
 function selectColor(name, value) {
     // Check if color already selected
     const existingColor = productData.colors.find(c => c.value === value);
@@ -346,6 +237,9 @@ function selectColor(name, value) {
 
     // Update UI
     updateSelectedColorsList();
+    generateSizeSections();
+    generateImageSections();
+
     const panel = document.getElementById('colorSelectionPanel');
     if (panel) panel.style.display = 'none';
 }
@@ -377,7 +271,7 @@ function updateSelectedColorsList() {
         return;
     }
 
-    let html = '<div class="selected-colors-grid">';
+    let html = '<div class="d-flex flex-wrap">';
 
     productData.colors.forEach((color, index) => {
         html += `
@@ -399,13 +293,8 @@ function removeColor(index) {
     if (confirm('Are you sure you want to remove this color? All sizes and images for this color will also be removed.')) {
         productData.colors.splice(index, 1);
         updateSelectedColorsList();
-
-        // Regenerate sections if we're on step 3 or 4
-        if (productData.currentStep === 3) {
-            generateSizeSections();
-        } else if (productData.currentStep === 4) {
-            generateImageSections();
-        }
+        generateSizeSections();
+        generateImageSections();
     }
 }
 
@@ -436,44 +325,37 @@ function generateSizeSections() {
 
     productData.colors.forEach((color, colorIndex) => {
         const colorSection = document.createElement('div');
-        colorSection.className = 'color-size-section';
+        colorSection.className = 'color-section mb-4';
         colorSection.id = `color-section-${colorIndex}`;
 
         colorSection.innerHTML = `
-            <div class="section-header">
-                <div class="color-title">
-                    <div class="color-indicator" style="background-color: ${color.value};"></div>
-                    <h4>${color.name} - Sizes & Prices</h4>
-                </div>
-                <button type="button" class="btn btn-outline btn-small add-size-btn" onclick="addSizeRow(${colorIndex})">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5>
+                    <div class="color-circle" style="background-color: ${color.value}; display: inline-block; margin-right: 8px;"></div>
+                    ${color.name} - Sizes & Prices
+                </h5>
+                <button type="button" class="btn btn-outline btn-sm" onclick="addSizeRow(${colorIndex})">
                     <i class="fas fa-plus"></i> Add Size
                 </button>
             </div>
-
-            <div class="sizes-table-container">
-                <table class="sizes-table">
-                    <thead>
+            
+            <table class="size-price-table">
+                <thead>
+                    <tr>
+                        <th>Size</th>
+                        <th>Price (Rs.)</th>
+                        <th>Quantity</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="sizes-body-${colorIndex}">
+                    ${color.sizes.length === 0 ? `
                         <tr>
-                            <th>Size</th>
-                            <th>Price (Rs.)</th>
-                            <th>Quantity</th>
-                            <th>Action</th>
+                            <td colspan="4" class="text-center text-muted">No sizes added yet. Click "Add Size" to add sizes for this color.</td>
                         </tr>
-                    </thead>
-                    <tbody id="sizes-body-${colorIndex}">
-                        ${color.sizes.length === 0 ? `
-                            <tr class="empty-row">
-                                <td colspan="4">
-                                    <div class="empty-sizes">
-                                        <i class="fas fa-ruler-combined"></i>
-                                        <p>No sizes added yet. Click "Add Size" to add sizes for this color.</p>
-                                    </div>
-                                </td>
-                            </tr>
-                        ` : generateSizeRows(colorIndex)}
-                    </tbody>
-                </table>
-            </div>
+                    ` : generateSizeRows(colorIndex)}
+                </tbody>
+            </table>
         `;
 
         container.appendChild(colorSection);
@@ -493,7 +375,7 @@ function generateSizeRows(colorIndex) {
         rows += `
             <tr class="size-row" id="size-row-${colorIndex}-${sizeIndex}">
                 <td>
-                    <select class="form-control size-input" 
+                    <select class="form-control form-control-sm size-input" 
                             onchange="updateSizeField(${colorIndex}, ${sizeIndex}, 'size', this.value)">
                         <option value="">Select Size</option>
                         ${commonSizes.map(sizeOption => `
@@ -504,19 +386,19 @@ function generateSizeRows(colorIndex) {
                     </select>
                 </td>
                 <td>
-                    <input type="number" class="form-control price-input"
+                    <input type="number" class="form-control form-control-sm price-input"
                            placeholder="0.00" step="0.01" min="0"
                            value="${size.price}"
                            onchange="updateSizeField(${colorIndex}, ${sizeIndex}, 'price', this.value)">
                 </td>
                 <td>
-                    <input type="number" class="form-control qty-input"
+                    <input type="number" class="form-control form-control-sm qty-input"
                            placeholder="0" min="0"
                            value="${size.quantity}"
                            onchange="updateSizeField(${colorIndex}, ${sizeIndex}, 'quantity', this.value)">
                 </td>
                 <td>
-                    <button type="button" class="btn btn-text btn-small remove-size-btn"
+                    <button type="button" class="btn btn-danger btn-sm"
                             onclick="removeSize(${colorIndex}, ${sizeIndex})">
                         <i class="fas fa-trash"></i>
                     </button>
@@ -559,7 +441,7 @@ function addSizeRow(colorIndex) {
         const rows = document.querySelectorAll(`#sizes-body-${colorIndex} .size-row`);
         if (rows.length > 0) {
             const lastRow = rows[rows.length - 1];
-            lastRow.querySelector('.price-input').focus(); // Focus on price instead of size
+            lastRow.querySelector('.price-input')?.focus();
         }
     }, 100);
 }
@@ -585,13 +467,8 @@ function removeSize(colorIndex, sizeIndex) {
             const tbody = document.getElementById(`sizes-body-${colorIndex}`);
             if (tbody) {
                 tbody.innerHTML = `
-                    <tr class="empty-row">
-                        <td colspan="4">
-                            <div class="empty-sizes">
-                                <i class="fas fa-ruler-combined"></i>
-                                <p>No sizes added yet. Click "Add Size" to add sizes for this color.</p>
-                            </div>
-                        </td>
+                    <tr>
+                        <td colspan="4" class="text-center text-muted">No sizes added yet. Click "Add Size" to add sizes for this color.</td>
                     </tr>
                 `;
             }
@@ -612,7 +489,7 @@ function validateStep3() {
             const size = color.sizes[j];
 
             if (!size.size.trim()) {
-                alert(`Please enter size for color: ${color.name}`);
+                alert(`Please select a size for color: ${color.name}`);
                 return false;
             }
 
@@ -640,7 +517,7 @@ function generateImageSections() {
         container.innerHTML = `
             <div class="empty-state">
                 <i class="fas fa-images"></i>
-                <p>Please add colors and sizes in the previous steps first.</p>
+                <p>Please add colors first to upload images.</p>
             </div>
         `;
         return;
@@ -650,41 +527,38 @@ function generateImageSections() {
 
     productData.colors.forEach((color, colorIndex) => {
         const colorSection = document.createElement('div');
-        colorSection.className = 'color-image-section';
+        colorSection.className = 'color-section mb-4';
         colorSection.id = `color-image-section-${colorIndex}`;
 
         colorSection.innerHTML = `
-            <div class="section-header">
-                <div class="color-title">
-                    <div class="color-indicator" style="background-color: ${color.value};"></div>
-                    <h4>${color.name} - Product Images</h4>
-                    <span class="image-count">(${color.images.length} images)</span>
-                </div>
-                <button type="button" class="btn btn-outline btn-small upload-images-btn" onclick="openImageUploader(${colorIndex})">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5>
+                    <div class="color-circle" style="background-color: ${color.value}; display: inline-block; margin-right: 8px;"></div>
+                    ${color.name} - Images
+                    <small class="text-muted ml-2">(${color.images.length} images)</small>
+                </h5>
+                <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('image-upload-${colorIndex}').click()">
                     <i class="fas fa-upload"></i> Upload Images
                 </button>
             </div>
-
-            <div class="image-upload-area" id="image-upload-area-${colorIndex}" style="display: none;">
-                <div class="upload-box" onclick="triggerImageUpload(${colorIndex})">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    <h5>Click to upload images</h5>
-                    <p>Drag & drop images or click to browse</p>
-                    <p class="upload-hint">Supports JPG, PNG, GIF (Max 5MB each)</p>
-                </div>
-                <input type="file" id="image-upload-${colorIndex}" multiple accept="image/*" style="display: none;"
-                       onchange="handleImageUpload(${colorIndex}, this.files)">
+            
+            <!-- Image Upload Area -->
+            <div class="image-upload-area" onclick="document.getElementById('image-upload-${colorIndex}').click()">
+                <i class="fas fa-cloud-upload-alt fa-2x mb-3"></i>
+                <h5>Click to upload images for ${color.name}</h5>
+                <p class="text-muted">Drag & drop or click to browse</p>
+                <p class="text-muted"><small>Supports JPG, PNG, GIF (Max 5MB each)</small></p>
             </div>
-
-            <div class="color-image-container">
-                <div class="image-gallery" id="image-gallery-${colorIndex}">
-                    ${color.images.length === 0 ? `
-                        <div class="empty-gallery">
-                            <i class="fas fa-image"></i>
-                            <p>No images uploaded yet</p>
-                        </div>
-                    ` : generateImageGallery(colorIndex)}
-                </div>
+            <input type="file" id="image-upload-${colorIndex}" 
+                   multiple accept="image/*" 
+                   style="display: none;"
+                   onchange="handleImageUpload(${colorIndex}, this.files)">
+            
+            <!-- Image Gallery -->
+            <div id="image-gallery-${colorIndex}" class="mt-3">
+                ${color.images.length === 0 ? `
+                    <p class="text-muted text-center">No images uploaded yet</p>
+                ` : generateImageGallery(colorIndex)}
             </div>
         `;
 
@@ -713,36 +587,21 @@ function generateImageGallery(colorIndex) {
     return gallery;
 }
 
-function openImageUploader(colorIndex) {
-    const uploadArea = document.getElementById(`image-upload-area-${colorIndex}`);
-    if (uploadArea) {
-        uploadArea.style.display = uploadArea.style.display === 'none' ? 'block' : 'none';
-    }
-}
-
-function triggerImageUpload(colorIndex) {
-    document.getElementById(`image-upload-${colorIndex}`).click();
-}
-
 function handleImageUpload(colorIndex, files) {
     const color = productData.colors[colorIndex];
     const maxSize = 5 * 1024 * 1024; // 5MB
 
-    for (let file of files) {
+    Array.from(files).forEach(file => {
         // Check file size
         if (file.size > maxSize) {
-            Notiflix.Notify.failure(`File "${file.name}" exceeds 5MB limit`, {
-                position: 'center-top'
-            });
-            continue;
+            Notiflix.Notify.failure(`"${file.name}" exceeds 5MB limit`);
+            return;
         }
 
         // Check file type
         if (!file.type.match('image.*')) {
-            Notiflix.Notify.failure(`File "${file.name}" is not a valid image`, {
-                position: 'center-top'
-            });
-            continue;
+            Notiflix.Notify.failure(`"${file.name}" is not a valid image`);
+            return;
         }
 
         const reader = new FileReader();
@@ -753,40 +612,29 @@ function handleImageUpload(colorIndex, files) {
                 name: file.name,
                 type: file.type,
                 size: file.size,
-                preview: base64String,  // Full data URL for preview
-                base64Data: base64String  // Full data URL for backend
+                preview: base64String,
+                base64Data: base64String // Keep full data URL for preview
             });
 
             updateImageGallery(colorIndex);
+
+            Notiflix.Notify.success(`"${file.name}" uploaded`);
         };
         reader.readAsDataURL(file);
-    }
+    });
 
     // Clear file input
     document.getElementById(`image-upload-${colorIndex}`).value = '';
-    const uploadArea = document.getElementById(`image-upload-area-${colorIndex}`);
-    if (uploadArea) uploadArea.style.display = 'none';
 }
 
 function updateImageGallery(colorIndex) {
     const gallery = document.getElementById(`image-gallery-${colorIndex}`);
     const color = productData.colors[colorIndex];
 
-    // Update image count in header
-    const imageCountElement = document.querySelector(`#color-image-section-${colorIndex} .image-count`);
-    if (imageCountElement) {
-        imageCountElement.textContent = `(${color.images.length} images)`;
-    }
-
     // Update gallery content
     if (gallery) {
         if (color.images.length === 0) {
-            gallery.innerHTML = `
-                <div class="empty-gallery">
-                    <i class="fas fa-image"></i>
-                    <p>No images uploaded yet</p>
-                </div>
-            `;
+            gallery.innerHTML = '<p class="text-muted text-center">No images uploaded yet</p>';
         } else {
             gallery.innerHTML = generateImageGallery(colorIndex);
         }
@@ -796,24 +644,18 @@ function updateImageGallery(colorIndex) {
 function removeImage(colorIndex, imageIndex) {
     if (confirm('Are you sure you want to remove this image?')) {
         productData.colors[colorIndex].images.splice(imageIndex, 1);
-        updateImageGallery(colorIndex);
 
-        // If no images left, show empty gallery
-        if (productData.colors[colorIndex].images.length === 0) {
-            const gallery = document.getElementById(`image-gallery-${colorIndex}`);
-            if (gallery) {
-                gallery.innerHTML = `
-                    <div class="empty-gallery">
-                        <i class="fas fa-image"></i>
-                        <p>No images uploaded yet</p>
-                    </div>
-                `;
+        const gallery = document.getElementById(`image-gallery-${colorIndex}`);
+        if (gallery) {
+            if (productData.colors[colorIndex].images.length === 0) {
+                gallery.innerHTML = '<p class="text-muted text-center">No images uploaded yet</p>';
+            } else {
+                gallery.innerHTML = generateImageGallery(colorIndex);
             }
         }
     }
 }
 
-// Main Save Product Function
 async function saveProduct() {
     // Validate all steps
     if (!validateStep1()) return;
@@ -831,6 +673,9 @@ async function saveProduct() {
         }
     }
 
+    // Save basic info first
+    saveBasicInfo();
+
     const finalData = {
         title: productData.basicInfo.title,
         description: productData.basicInfo.description,
@@ -839,7 +684,7 @@ async function saveProduct() {
         variants: productData.colors.map(color => ({
             color: {
                 name: color.name,
-                hexCode: color.value // Using 'hexCode' to match your DTO
+                hexCode: color.value
             },
             sizes: color.sizes.map(size => ({
                 size: size.size,
@@ -849,12 +694,11 @@ async function saveProduct() {
             images: color.images.map(image => ({
                 fileName: image.name,
                 fileType: image.type,
-                base64Data: image.base64Data, // Make sure to store base64
+                base64Data: image.base64Data.split(',')[1], // Extract base64 data without prefix
                 fileSize: image.size
             }))
         }))
     };
-
 
     console.log('Product Data to Save:', finalData);
 
@@ -868,35 +712,44 @@ async function saveProduct() {
         const response = await fetch("api/product/add-product", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Accept": "application/json"
             },
             body: JSON.stringify(finalData)
         });
 
-        // Log response for debugging
-        console.log("Response status:", response.status);
-        console.log("Response headers:", response.headers);
-
-        if (response.ok) {
+        const contentType = response.headers.get("content-type");
+        if (response.ok && contentType && contentType.indexOf("application/json") !== -1) {
             const data = await response.json();
-            console.log("Response data:", data);
-
             if (data.status) {
-                Notiflix.Report.success('Openbay', data.message, 'Okay');
-                resetForm();
-                document.querySelector('.nav-link[data-tab="products"]').click();
+                Notiflix.Report.success('Success', data.message, 'Okay', () => {
+                    resetForm();
+                    showDashboard({
+                        preventDefault: () => {}
+                    });
+                });
             } else {
-                Notiflix.Notify.failure("Error: " + data.message, {
+                Notiflix.Notify.failure("Error: " + (data.message || "Unknown error"), {
                     position: 'center-top'
                 });
             }
         } else {
-            // Try to get error details
-            const errorText = await response.text();
-            console.error("Server error details:", errorText);
-            Notiflix.Notify.failure("Server error: " + response.status + " - " + errorText, {
-                position: 'center-top'
-            });
+            const responseText = await response.text();
+            if (responseText.toLowerCase().includes('<html>')) {
+                console.error("Server returned HTML instead of JSON. This might be a login redirect.");
+                Notiflix.Report.warning(
+                    'Session Expired',
+                    'Your session has expired. You will be redirected to the login page.',
+                    'Okay',
+                    () => {
+                        window.location.href = 'adminLogin.html';
+                    }
+                );
+            } else {
+                Notiflix.Notify.failure(`Server error ${response.status}: ${responseText.substring(0, 100)}`, {
+                    position: 'center-top'
+                });
+            }
         }
     } catch (e) {
         console.error("Network error:", e);
@@ -910,10 +763,15 @@ async function saveProduct() {
 
 function resetForm() {
     // Reset form fields
-    const addProductForm = document.getElementById('addProductForm');
-    if (addProductForm) {
-        addProductForm.reset();
-    }
+    const productTitle = document.getElementById('productTitle');
+    const productDescription = document.getElementById('productDescription');
+    const productCategory = document.getElementById('productCategory');
+    const productSKU = document.getElementById('productSKU');
+
+    if (productTitle) productTitle.value = '';
+    if (productDescription) productDescription.value = '';
+    if (productCategory) productCategory.selectedIndex = 0;
+    if (productSKU) productSKU.value = '';
 
     // Reset product data
     productData = {
@@ -924,12 +782,13 @@ function resetForm() {
 
     // Reset UI
     updateSelectedColorsList();
+
     const colorSizesContainer = document.getElementById('colorSizesContainer');
     if (colorSizesContainer) {
         colorSizesContainer.innerHTML = `
             <div class="empty-state">
                 <i class="fas fa-ruler-combined"></i>
-                <p>Please add colors in the previous step first.</p>
+                <p>Please add colors first to set sizes and prices.</p>
             </div>
         `;
     }
@@ -939,71 +798,20 @@ function resetForm() {
         colorImagesContainer.innerHTML = `
             <div class="empty-state">
                 <i class="fas fa-images"></i>
-                <p>Please add colors and sizes in the previous steps first.</p>
+                <p>Please add colors first to upload images.</p>
             </div>
         `;
     }
-
-    // Go back to step 1
-    goToStep(1);
 }
 
-// Initialize size datalist
-window.addEventListener('load', function() {
-    if (!document.getElementById('sizeOptionsList')) {
-        const sizeDatalist = document.createElement('datalist');
-        sizeDatalist.id = 'sizeOptionsList';
-        commonSizes.forEach(size => {
-            const option = document.createElement('option');
-            option.value = size;
-            sizeDatalist.appendChild(option);
-        });
-        document.body.appendChild(sizeDatalist);
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Set dashboard as active by default
+    showDashboard({preventDefault: () => {}});
+
+    // Initialize feather icons
+    if (typeof feather !== 'undefined') {
+        feather.replace();
     }
 });
-
-// function handleImageUpload(colorIndex, files) {
-//     const color = productData.colors[colorIndex];
-//     const maxSize = 5 * 1024 * 1024; // 5MB
-//
-//     for (let file of files) {
-//         // Check file size
-//         if (file.size > maxSize) {
-//             Notiflix.Notify.failure(`File "${file.name}" exceeds 5MB limit`, {
-//                 position: 'center-top'
-//             });
-//             continue;
-//         }
-//
-//         // Check file type
-//         if (!file.type.match('image.*')) {
-//             Notiflix.Notify.failure(`File "${file.name}" is not a valid image`, {
-//                 position: 'center-top'
-//             });
-//             continue;
-//         }
-//
-//         // Create preview and base64 data
-//         const reader = new FileReader();
-//         reader.onload = (e) => {
-//             const base64String = e.target.result;
-//
-//             color.images.push({
-//                 name: file.name,
-//                 type: file.type,
-//                 size: file.size,
-//                 preview: base64String,
-//                 base64Data: base64String.split(',')[1] // Remove the data URL prefix
-//             });
-//
-//             // Update gallery
-//             updateImageGallery(colorIndex);
-//         };
-//         reader.readAsDataURL(file);
-//     }
-//
-//     // Clear file input
-//     document.getElementById(`image-upload-${colorIndex}`).value = '';
-//     const uploadArea = document.getElementById(`image-upload-area-${colorIndex}`);
-//     if (uploadArea) uploadArea.style.display = 'none';
-// }

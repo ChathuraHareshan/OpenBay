@@ -262,6 +262,11 @@ public class ProfileService {
                             .setParameter("postalCode", userDTO.getPostalCode())
                             .getSingleResult();
 
+                    Long primaryCount = hibernateSession.createQuery("SELECT count(a) from Address a WHERE a.user =:user", Long.class)
+                            .setParameter("user",dbuser)
+                            .getSingleResult();
+
+
 
                     if (count > 0) {
                         message = "This address already exists!";
@@ -273,7 +278,14 @@ public class ProfileService {
                         address.setMobile(userDTO.getMobile());
                         address.setUser(dbuser);
                         address.setPostalCode(userDTO.getPostalCode());
+
+                        if(primaryCount == 0){
+                            address.setPrimary(true);
+                        }else {
+
                         address.setPrimary(false);
+                        }
+
 
                         Transaction transaction = hibernateSession.beginTransaction();
 

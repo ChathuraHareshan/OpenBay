@@ -10,6 +10,14 @@ import lk.karu.openbay.service.ContentService;
 @Path("/data")
 public class ContentController {
 
+    @Path("/topProduct")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response loadNewArrivals() {
+        String responseJson = new ContentService().loadTopProduct();
+        return Response.ok().entity(responseJson).build();
+    }
+
     @Path("/cities")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -41,6 +49,8 @@ public class ContentController {
         String sizesJson = new ContentService().loadAllSizes();
         return Response.ok().entity(sizesJson).build();
     }
+
+
 
 
 }
