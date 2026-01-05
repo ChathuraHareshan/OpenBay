@@ -12,10 +12,54 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ContentService {
-    private static final int MAX_RESULT = 10;
+
+
+    public String loadModelDetails(int id) {
+        JsonObject responseObject = new JsonObject();
+        boolean status = false;
+        String message = "";
+
+        if (id <= 0) {
+            message = "Please select a brand!";
+        } else {
+            Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
+            Category category = hibernateSession.find(Category.class, id);
+            if (category == null) {
+                message = "Please provide correct brand!";
+            } else {
+                List<Model> modelList = hibernateSession.createQuery("FROM Model m WHERE m.category=:category", Model.class)
+                        .setParameter("category", category)
+                        .getResultList();
+                if (modelList.isEmpty()) {
+                    message = "No models found!";
+                } else {
+                    responseObject.add("models", AppUtil.GSON.toJsonTree(ContentService.models(modelList)));
+                    status = true;
+                    message = "Models data loading successful";
+                }
+            }
+            hibernateSession.close();
+        }
+
+        responseObject.addProperty("status", status);
+        responseObject.addProperty("message", message);
+        return AppUtil.GSON.toJson(responseObject);
+    }
+
+    private static List<JsonObject> models(List<Model> modelList) {
+        List<JsonObject> brandJson = new ArrayList<>();
+        for (Model b : modelList) {
+            JsonObject obj = new JsonObject();
+            obj.addProperty("id", b.getId());
+            obj.addProperty("name", b.getName());
+            brandJson.add(obj);
+        }
+        return brandJson;
+    }
 
     public String loadTopProduct() {
 
@@ -27,13 +71,17 @@ public class ContentService {
         try {
 
             List<Product> products = session.createQuery(
-                    "SELECT DISTINCT p FROM Product p " +
-                            "LEFT JOIN FETCH p.variants v " +
-                            "LEFT JOIN FETCH v.sizes " +
-                            "LEFT JOIN FETCH v.images " +
-                            "LEFT JOIN FETCH p.category",
-                    Product.class
-            ).setMaxResults(8).getResultList(); // home page limit
+                            "SELECT DISTINCT p FROM Product p " +
+                                    "LEFT JOIN FETCH p.variants v " +
+                                    "LEFT JOIN FETCH v.sizes " +
+                                    "LEFT JOIN FETCH v.images " +
+                                    "JOIN FETCH p.category " +
+                                    "ORDER BY p.createdAt DESC",
+                            Product.class
+                    )
+                    .setMaxResults(10)
+                    .getResultList();
+
 
             for (Product product : products) {
 
@@ -42,27 +90,26 @@ public class ContentService {
                 dto.setTitle(product.getTitle());
                 dto.setCategory(product.getCategory().getName());
 
-                // MIN / MAX PRICE
-                double minPrice = Double.MAX_VALUE;
-                double maxPrice = 0;
+                List<Double> prices = new ArrayList<>();
 
                 for (ProductVariant variant : product.getVariants()) {
                     for (VariantSize size : variant.getSizes()) {
-                        double price = size.getPrice();
-
-                        if (price < minPrice) {
-                            minPrice = price;
-                        }
-                        if (price > maxPrice) {
-                            maxPrice = price;
-                        }
+                        prices.add(size.getPrice());
                     }
                 }
 
-                dto.setMinPrice(minPrice == Double.MAX_VALUE ? 0 : minPrice);
-                dto.setMaxPrice(maxPrice);
+                if (prices.isEmpty()) {
+                    dto.setMinPrice((double) 0);
+                    dto.setMaxPrice((double) 0);
+                } else {
+                    double minPrice = Collections.min(prices);
+                    double maxPrice = Collections.max(prices);
 
-                // GET ONLY 2 IMAGES
+                    dto.setMinPrice(minPrice);
+                    dto.setMaxPrice(maxPrice);
+                }
+
+
                 List<String> images = new ArrayList<>();
 
                 for (ProductVariant variant : product.getVariants()) {
@@ -76,7 +123,6 @@ public class ContentService {
 
                 dto.setImages(images);
 
-                // COLORS FROM VARIANTS
                 List<ColorDTO> colorDTOList = new ArrayList<>();
 
                 for (ProductVariant variant : product.getVariants()) {
@@ -102,7 +148,6 @@ public class ContentService {
 
         return AppUtil.GSON.toJson(responseObject);
     }
-
 
     public String loadAllCities(){
         JsonObject responseObject = new JsonObject();

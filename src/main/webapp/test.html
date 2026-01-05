@@ -1,800 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account Dashboard - E-Commerce Site</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/myAccount.css">
+    <meta charset="UTF-8" />
+    <title>E-commerce Header</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
 </head>
+<body class="bg-white">
 
+<!-- TOP BAR -->
+<div class="border-b text-sm text-gray-600">
+    <div class="max-w-7xl mx-auto flex items-center justify-between py-3 px-4">
+        <!-- Left -->
+        <div class="flex items-center gap-2">
+            <i class="fa-solid fa-phone"></i>
+            <span>Call: +0123 456 789</span>
+        </div>
 
+        <!-- Center Search -->
+        <div class="flex w-[500px]">
+            <input
+                    type="text"
+                    placeholder="Search product ..."
+                    class="w-full border border-gray-300 px-4 py-2 focus:outline-none"
+            />
+            <button class="bg-emerald-500 px-5 text-white">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </div>
 
-<body class="body">
+        <!-- Right -->
+        <div class="flex items-center gap-6">
+            <div class="flex gap-3 text-gray-500">
+                <i class="fab fa-facebook-f"></i>
+                <i class="fab fa-twitter"></i>
+                <i class="fab fa-pinterest-p"></i>
+                <i class="fab fa-instagram"></i>
+            </div>
+            <a href="#" class="hover:text-emerald-500">Login</a>
 
-<!-- Mobile Menu Toggle -->
-<button class="mobile-menu-toggle" id="mobileMenuToggle">
-    <i class="fas fa-bars"></i> Menu
-</button>
+            <div class="flex items-center gap-5">
+                <div class="relative">
+                    <i class="fa-regular fa-user text-lg"></i>
+                </div>
 
-<!-- Mobile Tab Navigation -->
-<div class="mobile-tab-nav" id="mobileTabNav">
-    <a href="#" class="mobile-tab-item active" data-tab="dashboard">
-        <i class="fas fa-chart-line"></i> Dashboard
-    </a>
-    <a href="#" class="mobile-tab-item" id="profile-anchor-mobile" data-tab="profile">
-        <i class="fas fa-user"></i> Profile
-    </a>
-    <a href="#" class="mobile-tab-item" id="address-anchor-mobile" data-tab="address">
-        <i class="fas fa-map-marker-alt"></i> Address
-    </a>
-    <a href="#" class="mobile-tab-item" data-tab="password">
-        <i class="fas fa-key"></i> Password
-    </a>
-    <a href="#" class="mobile-tab-item" data-tab="orders">
-        <i class="fas fa-shopping-bag"></i> Orders
-    </a>
-    <a href="#" class="mobile-tab-item" data-tab="products">
-        <i class="fas fa-box"></i> Products
-    </a>
-    <a href="#" class="mobile-tab-item" data-tab="add-product">
-        <i class="fas fa-plus-circle"></i> Add Product
-    </a>
+                <div class="relative">
+                    <i class="fa-regular fa-heart text-lg"></i>
+                    <span class="absolute -top-2 -right-2 bg-emerald-500 text-white text-xs px-1 rounded-full">3</span>
+                </div>
+
+                <div class="relative">
+                    <i class="fa-solid fa-cart-shopping text-lg"></i>
+                    <span class="absolute -top-2 -right-2 bg-emerald-500 text-white text-xs px-1 rounded-full">2</span>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="container">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="profile-summary">
-            <div class="profile-img-wrapper">
-                <div class="profile-img-container">
-                    <img src="https://ui-avatars.com/api/?name=Chathura+Hareshan&background=1cc0a0&color=fff&size=100"
-                         alt="Profile"
-                         class="profile-img"
-                         id="profileImage">
-                    <div class="profile-img-edit">
-                        <i class="fas fa-pen"></i>
-                    </div>
-                </div>
-                <input type="file" id="profilePhotoInput" accept="image/*" style="display: none;">
-            </div>
-            <h2 class="user-name">Chathura Hareshan</h2>
-            <p class="user-email">chathura.hareshan142@gmail.com</p>
-            <button class="btn btn-primary btn-small" id="updatePhotoBtn">Update Photo</button>
-        </div>
+<!-- MAIN NAV -->
+<div class="bg-gray-800">
+    <div class="max-w-7xl mx-auto flex items-center justify-between px-4">
 
-        <ul class="nav-menu">
-            <li class="nav-item">
-                <a href="#" class="nav-link active" data-tab="dashboard">
-                    <i class="fas fa-chart-line"></i> Dashboard
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="profile-anchor" data-tab="profile">
-                    <i class="fas fa-user"></i> Profile
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="address-anchor" data-tab="address">
-                    <i class="fas fa-map-marker-alt"></i> Address
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link" data-tab="password">
-                    <i class="fas fa-key"></i> Password Reset
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link" data-tab="orders">
-                    <i class="fas fa-shopping-bag"></i> Orders
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link" data-tab="products">
-                    <i class="fas fa-box"></i> My Products
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link" data-tab="add-product">
-                    <i class="fas fa-plus-circle"></i> Add Product
-                </a>
-            </li>
-        </ul>
+        <!-- Browse Categories -->
+        <div class="relative group">
+            <button class="flex items-center gap-3 bg-emerald-500 text-white px-6 py-4 font-semibold">
+                <i class="fa-solid fa-bars"></i>
+                BROWSE CATEGORIES
+            </button>
 
-        <div class="footer">
-            <p>&copy; 2025 OpenBay</p>
-        </div>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="content-header">
-            <h1 class="content-title"><i class="fas fa-chart-line"></i> Dashboard Overview</h1>
-            <div class="breadcrumb">
-                <a href="index.html"><i class="fas fa-home"></i> Home</a>
-                <span class="separator">›</span>
-                <a>My Account</a>
-                <span class="separator">›</span>
-                <span class="current">My Account</span>
-            </div>
-        </div>
-
-        <!-- Profile Tab -->
-        <div id="profile" class="tab-content">
-            <form>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="firstName">First Name</label>
-                        <input type="text" id="firstName" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="lastName">Last Name</label>
-                        <input type="text" id="lastName" class="form-control">
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="primaryLineOne">Address Line One</label>
-                        <input type="text" id="primaryLineOne" class="form-control" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label for="primaryLineTwo">Address Line Two</label>
-                        <input type="text" id="primaryLineTwo" class="form-control" disabled>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="PrimaryCity">City</label>
-                        <select id="PrimaryCity" class="form-control" disabled>
-                            <option value="0">Select City</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="primaryPCode">Postal Code</label>
-                        <input type="text" id="primaryPCode" class="form-control" disabled>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="primaryMobile">Phone Number</label>
-                    <input type="tel" id="primaryMobile" class="form-control" disabled>
-                </div>
-
-                <div class="form-actions">
-                    <button type="button" class="btn btn-primary" onclick="saveChanges();">Save Changes</button>
-                    <button type="button" class="btn btn-secondary" id="cancelProfile">Cancel</button>
-                </div>
-            </form>
-        </div>
-
-        <!-- Address Tab -->
-        <div id="address" class="tab-content">
-            <div class="tab-content-inner">
-                <div class="address-cards" id="addressList">
-                    <!-- Add New Address Card (Clickable) -->
-                    <div class="address-card add-new" id="addAddressCard">
-                        <div class="add-new-content">
-                            <i class="fas fa-plus-circle"></i>
-                            <h4>Add New Address</h4>
-                            <p>Click to add a new shipping address</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Edit Address Modal -->
-                <div class="modal-overlay" id="editAddressModal" style="display: none;">
-                    <div class="modal-container">
-                        <div class="modal-header">
-                            <h3 class="modal-title">
-                                <i class="fas fa-edit"></i> Edit Address
-                            </h3>
-                            <button class="modal-close" id="closeEditModal" onclick="closeEditModal();">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-
-                        <div class="modal-body">
-                            <form id="editAddressForm">
-                                <div class="form-group">
-                                    <label for="editAddressLine1">Address Line 1 *</label>
-                                    <input type="text" id="editAddressLine1" class="form-control" placeholder="House number, street" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="editAddressLine2">Address Line 2 (Optional)</label>
-                                    <input type="text" id="editAddressLine2" class="form-control" placeholder="Apartment, suite, unit">
-                                </div>
-
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="editCity">City *</label>
-                                        <select id="editCity" class="form-control" required>
-                                            <option value="0">Select city</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="editPostalCode">Postal Code *</label>
-                                        <input type="text" id="editPostalCode" class="form-control" required>
-
-                                    </div>
-                                </div>
-
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="editPhone">Phone Number *</label>
-                                        <input type="tel" id="editPhone" class="form-control" required>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" id="cancelEditModal" onclick="closeEditModal();">Cancel</button>
-                            <button type="button" class="btn btn-primary" id="saveEditAddress" onclick="saveEditAddress();">Save Changes</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Add/Edit Address Form (Hidden by default) -->
-                <div class="address-form-container" id="addressFormContainer" style="display: none;">
-                    <div class="address-form-header">
-                        <h3 class="section-title" id="addressFormTitle">Add New Address</h3>
-                        <button class="btn btn-secondary btn-small" id="closeAddressForm">
-                            <i class="fas fa-times"></i> Cancel
-                        </button>
-                    </div>
-
-                    <form id="addressForm">
-                        <div class="form-group">
-                            <label for="newAddressLine1">Address Line 1</label>
-                            <input type="text" id="newAddressLine1" class="form-control" placeholder="House number, street" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="newAddressLine2">Address Line 2 (Optional)</label>
-                            <input type="text" id="newAddressLine2" class="form-control" placeholder="Apartment, suite, unit">
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="newCity">City</label>
-                                <select id="newCity" class="form-control">
-                                    <option value="0">Select City</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="newPostalCode">Postal Code</label>
-                                <input type="text" id="newPostalCode" class="form-control" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="newMobile">Phone Number</label>
-                            <input type="tel" id="newMobile" class="form-control" placeholder="077" required>
-                        </div>
-
-                        <div class="form-actions">
-                            <button type="button" class="btn btn-primary" id="saveAddressBtn" onclick="addNewAddress();">Save Address</button>
-                            <button type="button" class="btn btn-secondary" id="cancelAddressBtn">Cancel</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <!-- Password Reset Tab -->
-        <div id="password" class="tab-content">
-            <form>
-                <div class="form-group">
-                    <label for="currentPassword">Current Password</label>
-                    <input type="password" id="currentPassword" class="form-control" placeholder="Enter your current password">
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="newPassword">New Password</label>
-                        <input type="password" id="newPassword" class="form-control" placeholder="Enter new password">
-                    </div>
-                    <div class="form-group">
-                        <label for="confirmPassword">Confirm New Password</label>
-                        <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm new password">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="password-requirements">
-                        <p><strong>Password Requirements:</strong></p>
-                        <ul>
-                            <li>At least 8 characters long</li>
-                            <li>Contains at least one uppercase letter</li>
-                            <li>Contains at least one number</li>
-                            <li>Contains at least one special character</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="form-actions">
-                    <button type="button" class="btn btn-primary" onclick="changePassword();">Change Password</button>
-                    <button type="button" class="btn btn-secondary" id="cancelPassword">Cancel</button>
-                </div>
-            </form>
-        </div>
-
-        <!-- Orders Tab -->
-        <div id="orders" class="tab-content">
-            <div class="recent-orders">
-                <h3 class="section-title">All Orders</h3>
-                <ul class="order-list">
-                    <li class="order-item">
-                        <span class="order-id">ORD-78945</span>
-                        <span>July 15, 2023</span>
-                        <span>$128.50</span>
-                        <span class="order-status status-delivered">Delivered</span>
-                        <button class="btn btn-primary btn-small">View Details</button>
-                    </li>
-                    <li class="order-item">
-                        <span class="order-id">ORD-78944</span>
-                        <span>July 12, 2023</span>
-                        <span>$89.99</span>
-                        <span class="order-status status-pending">Pending</span>
-                        <button class="btn btn-primary btn-small">Track Order</button>
-                    </li>
-                    <li class="order-item">
-                        <span class="order-id">ORD-78943</span>
-                        <span>July 10, 2023</span>
-                        <span>$245.75</span>
-                        <span class="order-status status-processing">Processing</span>
-                        <button class="btn btn-primary btn-small">Track Order</button>
-                    </li>
-                    <li class="order-item">
-                        <span class="order-id">ORD-78942</span>
-                        <span>July 8, 2023</span>
-                        <span>$67.20</span>
-                        <span class="order-status status-delivered">Delivered</span>
-                        <button class="btn btn-primary btn-small">View Details</button>
-                    </li>
-                    <li class="order-item">
-                        <span class="order-id">ORD-78941</span>
-                        <span>July 5, 2023</span>
-                        <span>$150.00</span>
-                        <span class="order-status status-delivered">Delivered</span>
-                        <button class="btn btn-primary btn-small">View Details</button>
-                    </li>
+            <!-- Dropdown -->
+            <div class="absolute left-0 top-full w-64 bg-white shadow-lg hidden group-hover:block z-50">
+                <ul class="divide-y text-gray-700">
+                    <li class="px-5 py-3 hover:bg-gray-100"><i class="fa-solid fa-tv mr-3"></i>Electronics</li>
+                    <li class="px-5 py-3 hover:bg-gray-100"><i class="fa-solid fa-couch mr-3"></i>Furniture</li>
+                    <li class="px-5 py-3 hover:bg-gray-100"><i class="fa-solid fa-kitchen-set mr-3"></i>Cooking</li>
+                    <li class="px-5 py-3 hover:bg-gray-100"><i class="fa-solid fa-shirt mr-3"></i>Clothing</li>
+                    <li class="px-5 py-3 hover:bg-gray-100"><i class="fa-solid fa-blender mr-3"></i>Home Appliances</li>
+                    <li class="px-5 py-3 hover:bg-gray-100"><i class="fa-solid fa-heart-pulse mr-3"></i>Healthy & Beauty</li>
+                    <li class="px-5 py-3 hover:bg-gray-100"><i class="fa-solid fa-shoe-prints mr-3"></i>Shoes & Boots</li>
+                    <li class="px-5 py-3 hover:bg-gray-100"><i class="fa-solid fa-mountain mr-3"></i>Travel & Outdoor</li>
+                    <li class="px-5 py-3 hover:bg-gray-100"><i class="fa-solid fa-mobile-screen mr-3"></i>Smart Phones</li>
+                    <li class="px-5 py-3 hover:bg-gray-100"><i class="fa-solid fa-headphones mr-3"></i>TV & Audio</li>
+                    <li class="px-5 py-3 hover:bg-gray-100"><i class="fa-solid fa-backpack mr-3"></i>Backpack & Bag</li>
+                    <li class="px-5 py-3 hover:bg-gray-100"><i class="fa-solid fa-music mr-3"></i>Musical Instruments</li>
+                    <li class="px-5 py-3 hover:bg-gray-100"><i class="fa-solid fa-gift mr-3"></i>Gift Ideas</li>
                 </ul>
             </div>
         </div>
 
-        <!-- My Products Tab -->
-        <div id="products" class="tab-content">
-            <div class="section-title">My Products</div>
-            <div class="products-grid">
-                <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Wireless Headphones" class="product-img">
-                    <div class="product-info">
-                        <h3 class="product-title">Wireless Bluetooth Headphones</h3>
-                        <p class="product-price">$59.99</p>
-                        <p>Noise-cancelling over-ear headphones with 30hr battery</p>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small">Edit</button>
-                            <button class="btn btn-secondary btn-small">View</button>
-                        </div>
-                    </div>
-                </div>
+        <!-- Center Nav -->
+        <nav class="flex items-center gap-10 text-white font-medium">
+            <a href="#" class="text-emerald-500">HOME</a>
+            <a href="#" class="hover:text-emerald-500">SHOP</a>
+            <a href="#" class="hover:text-emerald-500">PRODUCT</a>
+            <a href="#" class="hover:text-emerald-500">SALE</a>
+        </nav>
 
-                <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Smart Watch" class="product-img">
-                    <div class="product-info">
-                        <h3 class="product-title">Smart Fitness Watch</h3>
-                        <p class="product-price">$129.99</p>
-                        <p>Track heart rate, sleep, and workouts with GPS</p>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small">Edit</button>
-                            <button class="btn btn-secondary btn-small">View</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1583394838336-acd977736f90?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Charger" class="product-img">
-                    <div class="product-info">
-                        <h3 class="product-title">USB-C Fast Charger</h3>
-                        <p class="product-price">$24.99</p>
-                        <p>65W PD fast charging for laptops and phones</p>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small">Edit</button>
-                            <button class="btn btn-secondary btn-small">View</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- Right Promo -->
+        <div class="flex items-center gap-2 text-white">
+            <i class="fa-regular fa-lightbulb"></i>
+            <span>Clearance Up to 30% Off</span>
         </div>
 
-        <!-- Add Product Tab -->
-        <div id="add-product" class="tab-content">
-            <div class="section-title">Add New Product</div>
-            <form id="addProductForm">
-                <!-- Step 1: Basic Product Info -->
-                <div class="form-step" id="step1">
-                    <h3 class="step-title">Step 1: Basic Information</h3>
-
-                    <div class="form-group">
-                        <label for="productTitle">Product Title *</label>
-                        <input type="text" id="productTitle" class="form-control" placeholder="Enter product title" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="productDescription">Description *</label>
-                        <textarea id="productDescription" class="form-control" placeholder="Describe your product in detail" rows="4" required></textarea>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="productCategory">Category *</label>
-                            <select id="productCategory" class="form-control" required>
-                                <option value="0">Select category</option>
-                                <!--                                    <option value="clothing">Clothing</option>-->
-                                <!--                                    <option value="shoes">Shoes</option>-->
-                                <!--                                    <option value="electronics">Electronics</option>-->
-                                <!--                                    <option value="accessories">Accessories</option>-->
-                                <!--                                    <option value="home">Home & Kitchen</option>-->
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="productSKU">Product SKU</label>
-                            <input type="text" id="productSKU" class="form-control" placeholder="PROD-001">
-                        </div>
-                    </div>
-
-                    <div class="step-actions">
-                        <button type="button" class="btn btn-primary" id="nextToStep2">
-                            Next: Add Colors <i class="fas fa-arrow-right"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Step 2: Color Variations -->
-                <div class="form-step" id="step2" style="display: none;">
-                    <div class="step-header">
-                        <h3 class="step-title">Step 2: Add Color Variations</h3>
-                        <button type="button" class="btn btn-text" id="backToStep1">
-                            <i class="fas fa-arrow-left"></i> Back to Basic Info
-                        </button>
-                    </div>
-
-                    <div class="color-selection-section">
-                        <div class="section-header">
-                            <h4>Select Colors for Your Product</h4>
-                            <button type="button" class="btn btn-outline btn-small" id="addColorBtn">
-                                <i class="fas fa-plus"></i> Add Color
-                            </button>
-                        </div>
-
-                        <!-- Color Selection Options -->
-                        <div class="color-selection-panel" id="colorSelectionPanel" style="display: none;">
-                            <div class="panel-header">
-                                <h5>Select a Color</h5>
-                                <button type="button" class="btn btn-text btn-small" id="closeColorPanel">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-
-                            <div class="color-options-grid" id="colorOptionsGrid">
-                                <!-- Colors will be populated here -->
-                            </div>
-
-                            <div class="custom-color-section">
-                                <h6>Or Create Custom Color</h6>
-                                <div class="custom-color-input">
-                                    <input type="color" id="customColorPicker" class="color-picker-input">
-                                    <input type="text" id="customColorName" class="form-control" placeholder="Enter color name">
-                                    <button type="button" class="btn btn-outline btn-small" id="addCustomColorBtn">
-                                        Add
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Selected Colors List -->
-                        <div class="selected-colors-container" id="selectedColorsContainer">
-                            <div class="empty-state">
-                                <i class="fas fa-palette"></i>
-                                <p>No colors added yet. Click "Add Color" to select colors for your product.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="step-actions">
-                        <button type="button" class="btn btn-secondary" id="backToStep1Bottom">
-                            <i class="fas fa-arrow-left"></i> Back
-                        </button>
-                        <button type="button" class="btn btn-primary" id="nextToStep3">
-                            Next: Add Sizes & Prices <i class="fas fa-arrow-right"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Step 3: Add Sizes for Each Color -->
-                <div class="form-step" id="step3" style="display: none;">
-                    <div class="step-header">
-                        <h3 class="step-title">Step 3: Add Sizes & Prices</h3>
-                        <button type="button" class="btn btn-text" id="backToStep2">
-                            <i class="fas fa-arrow-left"></i> Back to Colors
-                        </button>
-                    </div>
-
-                    <div class="color-sizes-container" id="colorSizesContainer">
-                        <!-- Color sections will be added here dynamically -->
-                        <div class="empty-state">
-                            <i class="fas fa-ruler-combined"></i>
-                            <p>Please add colors in the previous step first.</p>
-                        </div>
-                    </div>
-
-                    <div class="step-actions">
-                        <button type="button" class="btn btn-secondary" id="backToStep2Bottom">
-                            <i class="fas fa-arrow-left"></i> Back
-                        </button>
-                        <button type="button" class="btn btn-primary" id="nextToStep4">
-                            Next: Add Images <i class="fas fa-arrow-right"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Step 4: Add Images for Each Color -->
-                <div class="form-step" id="step4" style="display: none;">
-                    <div class="step-header">
-                        <h3 class="step-title">Step 4: Add Product Images</h3>
-                        <button type="button" class="btn btn-text" id="backToStep3">
-                            <i class="fas fa-arrow-left"></i> Back to Sizes
-                        </button>
-                    </div>
-
-                    <div class="color-images-container" id="colorImagesContainer">
-                        <!-- Color image sections will be added here dynamically -->
-                        <div class="empty-state">
-                            <i class="fas fa-images"></i>
-                            <p>Please add colors and sizes in the previous steps first.</p>
-                        </div>
-                    </div>
-
-                    <!-- Form Actions -->
-                    <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" id="backToStep3Bottom">
-                            <i class="fas fa-arrow-left"></i> Back
-                        </button>
-                        <button type="button" class="btn btn-primary" id="saveProductBtn">
-                            <i class="fas fa-save"></i> Save Product
-                        </button>
-                        <button type="button" class="btn btn-outline" id="cancelBtn">Cancel</button>
-                    </div>
-                </div>
-            </form>
-        </div>
+    </div>
 </div>
-</main>
-</div>
-
-<script>
-    // Tab switching functionality
-    document.addEventListener('DOMContentLoaded', function() {
-        const navLinks = document.querySelectorAll('.nav-link');
-        const tabContents = document.querySelectorAll('.tab-content');
-        const mobileTabItems = document.querySelectorAll('.mobile-tab-item');
-        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-        const sidebar = document.querySelector('.sidebar');
-        const addAddressCard = document.getElementById('addAddressCard');
-        const addressFormContainer = document.getElementById('addressFormContainer');
-        const closeAddressForm = document.getElementById('closeAddressForm');
-        const cancelAddressBtn = document.getElementById('cancelAddressBtn');
-
-        const mobileOverlay = document.createElement('div');
-        mobileOverlay.className = 'mobile-sidebar-overlay';
-        document.body.appendChild(mobileOverlay);
-
-        function switchTab(tabId) {
-            // Hide all tab contents
-            tabContents.forEach(content => {
-                content.classList.remove('active');
-            });
-
-            // Remove active class from all nav links
-            navLinks.forEach(item => item.classList.remove('active'));
-            mobileTabItems.forEach(item => item.classList.remove('active'));
-
-            // Show the selected tab
-            const activeTab = document.getElementById(tabId);
-            if (activeTab) {
-                activeTab.classList.add('active');
-                setTimeout(() => {
-                    activeTab.scrollTop = 0;
-                }, 10);
-            }
-
-            // Activate the corresponding nav link
-            document.querySelector(`.nav-link[data-tab="${tabId}"]`)?.classList.add('active');
-            document.querySelector(`.mobile-tab-item[data-tab="${tabId}"]`)?.classList.add('active');
-
-            // Update header and breadcrumb
-            updateContentHeader(tabId);
-            updateBreadcrumb(tabId);
-
-            // Close mobile menu
-            closeMobileMenu();
-        }
-
-        // Desktop navigation
-        navLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const tabId = this.getAttribute('data-tab');
-                switchTab(tabId);
-            });
-        });
-
-        // Mobile tab navigation
-        mobileTabItems.forEach(item => {
-            item.addEventListener('click', function(e) {
-                e.preventDefault();
-                const tabId = this.getAttribute('data-tab');
-                switchTab(tabId);
-            });
-        });
-
-        // Mobile menu toggle
-        function openMobileMenu() {
-            sidebar.classList.add('active');
-            mobileOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeMobileMenu() {
-            sidebar.classList.remove('active');
-            mobileOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        if (mobileMenuToggle) {
-            mobileMenuToggle.addEventListener('click', function(e) {
-                e.stopPropagation();
-                openMobileMenu();
-            });
-        }
-
-        // Close sidebar when clicking overlay
-        mobileOverlay.addEventListener('click', function() {
-            closeMobileMenu();
-        });
-
-        // Close sidebar with escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeMobileMenu();
-            }
-        });
-
-        // Function to update content header
-        function updateContentHeader(tabId) {
-            const contentTitle = document.querySelector('.content-title');
-            const titles = {
-                'dashboard': '<i class="fas fa-chart-line"></i> Dashboard Overview',
-                'profile': '<i class="fas fa-user"></i> Personal Information',
-                'address': '<i class="fas fa-map-marker-alt"></i> Address Details',
-                'password': '<i class="fas fa-key"></i> Password Reset',
-                'orders': '<i class="fas fa-shopping-bag"></i> My Orders',
-                'products': '<i class="fas fa-box"></i> My Products',
-                'add-product': '<i class="fas fa-plus-circle"></i> Add New Product'
-            };
-
-            if (titles[tabId] && contentTitle) {
-                contentTitle.innerHTML = titles[tabId];
-            }
-        }
-
-        // Function to update breadcrumb
-        function updateBreadcrumb(tabId) {
-            const breadcrumb = document.querySelector('.breadcrumb .current');
-            const tabNames = {
-                'dashboard': 'Dashboard',
-                'profile': 'Profile',
-                'address': 'Address',
-                'password': 'Password',
-                'orders': 'Orders',
-                'products': 'My Products',
-                'add-product': 'Add Product'
-            };
-
-            if (breadcrumb && tabNames[tabId]) {
-                breadcrumb.textContent = tabNames[tabId];
-            }
-        }
-
-        // Profile picture upload functionality
-        const profileImgContainer = document.querySelector('.profile-img-container');
-        const profileImage = document.getElementById('profileImage');
-        const profilePhotoInput = document.getElementById('profilePhotoInput');
-
-        if (profileImgContainer && profilePhotoInput) {
-            profileImgContainer.addEventListener('click', function(e) {
-                e.stopPropagation();
-                profilePhotoInput.click();
-            });
-
-            profilePhotoInput.addEventListener('change', function(e) {
-                if (e.target.files && e.target.files[0]) {
-                    const file = e.target.files[0];
-
-                    if (!file.type.match('image.*')) {
-                        alert('Please select an image file (JPG, PNG, GIF, etc.)');
-                        return;
-                    }
-
-                    if (file.size > 5 * 1024 * 1024) {
-                        alert('Image size should be less than 5MB');
-                        return;
-                    }
-
-                    const reader = new FileReader();
-
-                    reader.onload = function(event) {
-                        profileImage.src = event.target.result;
-                        alert('Profile photo updated successfully!');
-                    };
-
-                    reader.readAsDataURL(file);
-                }
-            });
-        }
-
-        document.getElementById('updatePhotoBtn').addEventListener('click', function(e) {
-            e.stopPropagation();
-            if (profilePhotoInput) {
-                profilePhotoInput.click();
-            }
-        });
-
-        // Address functionality
-        if (addAddressCard) {
-            addAddressCard.addEventListener('click', function(e) {
-                e.preventDefault();
-                if (addressFormContainer) {
-                    addressFormContainer.style.display = 'block';
-                    document.getElementById('addressFormTitle').textContent = 'Add New Address';
-                    document.getElementById('addressForm').reset();
-                    addressFormContainer.scrollIntoView({ behavior: 'smooth' });
-                }
-            });
-        }
-
-        if (closeAddressForm) {
-            closeAddressForm.addEventListener('click', function(e) {
-                e.preventDefault();
-                if (addressFormContainer) {
-                    addressFormContainer.style.display = 'none';
-                }
-            });
-        }
-
-        if (cancelAddressBtn) {
-            cancelAddressBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                if (addressFormContainer) {
-                    addressFormContainer.style.display = 'none';
-                }
-            });
-        }
-
-        // Initialize with dashboard tab
-        switchTab('dashboard');
-    });
-
-</script>
-
-<!-- External JavaScript files -->
-<script src="assets/js/userAccount.js"></script>
-<script src="assets/js/notiflix-aio-3.2.8.min.js"></script>
-<script src="assets/js/addProduct.js"></script>
 
 </body>
 </html>

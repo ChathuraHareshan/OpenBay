@@ -100,6 +100,52 @@ async function loadCategories() {
     }
 }
 
+async function loadModels(){
+    Notiflix.Loading.pulse("Wait...", {
+        clickToClose: false,
+        svgColor: '#0284c7'
+    });
+    const categoryselect = document.getElementById("productCategory");
+
+    try {
+        const response = await fetch(`api/data/${categoryselect.value}/models`);
+        if (response.ok) {
+            const data = await response.json();
+            const modelSelect = document.getElementById("productModel");
+            if (data.status) {
+
+                // Clear existing options except the first one
+                while (modelSelect.options.length > 1) {
+                    modelSelect.remove(1);
+                }
+
+                if (data.models && Array.isArray(data.models)) {
+                    data.models.forEach(model => {
+                        const opt = document.createElement("option");
+                        opt.value = model.id;
+                        opt.textContent = model.name;
+                        modelSelect.appendChild(opt);
+                    });
+                }
+
+            } else {
+                Notiflix.Notify.failure(data.message, {
+                    position: 'center-top'
+                });
+            }
+        } else {
+            Notiflix.Notify.failure("Models loading failed!", {
+                position: 'center-top'
+            });
+        }
+    } catch (e) {
+        Notiflix.Notify.failure(e.message, {
+            position: 'center-top'
+        });
+    } finally {
+        Notiflix.Loading.remove();
+    }
+}
 
 function initializeColorOptions() {
     const colorGrid = document.getElementById('colorOptionsGrid');
@@ -158,20 +204,6 @@ function setupEventListeners() {
     }
 }
 
-// function goToStep(stepNumber) {
-//     // For admin panel, we show everything at once, but we can use this to update data
-//     productData.currentStep = stepNumber;
-//
-//     // Update data when moving between steps
-//     if (stepNumber === 1) {
-//         saveBasicInfo();
-//     } else if (stepNumber === 3) {
-//         generateSizeSections();
-//     } else if (stepNumber === 4) {
-//         generateImageSections();
-//     }
-// }
-
 // Step 1: Basic Info
 function validateStep1() {
     const title = document.getElementById('productTitle')?.value.trim();
@@ -206,13 +238,15 @@ function saveBasicInfo() {
     const titleEl = document.getElementById('productTitle');
     const descEl =  editor1.getHTMLCode();
     const categoryEl = document.getElementById('productCategory');
+    const modelEl = document.getElementById('productModel');
     const skuEl = document.getElementById('productSKU');
 
-    if (titleEl && descEl && categoryEl) {
+    if (titleEl && descEl && categoryEl && modelEl) {
         productData.basicInfo = {
             title: titleEl.value,
             description: descEl,
             category: categoryEl.value,
+            model: modelEl.value,
             sku: skuEl ? skuEl.value || '' : ''
         };
     }
@@ -306,7 +340,6 @@ function validateStep2() {
     return true;
 }
 
-// Step 3: Sizes for Each Color
 function generateSizeSections() {
     const container = document.getElementById('colorSizesContainer');
     if (!container) return;
@@ -371,14 +404,21 @@ function generateSizeRows(colorIndex) {
     const color = productData.colors[colorIndex];
     let rows = '';
 
+    const selectedSizes = color.sizes.map(s => s.size);
+
     color.sizes.forEach((size, sizeIndex) => {
+
+        const availableSizes = commonSizes.filter(s =>
+            s === size.size || !selectedSizes.includes(s)
+        );
+
         rows += `
             <tr class="size-row" id="size-row-${colorIndex}-${sizeIndex}">
                 <td>
                     <select class="form-control form-control-sm size-input" 
                             onchange="updateSizeField(${colorIndex}, ${sizeIndex}, 'size', this.value)">
                         <option value="">Select Size</option>
-                        ${commonSizes.map(sizeOption => `
+                        ${availableSizes.map(sizeOption => `
                             <option value="${sizeOption}" ${size.size === sizeOption ? 'selected' : ''}>
                                 ${sizeOption}
                             </option>
@@ -420,23 +460,30 @@ function updateSizeRows(colorIndex) {
 function addSizeRow(colorIndex) {
     const color = productData.colors[colorIndex];
 
-    // Add new size to color with empty size value
+    const selectedSizes = color.sizes.map(s => s.size);
+
+    const availableSizes = commonSizes.filter(size =>
+        !selectedSizes.includes(size)
+    );
+
+    if (availableSizes.length === 0) {
+        Notiflix.Notify.info('All sizes have been added for this color');
+        return;
+    }
+
     color.sizes.push({
-        size: '',
+        size: availableSizes[0],
         price: 0,
         quantity: 0
     });
 
-    // Update UI
     updateSizeRows(colorIndex);
 
-    // Remove empty row if it exists
     const emptyRow = document.querySelector(`#sizes-body-${colorIndex} .empty-row`);
     if (emptyRow) {
         emptyRow.remove();
     }
 
-    // Focus on the new size input
     setTimeout(() => {
         const rows = document.querySelectorAll(`#sizes-body-${colorIndex} .size-row`);
         if (rows.length > 0) {
@@ -462,7 +509,6 @@ function removeSize(colorIndex, sizeIndex) {
         productData.colors[colorIndex].sizes.splice(sizeIndex, 1);
         updateSizeRows(colorIndex);
 
-        // If no sizes left, show empty row
         if (productData.colors[colorIndex].sizes.length === 0) {
             const tbody = document.getElementById(`sizes-body-${colorIndex}`);
             if (tbody) {
@@ -472,6 +518,8 @@ function removeSize(colorIndex, sizeIndex) {
                     </tr>
                 `;
             }
+        } else {
+            updateSizeRows(colorIndex);
         }
     }
 }
@@ -485,13 +533,20 @@ function validateStep3() {
             return false;
         }
 
+        const sizeSet = new Set();
         for (let j = 0; j < color.sizes.length; j++) {
             const size = color.sizes[j];
 
-            if (!size.size.trim()) {
+            if (!size.size || size.size.trim() === '') {
                 alert(`Please select a size for color: ${color.name}`);
                 return false;
             }
+
+            if (sizeSet.has(size.size)) {
+                alert(`Duplicate size "${size.size}" found for color: ${color.name}`);
+                return false;
+            }
+            sizeSet.add(size.size);
 
             if (size.price <= 0) {
                 alert(`Please enter a valid price for size ${size.size} in color: ${color.name}`);
@@ -508,7 +563,6 @@ function validateStep3() {
     return true;
 }
 
-// Step 4: Images
 function generateImageSections() {
     const container = document.getElementById('colorImagesContainer');
     if (!container) return;
@@ -662,7 +716,6 @@ async function saveProduct() {
     if (!validateStep2()) return;
     if (!validateStep3()) return;
 
-    // Check if all colors have at least one image
     for (let i = 0; i < productData.colors.length; i++) {
         const color = productData.colors[i];
         if (color.images.length === 0) {
@@ -673,13 +726,13 @@ async function saveProduct() {
         }
     }
 
-    // Save basic info first
     saveBasicInfo();
 
     const finalData = {
         title: productData.basicInfo.title,
         description: productData.basicInfo.description,
         category: productData.basicInfo.category,
+        model: productData.basicInfo.model,
         sku: productData.basicInfo.sku || '',
         variants: productData.colors.map(color => ({
             color: {
@@ -694,15 +747,14 @@ async function saveProduct() {
             images: color.images.map(image => ({
                 fileName: image.name,
                 fileType: image.type,
-                base64Data: image.base64Data.split(',')[1], // Extract base64 data without prefix
+                base64Data: image.base64Data.split(',')[1],
                 fileSize: image.size
             }))
         }))
     };
 
-    console.log('Product Data to Save:', finalData);
+    console.log('Product Data Save:', finalData);
 
-    // Show loading
     Notiflix.Loading.pulse("Saving product...", {
         clickToClose: false,
         svgColor: '#0284c7'
@@ -762,18 +814,17 @@ async function saveProduct() {
 }
 
 function resetForm() {
-    // Reset form fields
     const productTitle = document.getElementById('productTitle');
-    const productDescription = document.getElementById('productDescription');
     const productCategory = document.getElementById('productCategory');
     const productSKU = document.getElementById('productSKU');
 
     if (productTitle) productTitle.value = '';
-    if (productDescription) productDescription.value = '';
     if (productCategory) productCategory.selectedIndex = 0;
     if (productSKU) productSKU.value = '';
+        editor1.setHTMLCode('<p><br></p>');
 
-    // Reset product data
+
+
     productData = {
         basicInfo: {},
         colors: [],

@@ -7,6 +7,7 @@ public class ProductDTO {
     private String title;
     private String description;
     private String category;
+    private String model;
     private String sku;
     private List<ProductVariantDTO> variants;
 
@@ -39,4 +40,12 @@ public class ProductDTO {
 
     public List<ProductVariantDTO> getVariants() { return variants; }
     public void setVariants(List<ProductVariantDTO> variants) { this.variants = variants; }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
 }

@@ -2,6 +2,7 @@ package lk.karu.openbay.controller.api;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -9,6 +10,15 @@ import lk.karu.openbay.service.ContentService;
 
 @Path("/data")
 public class ContentController {
+
+
+    @Path("/{categoryId}/models")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response loadModels(@PathParam("categoryId") int id) {
+        String responseJson = new ContentService().loadModelDetails(id);
+        return Response.ok().entity(responseJson).build();
+    }
 
     @Path("/topProduct")
     @GET

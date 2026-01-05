@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-    <title>Otika - Admin Dashboard Template</title>
+    <title>OpneBay - Admin Dashboard</title>
     <!-- General CSS Files -->
     <link rel="stylesheet" href="assets/css/app.min.css">
     <!-- Template CSS -->
@@ -489,10 +489,25 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="productCategory">Category *</label>
-                                <select id="productCategory" class="form-control" required>
+                                <select id="productCategory" class="form-control" onchange="loadModels()" required>
                                     <option value="0">Select category</option>
-                                    <!-- Categories will be loaded dynamically -->
+
                                 </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="productModel">Model *</label>
+                                <select id="productModel" class="form-control" required>
+                                    <option value="0">Select Model</option>
+
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="productSKU">Product SKU (Optional)</label>
+                                <input type="text" id="productSKU" class="form-control" placeholder="PROD-001">
                             </div>
                         </div>
 
@@ -501,10 +516,7 @@
                             <textarea id="productDescription" class="form-control"  rows="4" required></textarea>
                         </div>
 
-                        <div class="form-group">
-                            <label for="productSKU">Product SKU (Optional)</label>
-                            <input type="text" id="productSKU" class="form-control" placeholder="PROD-001">
-                        </div>
+
 
                         <hr class="my-4">
 

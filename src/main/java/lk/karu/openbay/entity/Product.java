@@ -32,6 +32,10 @@ public class Product extends BaseEntity{
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "model_id")
+    private Model model;
+
     public Status getStatus() {
         return status;
     }
@@ -88,6 +92,11 @@ public class Product extends BaseEntity{
         this.variants = variants;
     }
 
+    public Model getModel() {
+        return model;
+    }
 
-
+    public void setModel(Model model) {
+        this.model = model;
+    }
 }

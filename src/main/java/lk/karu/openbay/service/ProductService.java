@@ -10,10 +10,10 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Base64;
-import java.util.UUID;
 
 public class ProductService {
 
@@ -22,7 +22,6 @@ public class ProductService {
         boolean status = false;
         String message = "";
 
-        // Validate input
         if (!validateProductDTO(productDTO, responseObject)) {
             return AppUtil.GSON.toJson(responseObject);
         }
@@ -34,47 +33,70 @@ public class ProductService {
             session = HibernateUtil.getSessionFactory().openSession();
             tx = session.beginTransaction();
 
-            // Create main product
             Product product = new Product();
             product.setTitle(productDTO.getTitle().trim());
             product.setDescription(productDTO.getDescription().trim());
 
-            // Handle category - check if it's ID or name
             String categoryStr = productDTO.getCategory();
+            Category category = null;
+
             try {
-                // Try to parse as Long (ID)
                 Long categoryId = Long.parseLong(categoryStr);
-                Category category = session.get(Category.class, categoryId);
+                category = session.get(Category.class, categoryId);
                 if (category == null) {
                     throw new IllegalArgumentException("Category not found with ID: " + categoryId);
                 }
-                product.setCategory(category);
             } catch (NumberFormatException e) {
-                // If not a number, treat as category name
-                Category category = session.createQuery(
-                                "FROM Category c WHERE c.name = :name", Category.class)
+                category = session.createQuery("FROM Category c WHERE c.name = :name", Category.class)
                         .setParameter("name", categoryStr)
                         .uniqueResult();
-
                 if (category == null) {
-                    // Create new category if it doesn't exist
                     category = new Category();
                     category.setName(categoryStr);
                     session.persist(category);
                 }
-                product.setCategory(category);
             }
+            product.setCategory(category);
+
+            String modelStr = productDTO.getModel();
+            Model model = null;
+
+            try {
+                Long modelId = Long.parseLong(modelStr);
+                model = session.get(Model.class, modelId);
+                if (model == null) {
+                    throw new IllegalArgumentException("Model not found with ID: " + modelId);
+                }
+            } catch (NumberFormatException e) {
+                model = session.createQuery("FROM Model m WHERE m.name = :name", Model.class)
+                        .setParameter("name", modelStr)
+                        .uniqueResult();
+                if (model == null) {
+                    model = new Model();
+                    model.setName(modelStr);
+                    session.persist(model);
+                }
+            }
+            product.setModel(model);
 
             product.setSku(productDTO.getSku() != null ? productDTO.getSku().trim() : "");
 
-            // Add variants
+            Status activeStatus = session.createNamedQuery("Status.findByValue", Status.class)
+                    .setParameter("value", String.valueOf(Status.Type.ACTIVE))
+                    .getSingleResult();
+
+            product.setStatus(activeStatus);
+
+            session.persist(product);
+            session.flush();
+            Long productId = product.getId();
+
             for (ProductVariantDTO vDTO : productDTO.getVariants()) {
                 ProductVariant variant = new ProductVariant();
                 variant.setColorName(vDTO.getColor().getName());
                 variant.setColorHex(vDTO.getColor().getHexCode());
                 variant.setProduct(product);
 
-                // Add sizes
                 for (SizeDTO sDTO : vDTO.getSizes()) {
                     VariantSize size = new VariantSize();
                     size.setSize(sDTO.getSize());
@@ -84,21 +106,19 @@ public class ProductService {
                     variant.getSizes().add(size);
                 }
 
-                // Add images
                 for (ProductImageDTO iDTO : vDTO.getImages()) {
                     try {
-                        String path = saveImage(iDTO);
+                        String url = saveImage(iDTO, productId, request);
 
                         VariantImage image = new VariantImage();
                         image.setFileName(iDTO.getFileName());
                         image.setFileType(iDTO.getFileType());
-                        image.setFilePath(path);
+                        image.setFilePath(url);
                         image.setVariant(variant);
 
                         variant.getImages().add(image);
                     } catch (Exception e) {
                         System.err.println("Failed to save image: " + e.getMessage());
-                        // Continue with other images
                     }
                 }
 
@@ -162,8 +182,7 @@ public class ProductService {
         for (int i = 0; i < productDTO.getVariants().size(); i++) {
             ProductVariantDTO variant = productDTO.getVariants().get(i);
 
-            if (variant.getColor() == null ||
-                    variant.getColor().getName() == null ||
+            if (variant.getColor() == null || variant.getColor().getName() == null ||
                     variant.getColor().getName().trim().isEmpty()) {
                 responseObject.addProperty("status", false);
                 responseObject.addProperty("message", "Color name is required for variant " + (i + 1));
@@ -176,7 +195,6 @@ public class ProductService {
                 return false;
             }
 
-            // Validate each size
             for (int j = 0; j < variant.getSizes().size(); j++) {
                 SizeDTO size = variant.getSizes().get(j);
 
@@ -203,35 +221,38 @@ public class ProductService {
         return true;
     }
 
-    private String saveImage(ProductImageDTO dto) throws Exception {
+    private String saveImage(ProductImageDTO dto, Long productId, HttpServletRequest request) throws Exception {
         try {
-            // Ensure uploads directory exists
-            java.nio.file.Path uploadsDir = Paths.get("uploads");
+            // Get real path to webapp/uploads
+            String uploadsPathStr = request.getServletContext().getRealPath("/uploads/product/" + productId);
+            Path uploadsDir = Paths.get(uploadsPathStr);
+
             if (!Files.exists(uploadsDir)) {
                 Files.createDirectories(uploadsDir);
             }
 
-            // Decode base64
+            // Decode Base64
             String base64Data = dto.getBase64Data();
             if (base64Data.contains(",")) {
                 base64Data = base64Data.split(",")[1];
             }
-
             byte[] data = Base64.getDecoder().decode(base64Data);
 
             // Generate unique filename
-            String fileName = UUID.randomUUID() + "_" +
-                    System.currentTimeMillis() + "_" +
-                    dto.getFileName();
-
-            String filePath = "uploads/" + fileName;
+            String fileName = System.currentTimeMillis() + "_" + dto.getFileName();
+            Path filePath = uploadsDir.resolve(fileName);
 
             // Save file
-            Files.write(Paths.get(filePath), data, StandardOpenOption.CREATE);
+            Files.write(filePath, data, StandardOpenOption.CREATE);
 
-            return filePath;
+            // Generate full HTTP URL
+            String contextPath = request.getContextPath(); // e.g., /openbay
+            String fullUrl = contextPath + "/uploads/product/" + productId + "/" + fileName;
+
+            return fullUrl;
         } catch (Exception e) {
             throw new Exception("Failed to save image: " + e.getMessage());
         }
     }
+
 }
