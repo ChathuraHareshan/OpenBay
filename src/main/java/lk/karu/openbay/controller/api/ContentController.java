@@ -12,6 +12,14 @@ import lk.karu.openbay.service.ContentService;
 public class ContentController {
 
 
+    @Path("/productTab")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response loadProductTab() {
+        String responseJson = new ContentService().loadProductTab();
+        return Response.ok().entity(responseJson).build();
+    }
+
     @Path("/{categoryId}/models")
     @GET
     @Produces(MediaType.APPLICATION_JSON)

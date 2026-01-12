@@ -16,6 +16,10 @@ public class Category implements Serializable {
     @Column(nullable = false, unique = true)
     private String name;
 
+    @OneToOne
+    @JoinColumn(name = "view_id")
+    private Status viewStatus;
+
 
     public int getId() {
         return id;
@@ -33,5 +37,11 @@ public class Category implements Serializable {
         this.name = name;
     }
 
+    public Status getViewStatus() {
+        return viewStatus;
+    }
 
+    public void setViewStatus(Status viewStatus) {
+        this.viewStatus = viewStatus;
+    }
 }

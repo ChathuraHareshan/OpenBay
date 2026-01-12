@@ -16,10 +16,31 @@
     <link rel="stylesheet" href="assets/css/plugins/magnific-popup/magnific-popup.css">
     <link rel="stylesheet" href="assets/css/plugins/jquery.countdown.css">
     <!-- lk.karu.openbay.Main CSS File -->
-    <link rel="stylesheet" href="assets/css/style.css">
+    <!--    <link rel="stylesheet" href="assets/css/style.css">-->
+    <link rel="stylesheet" href="assets/css/header.css">
+    <link rel="stylesheet" href="assets/css/home.css">
     <link rel="stylesheet" href="assets/css/skins/skin-demo-9.css">
     <link rel="stylesheet" href="assets/css/demos/demo-9.css">
-    <script src="assets/js/index.js"></script>
+    <style>
+        /* Category Badge - Same for both but only shows when provided */
+        .category-name-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(255, 51, 102, 0.9);
+            color: white;
+            padding: 4px 10px;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            z-index: 2;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+
+    </style>
 </head>
 
 <body>
@@ -32,79 +53,84 @@
 
         <div class="mb-3 mb-lg-5"></div><!-- End .mb-3 mb-lg-5 -->
 
-        <div class="banner-group">
+
+
+        <div class="pt-3 pb-3">
             <div class="container">
-                <div class="row">
-                    <div class="col-md-12 col-lg-5">
-                        <div class="banner banner-large banner-overlay banner-overlay-light">
-                            <a href="#">
-                                <img src="assets/images/demos/demo-2/banners/banner-1.jpg" alt="Banner">
-                            </a>
+                <div class="banners-group">
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="banner banner-overlay banner-lg">
+                                <a href="#">
+                                    <img src="assets/images/demos/demo-9/banners/banner-1.jpg" alt="Banner">
+                                </a>
 
-                            <div class="banner-content banner-content-top">
-                                <h4 class="banner-subtitle">Clearence</h4><!-- End .banner-subtitle -->
-                                <h3 class="banner-title">Coffee Tables</h3><!-- End .banner-title -->
-                                <div class="banner-text">from $19.99</div><!-- End .banner-text -->
-                                <a href="#" class="btn btn-outline-gray banner-link">Shop Now<i
-                                        class="icon-long-arrow-right"></i></a>
-                            </div><!-- End .banner-content -->
-                        </div><!-- End .banner -->
-                    </div><!-- End .col-lg-5 -->
+                                <div class="banner-content banner-content-bottom">
+                                    <h4 class="banner-subtitle text-white"><a href="#">Clearance</a></h4><!-- End .banner-subtitle -->
+                                    <h3 class="banner-title text-white"><a href="#">Waterproof</a></h3><!-- End .banner-title -->
+                                    <div class="banner-text text-white"><a href="#">from $19.00</a></div><!-- End .banner-text -->
+                                    <a href="#" class="btn btn-outline-white banner-link">Discover Now</a>
+                                </div><!-- End .banner-content -->
+                            </div><!-- End .banner -->
+                        </div><!-- End .col-lg-4 -->
 
-                    <div class="col-md-6 col-lg-3">
-                        <div class="banner banner-overlay">
-                            <a href="#">
-                                <img src="assets/images/demos/demo-2/banners/banner-2.jpg" alt="Banner">
-                            </a>
+                        <div class="col-sm-6 col-lg-4 order-lg-last">
+                            <div class="banner banner-overlay banner-lg">
+                                <a href="#">
+                                    <img src="assets/images/demos/demo-9/banners/banner-4.jpg" alt="Banner">
+                                </a>
 
-                            <div class="banner-content banner-content-bottom">
-                                <h4 class="banner-subtitle text-grey">On Sale</h4><!-- End .banner-subtitle -->
-                                <h3 class="banner-title text-white">Amazing <br>Armchairs</h3>
-                                <!-- End .banner-title -->
-                                <div class="banner-text text-white">from $39.99</div><!-- End .banner-text -->
-                                <a href="#" class="btn btn-outline-white banner-link">Discover Now<i
-                                        class="icon-long-arrow-right"></i></a>
-                            </div><!-- End .banner-content -->
-                        </div><!-- End .banner -->
-                    </div><!-- End .col-lg-3 -->
+                                <div class="banner-content banner-content-top">
+                                    <h4 class="banner-subtitle text-white"><a href="#">On Sale</a></h4><!-- End .banner-subtitle -->
+                                    <h3 class="banner-title text-white"><a href="#">Women's<br>Sportswear</a></h3><!-- End .banner-title -->
+                                    <div class="banner-text text-white"><a href="#">from $39.00</a></div><!-- End .banner-text -->
+                                    <a href="#" class="btn btn-outline-white banner-link">Discover Now</a>
+                                </div><!-- End .banner-content -->
+                            </div><!-- End .banner -->
+                        </div><!-- End .col-lg-4 -->
 
-                    <div class="col-md-6 col-lg-4">
-                        <div class="banner banner-overlay">
-                            <a href="#">
-                                <img src="assets/images/demos/demo-2/banners/banner-3.jpg" alt="Banner">
-                            </a>
+                        <div class="col-12 col-lg-4">
+                            <div class="row">
+                                <div class="col-sm-6 col-lg-12">
+                                    <div class="banner banner-overlay">
+                                        <a href="#">
+                                            <img src="assets/images/demos/demo-9/banners/banner-2.jpg" alt="Banner">
+                                        </a>
 
-                            <div class="banner-content banner-content-top">
-                                <h4 class="banner-subtitle text-grey">New Arrivals</h4><!-- End .banner-subtitle -->
-                                <h3 class="banner-title text-white">Storage <br>Boxes & Baskets</h3>
-                                <!-- End .banner-title -->
-                                <a href="#" class="btn btn-outline-white banner-link">Discover Now<i
-                                        class="icon-long-arrow-right"></i></a>
-                            </div><!-- End .banner-content -->
-                        </div><!-- End .banner -->
+                                        <div class="banner-content">
+                                            <h4 class="banner-subtitle text-white"><a href="#">New Arrivals</a></h4><!-- End .banner-subtitle -->
+                                            <h3 class="banner-title text-white"><a href="#">Accessories<br>and Shoes</a></h3><!-- End .banner-title -->
+                                            <a href="#" class="btn btn-outline-white banner-link">Shop Now</a>
+                                        </div><!-- End .banner-content -->
+                                    </div><!-- End .banner -->
+                                </div><!-- End .col-sm-6 col-lg-12 -->
 
-                        <div class="banner banner-overlay banner-overlay-light">
-                            <a href="#">
-                                <img src="assets/images/demos/demo-2/banners/banner-4.jpg" alt="Banner">
-                            </a>
+                                <div class="col-sm-6 col-lg-12">
+                                    <div class="banner banner-overlay">
+                                        <a href="#">
+                                            <img src="assets/images/demos/demo-9/banners/banner-3.jpg" alt="Banner">
+                                        </a>
 
-                            <div class="banner-content banner-content-top">
-                                <h4 class="banner-subtitle">On Sale</h4><!-- End .banner-subtitle -->
-                                <h3 class="banner-title">Lamps Offer</h3><!-- End .banner-title -->
-                                <div class="banner-text">up to 30% off</div><!-- End .banner-text -->
-                                <a href="#" class="btn btn-outline-gray banner-link">Shop Now<i
-                                        class="icon-long-arrow-right"></i></a>
-                            </div><!-- End .banner-content -->
-                        </div><!-- End .banner -->
-                    </div><!-- End .col-lg-4 -->
-                </div><!-- End .row -->
+                                        <div class="banner-content">
+                                            <h4 class="banner-subtitle text-white"><a href="#">New Arrivals</a></h4><!-- End .banner-subtitle -->
+                                            <h3 class="banner-title text-white"><a href="#">Spring 2019</a></h3><!-- End .banner-title -->
+                                            <a href="#" class="btn btn-outline-white banner-link">Shop Now</a>
+                                        </div><!-- End .banner-content -->
+                                    </div><!-- End .banner -->
+                                </div><!-- End .col-sm-6 col-lg-12 -->
+                            </div><!-- End .row -->
+                        </div><!-- End .col-lg-4 -->
+                    </div><!-- End .row -->
+                </div><!-- End .banner-group -->
+
+
             </div><!-- End .container -->
-        </div><!-- End .banner-group -->
+        </div><!-- End .bg-lighter -->
 
         <div class="brands-border bg-dark owl-carousel owl-simple mt-3" data-toggle="owl" data-owl-options='{
                     "nav": false,
                     "dots": false,
-                    "margin": 0,
+                    "margin": 50,
                      "autoplay": true,
                      "autoplayTimeout": 4000,
                     "loop": true,
@@ -205,55 +231,116 @@
         <div class="mb-5"></div><!-- End .mb-5 -->
 
 
-        <div class="bg-light deal-container pt-5 pb-3 mb-5">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-9">
-                        <div class="deal">
-                            <div class="deal-content">
-                                <h4>Limited Quantities</h4>
-                                <h2>Deal of the Day</h2>
+        <!-- Clothing Deal Section with Image -->
+        <section class="clothing-deal-section">
+            <div class="deal-badge">LIMITED QUANTITIES</div>
 
-                                <h3 class="product-title"><a href="product.html">POÄNG</a></h3>
-                                <!-- End .product-title -->
+            <div class="deal-container">
+                <div class="image-section">
+                    <img src="https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Premium Denim Collection" class="product-image">
+                    <div class="image-badge">-40% OFF</div>
+                </div>
 
-                                <div class="product-price">
-                                    <span class="new-price">$149.00</span>
-                                    <span class="old-price">Was $240.00</span>
-                                </div><!-- End .product-price -->
+                <div class="deal-content">
+                    <h2 class="deal-title">Deal of the Day</h2>
 
-                                <div class="deal-countdown" data-until="+10h"></div><!-- End .deal-countdown -->
+                    <div class="product-highlight">
+                        <h3 class="product-name">PREMIUM DENIM COLLECTION</h3>
+                        <p class="product-description">High-quality selvedge denim jeans with perfect fit and comfort for all-day wear.</p>
 
-                                <a href="product.html" class="btn btn-primary">
-                                    <span>Shop Now</span><i class="icon-long-arrow-right"></i>
-                                </a>
-                            </div><!-- End .deal-content -->
-                            <div class="deal-image">
-                                <a href="product.html">
-                                    <img src="assets/images/demos/demo-2/deal/product-1.jpg" alt="image">
-                                </a>
-                            </div><!-- End .deal-image -->
-                        </div><!-- End .deal -->
-                    </div><!-- End .col-lg-9 -->
+                        <div class="price-container">
+                            <span class="current-price">$89.99</span>
+                            <span class="original-price">$149.99</span>
+                            <span class="discount-badge">Save $60</span>
+                        </div>
 
-                    <div class="col-lg-3">
-                        <div class="banner banner-overlay banner-overlay-light text-center d-none d-lg-block">
-                            <a href="#">
-                                <img src="assets/images/demos/demo-2/banners/banner-5.jpg" alt="Banner">
-                            </a>
+                        <div class="deal-timer">
+                            <p>Offer ends in:</p>
+                            <div class="timer">
+                                <div class="time-unit">
+                                    <span class="time-value">12</span>
+                                    <span class="time-label">HOURS</span>
+                                </div>
+                                <div class="time-separator">:</div>
+                                <div class="time-unit">
+                                    <span class="time-value">45</span>
+                                    <span class="time-label">MINUTES</span>
+                                </div>
+                                <div class="time-separator">:</div>
+                                <div class="time-unit">
+                                    <span class="time-value">30</span>
+                                    <span class="time-label">SECONDS</span>
+                                </div>
+                            </div>
+                        </div>
 
-                            <div class="banner-content banner-content-top banner-content-center">
-                                <h4 class="banner-subtitle">The Best Choice</h4><!-- End .banner-subtitle -->
-                                <h3 class="banner-title">AGEN</h3><!-- End .banner-title -->
-                                <div class="banner-text text-primary">$49.99</div><!-- End .banner-text -->
-                                <a href="#" class="btn btn-outline-gray banner-link">Shop Now<i
-                                        class="icon-long-arrow-right"></i></a>
-                            </div><!-- End .banner-content -->
-                        </div><!-- End .banner -->
-                    </div><!-- End .col-lg-3 -->
-                </div><!-- End .row -->
-            </div><!-- End .container -->
-        </div><!-- End .bg-light -->
+                        <button class="shop-button">Shop This Collection <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+
+
+        <script>
+            // Timer functionality - Countdown to end of day
+            function updateTimer() {
+                const timeValues = document.querySelectorAll('.time-value');
+
+                // Get current time
+                const now = new Date();
+
+                // Set end of day as target
+                const endOfDay = new Date();
+                endOfDay.setHours(23, 59, 59, 999);
+
+                // Calculate difference
+                const diff = endOfDay - now;
+
+                // Calculate hours, minutes, seconds
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                // Update display
+                if (timeValues.length >= 3) {
+                    timeValues[0].textContent = hours.toString().padStart(2, '0');
+                    timeValues[1].textContent = minutes.toString().padStart(2, '0');
+                    timeValues[2].textContent = seconds.toString().padStart(2, '0');
+                }
+            }
+
+            // Initialize timer and update every second
+            updateTimer();
+            setInterval(updateTimer, 1000);
+
+            // Add button interactivity
+            document.querySelector('.shop-button').addEventListener('click', function() {
+                alert('Redirecting to Premium Denim Collection...');
+                // In a real implementation:
+                // window.location.href = '/collections/denim';
+            });
+
+            document.querySelector('.choice-button').addEventListener('click', function() {
+                alert('Redirecting to Summer Essentials Collection...');
+                // In a real implementation:
+                // window.location.href = '/collections/summer-essentials';
+            });
+
+            // Image hover effect
+            const productImage = document.querySelector('.product-image');
+            if (productImage) {
+                productImage.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.03)';
+                    this.style.transition = 'transform 0.5s ease';
+                });
+
+                productImage.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            }
+        </script>
 
         <div class="mb-6"></div><!-- End .mb-6 -->
 
@@ -261,213 +348,27 @@
             <div class="heading heading-center mb-3">
                 <h2 class="title">Top Selling Products</h2><!-- End .title -->
 
-                <ul class="nav nav-pills nav-border-anim justify-content-center" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="top-all-link" data-toggle="tab" href="#top-all-tab"
-                           role="tab" aria-controls="top-all-tab" aria-selected="true">Men's Fashion</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="top-fur-link" data-toggle="tab" href="#top-fur-tab" role="tab"
-                           aria-controls="top-fur-tab" aria-selected="false">wome's Fashion</a>
-                    </li>
+                <ul class="nav nav-pills nav-border-anim justify-content-center" id="categoryTabs" role="tablist">
+                    <!-- Category Set-->
+
                 </ul>
             </div><!-- End .heading -->
 
-            <div class="tab-content">
-
-                <div class="tab-pane p-0 fade show active" id="top-all-tab" role="tabpanel" aria-labelledby="top-all-link">
-                    <div class="products">
-                        <div class="row justify-content-center">
-                            <div class="col-6 col-md-4 col-lg-3 col-xl-5col">
-                                <div class="product product-7 text-center">
-                                    <figure class="product-media">
-                                        <a href="product.html">
-                                            <img src="uploads/product/50/1767247738768_1764053308085.png"
-                                                 alt="Product image" class="product-image">
-                                            <img src="assets/images/demos/demo-9/products/product-10-2.jpg"
-                                                 alt="Product image" class="product-image-hover">
-                                        </a>
-                                        <div class="product-action-vertical">
-                                            <a href="#"
-                                               class="btn-product-icon btn-wishlist btn-expandable"><span>add to
-                                                        wishlist</span></a>
-                                            <a href="popup/quickView.html" class="btn-product-icon btn-quickview"
-                                               title="Quick view"><span>Quick view</span></a>
-                                        </div>
-                                    </figure>
-                                    <div class="product-body">
-                                        <h3 class="product-title"><a href="product.html">Small bucket Test</a></h3>
-                                        <div class="product-price">
-                                            $14.99
-                                        </div>
-                                        <div class="product-nav product-nav-dots">
-                                            <a href="#" class="active" style="background: #333333;"><span
-                                                    class="sr-only">Color name</span></a>
-                                        </div>
-                                        <div class="ratings-container">
-                                            <div class="ratings">
-                                                <div class="ratings-val" style="width: 60%;"></div>
-                                            </div>
-                                            <span class="ratings-text">( 3 Reviews )</span>
-                                        </div>
-                                    </div>
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-pane p-0 fade" id="top-fur-tab" role="tabpanel" aria-labelledby="top-fur-link">
-                    <div class="products">
-                        <div class="row justify-content-center">
-                            <div class="col-6 col-md-4 col-lg-3 col-xl-5col">
-                                <div class="product product-7 text-center">
-                                    <figure class="product-media">
-                                        <a href="product.html">
-                                            <img src="assets/images/demos/demo-9/products/product-10-1.jpg"
-                                                 alt="Product image" class="product-image">
-                                            <img src="assets/images/demos/demo-9/products/product-10-2.jpg"
-                                                 alt="Product image" class="product-image-hover">
-                                        </a>
-                                        <div class="product-action-vertical">
-                                            <a href="#"
-                                               class="btn-product-icon btn-wishlist btn-expandable"><span>add to
-                                                        wishlist</span></a>
-                                            <a href="popup/quickView.html" class="btn-product-icon btn-quickview"
-                                               title="Quick view"><span>Quick view</span></a>
-                                        </div>
-                                    </figure>
-                                    <div class="product-body">
-                                        <h3 class="product-title"><a href="product.html">Small bucket bag</a></h3>
-                                        <div class="product-price">
-                                            $14.99
-                                        </div>
-                                        <div class="product-nav product-nav-dots">
-                                            <a href="#" class="active" style="background: #333333;"><span
-                                                    class="sr-only">Color name</span></a>
-                                        </div>
-                                        <div class="ratings-container">
-                                            <div class="ratings">
-                                                <div class="ratings-val" style="width: 60%;"></div>
-                                            </div>
-                                            <span class="ratings-text">( 3 Reviews )</span>
-                                        </div>
-                                    </div>
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product  "><span>add to cart</span></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
+            <div class="tab-content" id="categoryTabContent">
+                <!-- Product Set-->
             </div>
+
+            <div class="more-container text-center mt-2">
+                <a href="" class="btn btn-primary btn-load-more"><span>View Shop</span><i
+                        class="icon-long-arrow-right"></i></a>
+            </div>
+
         </div>
 
         <div class="container">
             <hr class="mt-1 mb-6">
         </div><!-- End .container -->
 
-        <div class="blog-posts">
-            <div class="container">
-                <h2 class="title text-center">From Our Blog</h2><!-- End .title-lg text-center -->
-
-                <div class="owl-carousel owl-simple carousel-with-shadow" data-toggle="owl" data-owl-options='{
-                            "nav": false,
-                            "dots": true,
-                            "items": 3,
-                            "margin": 20,
-                            "loop": false,
-                            "responsive": {
-                                "0": {
-                                    "items":1
-                                },
-                                "600": {
-                                    "items":2
-                                },
-                                "992": {
-                                    "items":3
-                                }
-                            }
-                        }'>
-                    <article class="entry entry-display">
-                        <figure class="entry-media">
-                            <a href="single.html">
-                                <img src="assets/images/demos/demo-2/blog/post-1.jpg" alt="image desc">
-                            </a>
-                        </figure><!-- End .entry-media -->
-
-                        <div class="entry-body text-center">
-                            <div class="entry-meta">
-                                <a href="#">Nov 22, 2018</a>, 0 Comments
-                            </div><!-- End .entry-meta -->
-
-                            <h3 class="entry-title">
-                                <a href="single.html">Sed adipiscing ornare.</a>
-                            </h3><!-- End .entry-title -->
-
-                            <div class="entry-content">
-                                <a href="single.html" class="read-more">Continue Reading</a>
-                            </div><!-- End .entry-content -->
-                        </div><!-- End .entry-body -->
-                    </article><!-- End .entry -->
-
-                    <article class="entry entry-display">
-                        <figure class="entry-media">
-                            <a href="single.html">
-                                <img src="assets/images/demos/demo-2/blog/post-2.jpg" alt="image desc">
-                            </a>
-                        </figure><!-- End .entry-media -->
-
-                        <div class="entry-body text-center">
-                            <div class="entry-meta">
-                                <a href="#">Dec 12, 2018</a>, 0 Comments
-                            </div><!-- End .entry-meta -->
-
-                            <h3 class="entry-title">
-                                <a href="single.html">Fusce lacinia arcuet nulla.</a>
-                            </h3><!-- End .entry-title -->
-
-                            <div class="entry-content">
-                                <a href="single.html" class="read-more">Continue Reading</a>
-                            </div><!-- End .entry-content -->
-                        </div><!-- End .entry-body -->
-                    </article><!-- End .entry -->
-
-                    <article class="entry entry-display">
-                        <figure class="entry-media">
-                            <a href="single.html">
-                                <img src="assets/images/demos/demo-2/blog/post-3.jpg" alt="image desc">
-                            </a>
-                        </figure><!-- End .entry-media -->
-
-                        <div class="entry-body text-center">
-                            <div class="entry-meta">
-                                <a href="#">Dec 19, 2018</a>, 2 Comments
-                            </div><!-- End .entry-meta -->
-
-                            <h3 class="entry-title">
-                                <a href="single.html">Quisque volutpat mattis eros.</a>
-                            </h3><!-- End .entry-title -->
-
-                            <div class="entry-content">
-                                <a href="single.html" class="read-more">Continue Reading</a>
-                            </div><!-- End .entry-content -->
-                        </div><!-- End .entry-body -->
-                    </article><!-- End .entry -->
-                </div><!-- End .owl-carousel -->
-
-                <div class="more-container text-center mt-2">
-                    <a href="blog.html" class="btn btn-outline-darker btn-more"><span>View more articles</span><i
-                            class="icon-long-arrow-right"></i></a>
-                </div><!-- End .more-container -->
-            </div><!-- End .container -->
-        </div><!-- End .blog-posts -->
     </main><!-- End .main -->
 
     <footer class="footer footer-2">
@@ -694,7 +595,6 @@
     </div>
 </div>
 </div> -->
-<script src="assets/js/header.js"></script>
 <script src="assets/js/index.js"></script>
 
 
@@ -712,6 +612,7 @@
 <script src="assets/js/vendor/main.js"></script>
 <script src="assets/js/vendor/demos/demo-2.js"></script>
 <script src="assets/js/notiflix-aio-3.2.8.min.js"></script>
+<script src="assets/js/header.js"></script>
 
 </body>
 

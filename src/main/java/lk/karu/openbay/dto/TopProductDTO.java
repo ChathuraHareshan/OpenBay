@@ -1,16 +1,28 @@
 package lk.karu.openbay.dto;
 
+import lk.karu.openbay.entity.Model;
+
 import java.util.List;
 
 public class TopProductDTO {
     private Long productId;
     private String title;
+    private String description;
     private String category;
     private List<String> images; // only 2
     private Double minPrice;
     private Double maxPrice;
     private List<ColorDTO> colors;
+    private List<SizeDTO> sizes;
+    private String model;
 
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
 
     public Long getProductId() {
         return productId;
@@ -66,5 +78,21 @@ public class TopProductDTO {
 
     public void setColors(List<ColorDTO> colors) {
         this.colors = colors;
+    }
+
+    public List<SizeDTO> getSizes() {
+        return sizes;
+    }
+
+    public void setSizes(List<SizeDTO> sizes) {
+        this.sizes = sizes;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

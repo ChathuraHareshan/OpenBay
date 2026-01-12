@@ -1,5 +1,6 @@
 package lk.karu.openbay.service;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.protobuf.Message;
 import lk.karu.openbay.dto.ColorDTO;
@@ -10,6 +11,7 @@ import lk.karu.openbay.util.AppUtil;
 import lk.karu.openbay.util.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,6 +19,122 @@ import java.util.List;
 
 public class ContentService {
 
+    public String loadProductTab(){
+
+        JsonObject responseObject =  new JsonObject();
+        boolean status = false;
+        String message = "";
+
+        Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
+
+
+        try{
+
+            List<Category> categories = hibernateSession.createQuery("FROM Category c WHERE c.viewStatus.id=:status order by c.id", Category.class)
+                    .setParameter("status", 7).getResultList();
+
+            JsonArray categoryArray = new JsonArray();
+            JsonObject productsObject = new JsonObject();
+
+            for(Category category : categories){
+                JsonObject categoryObject = new JsonObject();
+                categoryObject.addProperty("id", category.getId());
+                categoryObject.addProperty("name", category.getName());
+                categoryArray.add(categoryObject);
+
+                List<Product> products = hibernateSession.createQuery("FROM Product p " +
+                        " left join fetch p.variants v " +
+                        "left join fetch v.sizes" +
+                        " left join v.images " +
+                        "WHERE p.category.id = :categoryId AND p.status.id=:status " +
+                        "order by p.id desc ", Product.class)
+                        .setParameter("categoryId", category.getId())
+                        .setParameter("status", 1)
+                        .setMaxResults(10)
+                        .getResultList();
+
+                List<TopProductDTO> categoryProducts = new ArrayList<>();
+
+                for(Product product: products){
+                    TopProductDTO dto = convertProductsToDTO(product);
+                    categoryProducts.add(dto);
+                }
+
+                String categoryKey = category.getName().toLowerCase()
+                        .replace("'s", "")
+                        .replace(" ", "_")
+                        .replace("_fashion","");
+
+                productsObject.add(categoryKey, AppUtil.GSON.toJsonTree(categoryProducts));
+
+            }
+
+            responseObject.add("categories", categoryArray);
+            responseObject.add("productsObject", productsObject);
+            status = true;
+            message = "Category Product load ok.";
+
+
+
+        }catch (HibernateException e){
+             message = e.getMessage();
+             status = false;
+        }finally {
+            hibernateSession.close();
+        }
+
+
+        responseObject.addProperty("status", status);
+        responseObject.addProperty("message", message);
+        return AppUtil.GSON.toJson(responseObject);
+    }
+
+    private TopProductDTO convertProductsToDTO(Product products){
+
+        TopProductDTO dto = new TopProductDTO();
+        dto.setProductId(products.getId());
+        dto.setTitle(products.getTitle());
+        dto.setCategory(products.getCategory().getName());
+
+        List<Double> prices = new ArrayList<>();
+        for (ProductVariant variant : products.getVariants()) {
+            for (VariantSize size : variant.getSizes()) {
+                prices.add(size.getPrice());
+            }
+        }
+
+        if (prices.isEmpty()) {
+            dto.setMinPrice(0.0);
+            dto.setMaxPrice(0.0);
+        } else {
+            dto.setMinPrice(Collections.min(prices));
+            dto.setMaxPrice(Collections.max(prices));
+        }
+
+        List<String> images = new ArrayList<>();
+        for (ProductVariant variant : products.getVariants()) {
+            for (VariantImage image : variant.getImages()) {
+                if (images.size() < 2) {
+                    images.add(image.getFilePath());
+                }
+            }
+            if (images.size() == 2) break;
+        }
+        dto.setImages(images);
+
+        // Colors
+        List<ColorDTO> colorDTOList = new ArrayList<>();
+        for (ProductVariant variant : products.getVariants()) {
+            ColorDTO colorDTO = new ColorDTO();
+            colorDTO.setName(variant.getColorName());
+            colorDTO.setHexCode(variant.getColorHex());
+            colorDTOList.add(colorDTO);
+        }
+        dto.setColors(colorDTOList);
+
+        return dto;
+
+    }
 
     public String loadModelDetails(int id) {
         JsonObject responseObject = new JsonObject();
