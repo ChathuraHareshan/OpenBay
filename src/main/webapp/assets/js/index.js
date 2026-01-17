@@ -180,7 +180,7 @@ function createProductCard(product, categoryName = null) {
     return `
         <div class="product product-7 text-center modern-product-card mb-5" style="margin-bottom: 20px" >
             <figure class="product-media product-media-wrapper" style="aspect-ratio: 1 / 1.1; overflow: hidden;">
-                <a href="singleProduct.html?id=${product.productId}">
+                <a href="product.html?id=${product.productId}">
                     <img src="${img1}" alt="${product.title}" class="product-image" style="width: 100%; height: 100%; object-fit: cover;">
                     <img src="${img2}" alt="${product.title}" class="product-image-hover" style="width: 100%; height: 100%; object-fit: cover;">
                 </a>
@@ -189,11 +189,11 @@ function createProductCard(product, categoryName = null) {
                     <a class="btn-product-icon btn-wishlist btn-expandable" onclick="addToWishlist(${product.productId})"><span>add to wishlist</span></a>
                 </div>
                 <div class="product-action">
-                    <a  class="btn-product btn-cart" href="singleProduct.html?id=${product.productId}"><span>add to cart</span></a>
+                    <a  class="btn-product btn-cart" href="product.html?id=${product.productId}"><span>add to cart</span></a>
                 </div>
             </figure>
             <div class="product-body">
-                <h3 class="product-title"><a href="singleProduct.html?id=${product.productId}">${product.title}</a></h3>
+                <h3 class="product-title"><a href="product.html?id=${product.productId}">${product.title}</a></h3>
                 <h4 class="product-price">${priceHtml}</h4>
                 <div class="product-nav product-nav-dots">${colorHtml}</div>
                 ${starRatingHtml}

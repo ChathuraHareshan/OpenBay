@@ -1,7 +1,9 @@
 package lk.karu.openbay.service;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import lk.karu.openbay.dto.ColorDTO;
+import lk.karu.openbay.dto.ProductDTO;
 import lk.karu.openbay.dto.TopProductDTO;
 import lk.karu.openbay.entity.Product;
 import lk.karu.openbay.entity.ProductVariant;
@@ -108,5 +110,65 @@ public class SingleProductService {
         responseObject.addProperty("message", message);
         return AppUtil.GSON.toJson(responseObject);
     }
+
+    public String getColorHasSize(ProductDTO productDTO) {
+        JsonObject responseObject = new JsonObject();
+        boolean status = false;
+        String message = "";
+
+        if (productDTO.getColorName() == null || productDTO.getColorName().isBlank()) {
+            message = "Color Not Found.";
+        } else if (productDTO.getProductId() == null) {
+            message = "ProductId Not Found.";
+        } else {
+            Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
+            try {
+
+                ProductVariant productVariant = hibernateSession.createQuery(
+                                "FROM ProductVariant pv WHERE pv.product.id = :pid AND pv.colorName = :cname", ProductVariant.class)
+                        .setParameter("pid", productDTO.getProductId())
+                        .setParameter("cname", productDTO.getColorName())
+                        .uniqueResult();
+
+                if (productVariant == null) {
+                    message = "Product color and sizes not found!";
+                } else {
+
+                    List<VariantSize> sizes = hibernateSession.createQuery(
+                                    "FROM VariantSize vs WHERE vs.variant = :variant", VariantSize.class)
+                            .setParameter("variant", productVariant)
+                            .list();
+
+                    if (sizes == null || sizes.isEmpty()) {
+                        message = "No sizes available for this color!";
+                    } else {
+                        JsonArray sizesArray = new JsonArray();
+                        for (VariantSize vs : sizes) {
+                            JsonObject sizeObj = new JsonObject();
+                            sizeObj.addProperty("size", vs.getSize());
+                            sizeObj.addProperty("price", vs.getPrice());
+                            sizeObj.addProperty("quantity", vs.getQuantity());
+                            sizesArray.add(sizeObj);
+                        }
+
+                        responseObject.addProperty("status", true);
+                        responseObject.add("sizes", sizesArray);
+                        return responseObject.toString();
+                    }
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                message = "Error: " + e.getMessage();
+            } finally {
+                hibernateSession.close();
+            }
+        }
+
+        responseObject.addProperty("status", false);
+        responseObject.addProperty("message", message);
+        return AppUtil.GSON.toJson(responseObject);
+    }
+
 
 }

@@ -10,7 +10,17 @@ public class ProductDTO {
     private String model;
     private String sku;
     private List<ProductVariantDTO> variants;
+    private String colorName;
+    private String size;
+    private Integer qty;
 
+    public String getColorName() {
+        return colorName;
+    }
+
+    public void setColorName(String colorName) {
+        this.colorName = colorName;
+    }
 
     // Constructors
     public ProductDTO() {}
@@ -24,6 +34,21 @@ public class ProductDTO {
     }
 
 
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public Integer getQty() {
+        return qty;
+    }
+
+    public void setQty(Integer qty) {
+        this.qty = qty;
+    }
 
     // Getters and Setters
     public String getTitle() { return title; }

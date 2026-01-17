@@ -1429,6 +1429,19 @@ a:focus {
     background-color: #333
 }
 
+.banner-badge .banner-link:hover .banner-link-text, .banner-badge .banner-link:focus .banner-link-text {
+    background-color: #1cc0a0
+}
+
+.wishlist-link .wishlist-count {
+    background-color: #1cc0a0
+}
+
+.wishlist a .wishlist-count {
+    background-color: #1cc0a0
+}
+
+
 .mobile-search .btn {
     font-size: 1.2rem;
     min-width: 3.6rem;

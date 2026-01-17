@@ -3,6 +3,9 @@ package lk.karu.openbay.entity;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "variant_size")
 public class VariantSize {
@@ -18,6 +21,7 @@ public class VariantSize {
     @ManyToOne
     @JoinColumn(name = "variant_id")
     private ProductVariant variant;
+
 
     public Long getId() {
         return id;

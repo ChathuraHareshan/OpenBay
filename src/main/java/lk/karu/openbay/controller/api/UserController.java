@@ -11,6 +11,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import lk.karu.openbay.annotation.IsUser;
 import lk.karu.openbay.dto.UserDTO;
+import lk.karu.openbay.service.CartService;
 import lk.karu.openbay.service.UserService;
 import lk.karu.openbay.util.AppUtil;
 
@@ -75,6 +76,7 @@ public class UserController {
     public Response login(String jsonData, @Context HttpServletRequest request) {
         UserDTO userDTO = AppUtil.GSON.fromJson(jsonData, UserDTO.class);
         String responseJson = new UserService().loginUser(userDTO, request);
+        new CartService().mergeUserCarts(request);
         return Response.ok().entity(responseJson).build();
     }
 

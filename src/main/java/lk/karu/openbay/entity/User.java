@@ -39,6 +39,9 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private Set<Address> addresses = new HashSet<>();
 
+    @OneToMany(mappedBy = "user")
+    private Set<Cart> carts = new HashSet<>();
+
 
     public int getId() {
         return id;

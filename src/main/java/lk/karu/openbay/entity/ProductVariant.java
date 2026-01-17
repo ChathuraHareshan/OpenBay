@@ -28,6 +28,8 @@ public class ProductVariant {
     @OneToMany(mappedBy = "variant", cascade = CascadeType.ALL)
     private Set<VariantImage> images = new HashSet<>();
 
+
+
     public Long getId() {
         return id;
     }

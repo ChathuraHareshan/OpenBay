@@ -647,7 +647,8 @@ a:hover, a:focus {
 }
 
 .product.product-list .btn-product.btn-cart:hover, .product.product-list .btn-product.btn-cart:focus {
-    background-color: #1cc0a0
+    background-color: #1cc0a0;
+    color: white;
 }
 
 .footer a:hover, .footer a:focus {
