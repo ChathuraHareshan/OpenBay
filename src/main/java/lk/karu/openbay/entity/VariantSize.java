@@ -3,16 +3,13 @@ package lk.karu.openbay.entity;
 
 import jakarta.persistence.*;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Entity
 @Table(name = "variant_size")
 public class VariantSize {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     private String size;
     private double price;
@@ -23,11 +20,11 @@ public class VariantSize {
     private ProductVariant variant;
 
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

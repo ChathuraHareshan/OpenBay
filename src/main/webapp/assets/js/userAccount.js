@@ -680,7 +680,7 @@ async function logout() {
     });
 
     try {
-        const response = await fetch("api/users/logout", {
+        const response = await fetch("api/user/logout", {
             method: "GET",
             credentials: "include"
         });

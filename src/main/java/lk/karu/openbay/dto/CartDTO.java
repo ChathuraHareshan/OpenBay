@@ -1,19 +1,49 @@
 package lk.karu.openbay.dto;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class CartDTO implements Serializable {
 
     private int cartId;
     private String title;
-    private List<String> image;
+    private String color;
+    private String size;
+    private String image;
     private int qty;
     private double price;
     private int variantSizeId;
+    private long productId;
+
+    public long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
 
     public int getCartId() {
         return cartId;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public int getVariantSizeId() {
+        return variantSizeId;
     }
 
     public void setCartId(int cartId) {
@@ -28,11 +58,11 @@ public class CartDTO implements Serializable {
         this.title = title;
     }
 
-    public List<String> getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(List<String> image) {
+    public void setImage(String image) {
         this.image = image;
     }
 

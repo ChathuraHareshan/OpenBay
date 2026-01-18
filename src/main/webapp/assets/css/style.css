@@ -2299,7 +2299,8 @@ blockquote.text-white cite span {
     display: block;
     background-color: #d7d7d7;
     margin-bottom: 0;
-    overflow: hidden
+    overflow: hidden;
+    border-radius: 10px;
 }
 
 .product-media > a {
@@ -10079,6 +10080,10 @@ button:focus {
 
 .table.table-cart .price-col {
     width: 120px
+}
+
+.table.table-cart .size-col {
+    width: 100px
 }
 
 .table.table-cart .total-col {

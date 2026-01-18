@@ -588,3 +588,9 @@ function initializeVerticalScroll() {
     });
     window.addEventListener('resize', updateButtons);
 }
+
+
+
+
+
+

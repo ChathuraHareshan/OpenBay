@@ -17,6 +17,326 @@ import java.util.List;
 
 public class CartService {
 
+    public String removeCartItem(int cartId, HttpServletRequest request) {
+        JsonObject responseObject = new JsonObject();
+        boolean status = false;
+        String message = "";
+
+        try {
+            HttpSession httpSession = request.getSession();
+            User sessionUser = (User) httpSession.getAttribute("user");
+
+            if (sessionUser == null) {
+                List<Cart> sessionCart = getSessionAttribute(httpSession);
+                if (sessionCart != null) {
+                    boolean removed = sessionCart.removeIf(cart -> cart.getId() == cartId);
+                    if (removed) {
+                        httpSession.setAttribute("sessionCart", sessionCart);
+                        status = true;
+                        message = "Item removed from cart";
+                    } else {
+                        message = "Item not found in cart";
+                    }
+                } else {
+                    message = "Cart is empty";
+                }
+            } else {
+                Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
+                Transaction transaction = hibernateSession.beginTransaction();
+
+                try {
+                    Cart cart = hibernateSession.find(Cart.class, cartId);
+                    if (cart != null) {
+                        if (cart.getUser().getId() == (sessionUser.getId())) {
+                            hibernateSession.remove(cart);
+                            status = true;
+                            message = "Item removed from cart";
+                        } else {
+                            message = "Unauthorized access";
+                        }
+                    } else {
+                        message = "Cart item not found";
+                    }
+
+                    transaction.commit();
+                } catch (Exception e) {
+                    transaction.rollback();
+                    throw e;
+                } finally {
+                    hibernateSession.close();
+                }
+            }
+        } catch (Exception e) {
+            message = "Error removing item: " + e.getMessage();
+            e.printStackTrace();
+        }
+
+        responseObject.addProperty("status", status);
+        responseObject.addProperty("message", message);
+        return AppUtil.GSON.toJson(responseObject);
+    }
+
+    public String updateQuantity(int cartId, int qty, HttpServletRequest request) {
+        JsonObject responseObject = new JsonObject();
+        boolean status = false;
+        String message = "";
+
+        try {
+            HttpSession httpSession = request.getSession();
+            User sessionUser = (User) httpSession.getAttribute("user");
+
+            if (sessionUser == null) {
+                // Guest user - update session cart
+                List<Cart> sessionCart = getSessionAttribute(httpSession);
+                if (sessionCart != null) {
+                    for (Cart cart : sessionCart) {
+                        if (cart.getId() == cartId) {
+                            Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
+                            VariantSize variantSize = hibernateSession.find(VariantSize.class, cart.getVariantSize().getId());
+
+                            int newQty = cart.getQty() + qty; // qty can be positive or negative
+
+                            if (newQty < 1) {
+                                newQty = 1;
+                            }
+
+                            if (newQty > variantSize.getQuantity()) {
+                                message = "Only " + variantSize.getQuantity() + " items available";
+                            } else {
+                                cart.setQty(newQty);
+                                status = true;
+                                message = "Quantity updated";
+                            }
+                            hibernateSession.close();
+                            break;
+                        }
+                    }
+                }
+            } else {
+                Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
+                Transaction transaction = hibernateSession.beginTransaction();
+
+                try {
+                    Cart cart = hibernateSession.find(Cart.class, cartId);
+                    if (cart != null) {
+                        if (cart.getUser().getId() == (sessionUser.getId())) {
+                            VariantSize variantSize = cart.getVariantSize();
+                            int newQty = cart.getQty() + qty;
+
+                            if (newQty < 1) {
+                                newQty = 1;
+                            }
+
+                            if (newQty > variantSize.getQuantity()) {
+                                message = "Only " + variantSize.getQuantity() + " items available";
+                            } else {
+                                cart.setQty(newQty);
+                                hibernateSession.merge(cart);
+                                status = true;
+                                message = "Quantity updated";
+                            }
+                        } else {
+                            message = "Unauthorized access";
+                        }
+                    } else {
+                        message = "Cart item not found";
+                    }
+
+                    transaction.commit();
+                } catch (Exception e) {
+                    transaction.rollback();
+                    throw e;
+                } finally {
+                    hibernateSession.close();
+                }
+            }
+        } catch (Exception e) {
+            message = "Error updating quantity: " + e.getMessage();
+            e.printStackTrace();
+        }
+
+        responseObject.addProperty("status", status);
+        responseObject.addProperty("message", message);
+        return AppUtil.GSON.toJson(responseObject);
+    }
+
+    public String getAllUserCarts(@Context HttpServletRequest request) {
+        JsonObject responseObject = new JsonObject();
+        boolean status = false;
+        String message = "";
+
+        try {
+            HttpSession httpSession = request.getSession();
+            User sessionUser = (User) httpSession.getAttribute("user");
+
+            if (sessionUser == null) {
+                // Guest user - get from session
+                List<Cart> sessionCart = getSessionAttribute(httpSession);
+
+                if (sessionCart == null || sessionCart.isEmpty()) {
+                    message = "Your cart is empty!";
+                } else {
+                    List<CartDTO> cartDTOList = new ArrayList<>();
+                    Session hibernateSession = null;
+
+                    try {
+                        hibernateSession = HibernateUtil.getSessionFactory().openSession();
+
+                        for (Cart cart : sessionCart) {
+                            VariantSize variantSize = hibernateSession.find(VariantSize.class, cart.getVariantSize().getId());
+
+                            // Get the product variant to access color and image
+                            ProductVariant variant = hibernateSession.find(ProductVariant.class,
+                                    variantSize.getVariant().getId());
+
+                            CartDTO cartDTO = new CartDTO();
+                            cartDTO.setCartId(cart.getId());
+                            cartDTO.setVariantSizeId(variantSize.getId());
+                            cartDTO.setTitle(variantSize.getVariant().getProduct().getTitle());
+                            cartDTO.setProductId(variantSize.getVariant().getProduct().getId());
+
+                            // Get variant image (color-specific image)
+//                            if (variant.getImages() != null) {
+//                                cartDTO.setImage(variant.getImages());
+//                            }
+
+                            cartDTO.setQty(cart.getQty());
+                            cartDTO.setPrice(variantSize.getPrice());
+
+                            if (variant.getImages() != null && !variant.getImages().isEmpty()) {
+                                VariantImage image = variant.getImages().iterator().next();
+                                cartDTO.setImage(image.getFilePath());
+                            }
+
+
+                            // Set color information
+                            cartDTO.setColor(variant.getColorName());
+
+                            // Set size
+                            cartDTO.setSize(variantSize.getSize());
+
+                            // Set product ID for reference
+
+                            // Calculate total for this item
+                            cartDTO.setPrice(variantSize.getPrice());
+
+                            // Check stock availability
+//                            if (variantSize.getQuantity() < cart.getQty()) {
+//                                cartDTO.setAvailableStock(variantSize.getQuantity());
+//                                cartDTO.setOutOfStock(true);
+//                            } else {
+//                                cartDTO.setAvailableStock(variantSize.getQuantity());
+//                                cartDTO.setOutOfStock(false);
+//                            }
+
+                            cartDTOList.add(cartDTO);
+                        }
+
+                        responseObject.add("cartItems", AppUtil.GSON.toJsonTree(cartDTOList));
+                        status = true;
+                        message = "Cart items loading success.";
+
+                    } finally {
+                        if (hibernateSession != null && hibernateSession.isOpen()) {
+                            hibernateSession.close();
+                        }
+                    }
+                }
+            } else {
+                // Logged-in user - get from database
+                Session hibernateSession = null;
+
+                try {
+                    hibernateSession = HibernateUtil.getSessionFactory().openSession();
+                    List<Cart> cartList = hibernateSession.createQuery("FROM Cart c WHERE c.user.id=:id", Cart.class)
+                            .setParameter("id", sessionUser.getId())
+                            .getResultList();
+
+                    if (cartList.isEmpty()) {
+                        message = "Your cart is empty";
+                    } else {
+                        List<CartDTO> cartDTOList = new ArrayList<>();
+
+                        for (Cart cart : cartList) {
+                            VariantSize variantSize = hibernateSession.find(VariantSize.class, cart.getVariantSize().getId());
+
+                            // Get the product variant to access color and image
+                            ProductVariant variant = hibernateSession.find(ProductVariant.class,
+                                    variantSize.getVariant().getId());
+
+                            CartDTO cartDTO = new CartDTO();
+                            cartDTO.setCartId(cart.getId());
+                            cartDTO.setProductId(variantSize.getVariant().getProduct().getId());
+                            cartDTO.setVariantSizeId(variantSize.getId());
+                            cartDTO.setTitle(variantSize.getVariant().getProduct().getTitle());
+
+                            if (variant.getImages() != null && !variant.getImages().isEmpty()) {
+                                VariantImage image = variant.getImages().iterator().next();
+                                cartDTO.setImage(image.getFilePath());
+                            }
+
+
+                            // Get variant image (color-specific image)
+//                            if (variant.getImages() != null) {
+//                                cartDTO.setImage(variant.getImages());
+//                            }
+
+                            cartDTO.setQty(cart.getQty());
+                            cartDTO.setPrice(variantSize.getPrice());
+
+                            // Set color information
+                            cartDTO.setColor(variant.getColorHex());
+
+                            // Set size
+                            cartDTO.setSize(variantSize.getSize());
+
+
+                            // Calculate total for this item
+                            cartDTO.setPrice(variantSize.getPrice());
+
+                            // Check stock availability
+//                            if (variantSize.getQuantity() < cart.getQty()) {
+//                                cartDTO.setAvailableStock(variantSize.getQuantity());
+//                                cartDTO.setOutOfStock(true);
+//                            } else {
+//                                cartDTO.setAvailableStock(variantSize.getQuantity());
+//                                cartDTO.setOutOfStock(false);
+//                            }
+
+                            cartDTOList.add(cartDTO);
+                        }
+
+                        responseObject.add("cartItems", AppUtil.GSON.toJsonTree(cartDTOList));
+                        status = true;
+                        message = "Cart items loading success.";
+
+                        // Add summary information
+//                        double totalCartPrice = 0;
+//                        for (CartDTO cartDTO : cartDTOList) {
+//                            totalCartPrice += cartDTO.getTotalPrice();
+//                        }
+//                        responseObject.addProperty("totalCartPrice", totalCartPrice);
+                        responseObject.addProperty("totalItems", cartDTOList.size());
+                    }
+
+                } finally {
+                    if (hibernateSession != null && hibernateSession.isOpen()) {
+                        hibernateSession.close();
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            status = false;
+            message = "Error retrieving cart: " + e.getMessage();
+            e.printStackTrace();
+        }
+
+        responseObject.addProperty("status", status);
+        responseObject.addProperty("message", message);
+        return AppUtil.GSON.toJson(responseObject);
+    }
+
     public String getCartCount(HttpSession httpSession) {
         JsonObject responseObject = new JsonObject();
 

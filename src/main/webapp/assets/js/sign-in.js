@@ -29,7 +29,7 @@ async function SignIn(){
             const data = await response.json();
 
             if(data.status){
-                await updateCartCount();
+                // await updateCartCount();
 
                 Notiflix.Report.success(
                     'OpenBay',
