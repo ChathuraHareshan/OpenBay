@@ -9,27 +9,17 @@ window.addEventListener("load", async () => {
     });
     try {
         await getCities();
-
-    } finally {
-        Notiflix.Loading.remove();
-    }
-});
-
-document.getElementById("profile-anchor").addEventListener("click", async () => {
-    Notiflix.Loading.pulse("Loading...", {
-        clickToClose: false,
-        svgColor: '#0284c7'
-    });
-
-    try {
-
         await loadUserData();
+        await loadAddress();
+
+
 
     } finally {
         Notiflix.Loading.remove();
     }
-
 });
+
+
 
 document.getElementById("address-anchor").addEventListener("click", async () => {
     Notiflix.Loading.pulse("Loading...", {

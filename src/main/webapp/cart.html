@@ -126,15 +126,18 @@
                                     <div class="cart-discount">
                                         <form action="#">
                                             <div class="input-group">
-                                                <input type="text" class="form-control" required placeholder="coupon code">
+                                                <input type="text" class="form-control" required
+                                                       placeholder="coupon code">
                                                 <div class="input-group-append">
-                                                    <button class="btn btn-outline-primary-2" type="submit"><i class="icon-long-arrow-right"></i></button>
+                                                    <button class="btn btn-outline-primary-2" type="submit"><i
+                                                            class="icon-long-arrow-right"></i></button>
                                                 </div>
                                             </div>
                                         </form>
                                     </div>
 
-                                    <button id="update-cart-btn" class="btn btn-outline-dark-2"><span>UPDATE CART</span><i class="icon-refresh"></i></button>
+                                    <button id="update-cart-btn" class="btn btn-outline-dark-2"><span>UPDATE CART</span><i
+                                            class="icon-refresh"></i></button>
                                 </div>
                             </div>
 
@@ -153,35 +156,27 @@
                                             <td>&nbsp;</td>
                                         </tr>
 
-                                        <tr class="summary-shipping-row">
-                                            <td>
-                                                <div class="custom-control custom-radio">
-                                                    <input type="radio" id="free-shipping" name="shipping" class="custom-control-input" checked>
-                                                    <label class="custom-control-label" for="free-shipping">Free Shipping</label>
-                                                </div>
-                                            </td>
-                                            <td>$0.00</td>
-                                        </tr>
+                                        </tbody>
+
+                                        <tbody id="shipping-row">
 
                                         <tr class="summary-shipping-row">
                                             <td>
-                                                <div class="custom-control custom-radio">
-                                                    <input type="radio" id="standart-shipping" name="shipping" class="custom-control-input">
-                                                    <label class="custom-control-label" for="standart-shipping">Standart:</label>
+
+                                                <div class="custom-control custom-radio disabled">
+                                                    <input type="radio" id="free-shipping" name="shipping"
+                                                           class="custom-control-input" checked>
+                                                    <label class="custom-control-label" for="free-shipping">Free
+                                                        Shipping</label>
                                                 </div>
                                             </td>
-                                            <td>$10.00</td>
+                                            <td id="free-shipping-price">0</td>
                                         </tr>
 
-                                        <tr class="summary-shipping-row">
-                                            <td>
-                                                <div class="custom-control custom-radio">
-                                                    <input type="radio" id="express-shipping" name="shipping" class="custom-control-input">
-                                                    <label class="custom-control-label" for="express-shipping">Express:</label>
-                                                </div>
-                                            </td>
-                                            <td>$20.00</td>
-                                        </tr>
+                                        </tbody>
+
+                                        <tbody>
+
 
                                         <tr class="summary-total">
                                             <td>Total:</td>
@@ -190,10 +185,12 @@
                                         </tbody>
                                     </table>
 
-                                    <a href="checkout.html" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a>
+                                    <a href="checkout.html" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED
+                                        TO CHECKOUT</a>
                                 </div>
 
-                                <a href="category.html" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a>
+                                <a href="category.html" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i
+                                        class="icon-refresh"></i></a>
                             </aside>
                         </div>
                     </div>
@@ -208,15 +205,22 @@
                 <div class="row">
                     <div class="col-sm-6 col-lg-3">
                         <div class="widget widget-about">
-                            <img src="assets/images/logo.png" class="footer-logo" alt="Footer Logo" width="105" height="25">
-                            <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. </p>
+                            <img src="assets/images/logo.png" class="footer-logo" alt="Footer Logo" width="105"
+                                 height="25">
+                            <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu vulputate magna
+                                eros eu erat. </p>
 
                             <div class="social-icons">
-                                <a href="#" class="social-icon" target="_blank" title="Facebook"><i class="icon-facebook-f"></i></a>
-                                <a href="#" class="social-icon" target="_blank" title="Twitter"><i class="icon-twitter"></i></a>
-                                <a href="#" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
-                                <a href="#" class="social-icon" target="_blank" title="Youtube"><i class="icon-youtube"></i></a>
-                                <a href="#" class="social-icon" target="_blank" title="Pinterest"><i class="icon-pinterest"></i></a>
+                                <a href="#" class="social-icon" target="_blank" title="Facebook"><i
+                                        class="icon-facebook-f"></i></a>
+                                <a href="#" class="social-icon" target="_blank" title="Twitter"><i
+                                        class="icon-twitter"></i></a>
+                                <a href="#" class="social-icon" target="_blank" title="Instagram"><i
+                                        class="icon-instagram"></i></a>
+                                <a href="#" class="social-icon" target="_blank" title="Youtube"><i
+                                        class="icon-youtube"></i></a>
+                                <a href="#" class="social-icon" target="_blank" title="Pinterest"><i
+                                        class="icon-pinterest"></i></a>
                             </div>
                         </div>
                     </div>

@@ -14,6 +14,14 @@ import lk.karu.openbay.util.AppUtil;
 public class CartController {
     private final CartService cartService= new CartService();
 
+    @GET
+    @Path("/shipping")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response loadShippingData(){
+        String responseJson = cartService.getShippingData();
+        return Response.ok().entity(responseJson).build();
+    }
+
     @DELETE
     @Path("/remove/{cartId}")
     @Produces(MediaType.APPLICATION_JSON)

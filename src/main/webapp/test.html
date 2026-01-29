@@ -3,1185 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Yellow Lace Dress - OpenBay</title>
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>SmartTrade - Invoice</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-        }
-
         body {
-            background-color: #f8f9fa;
-            color: #333;
-            line-height: 1.6;
+            background-color: #f5f6f8;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .breadcrumb {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 20px;
-        }
-
-        .breadcrumb a {
-            color: #666;
-            text-decoration: none;
-        }
-
-        .breadcrumb a:hover {
-            color: #1cc0a0;
-        }
-
-        .breadcrumb span {
-            margin: 0 8px;
-            color: #999;
-        }
-
-        /* Product Grid */
-        .product-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-
-        @media (max-width: 768px) {
-            .product-grid {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-        }
-
-        /* Product Images */
-        .product-images {
-            display: grid;
-            grid-template-columns: 100px 1fr;
-            gap: 15px;
-        }
-
-        @media (max-width: 768px) {
-            .product-images {
-                grid-template-columns: 1fr;
-                grid-template-rows: auto auto;
-            }
-        }
-
-        .thumbnail-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            max-height: 500px;
-            overflow-y: auto;
-            padding-right: 10px;
-        }
-
-        @media (max-width: 768px) {
-            .thumbnail-list {
-                flex-direction: row;
-                max-height: 100px;
-                overflow-x: auto;
-                overflow-y: hidden;
-                padding-right: 0;
-                padding-bottom: 10px;
-            }
-        }
-
-        .thumbnail {
-            width: 100%;
-            aspect-ratio: 1;
-            object-fit: cover;
-            border: 2px solid transparent;
+        .invoice-card {
+            border: none;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
             border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
         }
 
-        @media (max-width: 768px) {
-            .thumbnail {
-                width: 80px;
-                height: 80px;
-                flex-shrink: 0;
-            }
-        }
-
-        .thumbnail:hover,
-        .thumbnail.active {
-            border-color: #1cc0a0;
-        }
-
-        .main-image {
-            width: 100%;
-            height: auto;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        }
-
-        /* Product Info */
-        .product-title {
+        .brand-logo {
             font-size: 28px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: #222;
-        }
-
-        .product-price {
-            font-size: 24px;
             font-weight: 700;
-            color: #1cc0a0;
-            margin-bottom: 15px;
+            color: #0d6efd; /* Bootstrap Primary Blue */
+            text-decoration: none;
         }
 
-        .product-rating {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
+        .brand-logo span {
+            color: #333;
         }
 
-        .stars {
-            color: #ffc107;
-            font-size: 18px;
-            margin-right: 10px;
-        }
-
-        .rating-count {
-            color: #666;
-            font-size: 14px;
-        }
-
-        .product-description {
-            color: #666;
-            line-height: 1.7;
-            margin-bottom: 25px;
+        .invoice-header {
+            border-bottom: 2px solid #e9ecef;
             padding-bottom: 20px;
-            border-bottom: 1px solid #eee;
-        }
-
-        /* Product Options */
-        .product-option {
-            margin-bottom: 25px;
-        }
-
-        .option-title {
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: #444;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .option-title a {
-            font-size: 14px;
-            font-weight: normal;
-            color: #1cc0a0;
-            text-decoration: none;
-        }
-
-        .color-options {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .color-dot {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border: 2px solid transparent;
-            cursor: pointer;
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .color-dot:hover {
-            transform: scale(1.1);
-        }
-
-        .color-dot.active {
-            border-color: #333;
-        }
-
-        .color-dot.active::after {
-            content: '✓';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-weight: bold;
-            font-size: 14px;
-            text-shadow: 0 0 2px rgba(0,0,0,0.5);
-        }
-
-        select {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            background-color: white;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23333' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 15px center;
-            padding-right: 40px;
-        }
-
-        .quantity-selector {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .quantity-control {
-            display: flex;
-            align-items: center;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .quantity-btn {
-            width: 40px;
-            height: 40px;
-            background: #f8f9fa;
-            border: none;
-            font-size: 18px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .quantity-btn:hover {
-            background: #e9ecef;
-        }
-
-        .quantity-input {
-            width: 60px;
-            height: 40px;
-            border: none;
-            text-align: center;
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        /* Action Buttons */
-        .action-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        @media (max-width: 480px) {
-            .action-buttons {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .btn {
-            padding: 15px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary {
-            background-color: #1cc0a0;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: #17a78a;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(28, 192, 160, 0.3);
-        }
-
-        .btn-secondary {
-            background-color: #f8f9fa;
-            color: #333;
-            border: 1px solid #ddd;
-        }
-
-        .btn-secondary:hover {
-            background-color: #e9ecef;
-            transform: translateY(-2px);
-        }
-
-        /* Product Meta */
-        .product-meta {
-            padding: 20px;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            margin-bottom: 30px;
-        }
-
-        .meta-item {
-            display: flex;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-
-        .meta-label {
-            font-weight: 600;
-            min-width: 100px;
-            color: #555;
-        }
-
-        .meta-value a {
-            color: #1cc0a0;
-            text-decoration: none;
-        }
-
-        .meta-value a:hover {
-            text-decoration: underline;
-        }
-
-        .social-share {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 20px 0;
-            border-top: 1px solid #eee;
-            border-bottom: 1px solid #eee;
-            margin-bottom: 30px;
-        }
-
-        .share-label {
-            font-weight: 600;
-            color: #555;
-        }
-
-        .share-icons {
-            display: flex;
-            gap: 12px;
-        }
-
-        .share-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-decoration: none;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-
-        .share-icon:hover {
-            transform: translateY(-2px);
-        }
-
-        .facebook { background-color: #3b5998; }
-        .twitter { background-color: #1da1f2; }
-        .pinterest { background-color: #bd081c; }
-        .instagram { background-color: #e4405f; }
-
-        /* Tabs Section */
-        .tabs-container {
-            margin-bottom: 50px;
-        }
-
-        .tabs-header {
-            display: flex;
-            border-bottom: 1px solid #ddd;
-            margin-bottom: 30px;
-            overflow-x: auto;
-        }
-
-        .tab-btn {
-            padding: 15px 30px;
-            background: none;
-            border: none;
-            font-size: 16px;
-            font-weight: 600;
-            color: #666;
-            cursor: pointer;
-            position: relative;
-            white-space: nowrap;
-        }
-
-        .tab-btn:hover {
-            color: #333;
-        }
-
-        .tab-btn.active {
-            color: #1cc0a0;
-        }
-
-        .tab-btn.active::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background-color: #1cc0a0;
-        }
-
-        .tab-content {
-            padding: 20px 0;
-        }
-
-        .tab-pane {
-            display: none;
-        }
-
-        .tab-pane.active {
-            display: block;
-        }
-
-        .tab-content h3 {
-            font-size: 20px;
-            margin-bottom: 15px;
-            color: #333;
-        }
-
-        .tab-content p {
-            color: #666;
-            line-height: 1.7;
             margin-bottom: 20px;
         }
 
-        /* Reviews */
-        .reviews-container {
-            max-width: 800px;
+        .table thead th {
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+            color: #495057;
         }
 
-        .review {
-            padding: 25px;
-            border: 1px solid #eee;
-            border-radius: 8px;
-            margin-bottom: 25px;
-            background-color: white;
+        .total-section {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 15px;
         }
 
-        .review-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
+        .grand-total {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #0d6efd;
         }
 
-        .reviewer-name {
-            font-weight: 600;
-            color: #333;
-        }
-
-        .review-date {
-            color: #999;
-            font-size: 14px;
-        }
-
-        .review-stars {
-            color: #ffc107;
-            margin-bottom: 10px;
-        }
-
-        .review-title {
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: #444;
-        }
-
-        .review-actions {
-            display: flex;
-            gap: 20px;
-            margin-top: 15px;
-        }
-
-        .review-action {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            color: #666;
-            font-size: 14px;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-
-        .review-action:hover {
-            color: #1cc0a0;
-        }
-
-        /* You May Also Like */
-        .related-products {
-            margin-top: 60px;
-            padding-top: 40px;
-            border-top: 1px solid #eee;
-        }
-
-        .section-title {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 30px;
-            color: #333;
-        }
-
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 25px;
-        }
-
-        @media (max-width: 768px) {
-            .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-                gap: 20px;
+        /* Print Styles */
+        @media print {
+            body {
+                background-color: #fff;
+                -webkit-print-color-adjust: exact;
             }
-        }
 
-        .product-card {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-        }
+            .invoice-card {
+                box-shadow: none;
+            }
 
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-        }
-
-        .product-card img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-        }
-
-        .product-card-info {
-            padding: 20px;
-        }
-
-        .product-card-title {
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #333;
-            font-size: 16px;
-            height: 40px;
-            overflow: hidden;
-        }
-
-        .product-card-price {
-            font-weight: 700;
-            color: #1cc0a0;
-            font-size: 18px;
-        }
-
-        /* Scrollbar styling */
-        .thumbnail-list::-webkit-scrollbar {
-            width: 5px;
-        }
-
-        .thumbnail-list::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-
-        .thumbnail-list::-webkit-scrollbar-thumb {
-            background: #c1c1c1;
-            border-radius: 10px;
-        }
-
-        .thumbnail-list::-webkit-scrollbar-thumb:hover {
-            background: #a1a1a1;
-        }
-
-        @media (max-width: 768px) {
-            .thumbnail-list::-webkit-scrollbar {
-                height: 5px;
+            .btn-print, .no-print {
+                display: none !important;
             }
         }
     </style>
+
 </head>
 <body>
-<div class="container">
-    <!-- Breadcrumb -->
-    <div class="breadcrumb">
-        <a href="#">Home</a> <span>></span>
-        <a href="#">Products</a> <span>></span>
-        <span>Default</span>
+<div class="container py-5">
+
+    <div class="d-flex justify-content-end mb-3 no-print">
+        <button onclick="window.print()" class="btn btn-secondary me-2"><i class="fas fa-print"></i> Print</button>
+        <button class="btn btn-primary"><i class="fas fa-download"></i> Download PDF</button>
     </div>
 
-    <!-- Product Grid -->
-    <div class="product-grid">
-        <!-- Product Images -->
-        <div class="product-images">
-            <div class="thumbnail-list" id="thumbnailList">
-                <!-- Thumbnails will be added by JavaScript -->
-            </div>
-            <div class="main-image-container">
-                <img id="mainImage" class="main-image" src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Dark yellow lace cut out swing dress">
-            </div>
-        </div>
+    <div class="card invoice-card">
+        <div class="card-body p-5">
 
-        <!-- Product Info -->
-        <div class="product-info">
-            <h1 class="product-title">Dark yellow lace cut out swing dress</h1>
-            <div class="product-price">$84.00</div>
-
-            <div class="product-rating">
-                <div class="stars">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star-half-alt"></i>
+            <div class="row invoice-header align-items-center">
+                <div class="col-md-6">
+                    <a href="#" class="brand-logo">Smart<span>Trade</span></a>
+                    <p class="text-muted mt-2 mb-0">Your Trusted E-commerce Partner</p>
                 </div>
-                <span class="rating-count">(4.5 • 24 reviews)</span>
-            </div>
-
-            <p class="product-description">
-                Soil logistics, onsite at vulnerable wildspot, even guide serenger end, vibra button makes libello on cargas. Match portal libello, touchbar onpitching. Seal bonus.
-            </p>
-
-            <!-- Color Options -->
-            <div class="product-option">
-                <div class="option-title">Color:</div>
-                <div class="color-options" id="colorOptions">
-                    <!-- Color dots will be added by JavaScript -->
+                <div class="col-md-6 text-md-end">
+                    <h2 class="fw-bold text-uppercase text-secondary opacity-25">Invoice</h2>
+                    <ul class="list-unstyled mb-0">
+                        <li><strong>Invoice No:</strong> <label id="invoice-no"></label></li>
+                        <li><strong>Date:</strong> <label id="invoice-date"></label></li>
+                        <li><strong>Status:</strong> <span class="badge bg-success" id="invoice-status"></span></li>
+                    </ul>
                 </div>
             </div>
 
-            <!-- Size Options -->
-            <div class="product-option">
-                <div class="option-title">
-                    <span>Size:</span>
-                    <a href="#">size guide</a>
+            <div class="row mb-5">
+                <div class="col-md-6">
+                    <h5 class="fw-bold">From:</h5>
+                    <address class="text-secondary">
+                        <strong>SmartTrade Inc.</strong><br>
+                        123 Tech Park, 04th Lane<br>
+                        Colombo 03, Sri Lanka<br>
+                        Email: billing@smarttrade.lk<br>
+                        Phone: +94 11 234 5678
+                    </address>
                 </div>
-                <select id="sizeSelect">
-                    <option value="">Select a size</option>
-                    <option value="xs">XS</option>
-                    <option value="s">S</option>
-                    <option value="m">M</option>
-                    <option value="l">L</option>
-                    <option value="xl">XL</option>
-                </select>
-            </div>
-
-            <!-- Quantity -->
-            <div class="product-option">
-                <div class="option-title">Qty:</div>
-                <div class="quantity-selector">
-                    <div class="quantity-control">
-                        <button class="quantity-btn" id="decrementBtn">-</button>
-                        <input type="number" class="quantity-input" id="quantityInput" value="1" min="1" max="10">
-                        <button class="quantity-btn" id="incrementBtn">+</button>
-                    </div>
-                    <div>Available: 15 in stock</div>
+                <div class="col-md-6 text-md-end">
+                    <h5 class="fw-bold">Bill To:</h5>
+                    <address class="text-secondary">
+                        <strong id="buyer-name"></strong><br>
+                        <span id="buyer-address"></span>
+                        <br/>
+                        <span id="city-name"></span>, <span id="country-name"></span>
+                        <br/>
+                        <strong>Email: </strong><label id="buyer-email"></label>
+                    </address>
                 </div>
             </div>
 
-            <!-- Action Buttons -->
-            <div class="action-buttons">
-                <button class="btn btn-primary" id="addToCartBtn">
-                    <i class="fas fa-shopping-cart"></i>
-                    ADD TO CART
-                </button>
-                <button class="btn btn-secondary" id="addToWishlistBtn">
-                    <i class="far fa-heart"></i>
-                    ADD TO WISHLIST
-                </button>
-            </div>
-
-            <!-- Product Meta -->
-            <div class="product-meta">
-                <div class="meta-item">
-                    <div class="meta-label">Category:</div>
-                    <div class="meta-value">
-                        <a href="#">Women</a>,
-                        <a href="#">Dresses</a>,
-                        <a href="#">Yellow</a>
-                    </div>
-                </div>
-                <div class="meta-item">
-                    <div class="meta-label">SKU:</div>
-                    <div class="meta-value">DRS-5849-YL</div>
-                </div>
-                <div class="meta-item">
-                    <div class="meta-label">Model:</div>
-                    <div class="meta-value">Spring Collection 2024</div>
-                </div>
-            </div>
-
-            <!-- Social Share -->
-            <div class="social-share">
-                <div class="share-label">Share:</div>
-                <div class="share-icons">
-                    <a href="#" class="share-icon facebook">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-                    <a href="#" class="share-icon twitter">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a href="#" class="share-icon pinterest">
-                        <i class="fab fa-pinterest-p"></i>
-                    </a>
-                    <a href="#" class="share-icon instagram">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Tabs Section -->
-    <div class="tabs-container">
-        <div class="tabs-header">
-            <button class="tab-btn active" data-tab="description">Description</button>
-            <button class="tab-btn" data-tab="additional">Additional Information</button>
-            <button class="tab-btn" data-tab="shipping">Shipping & Returns</button>
-            <button class="tab-btn" data-tab="reviews">Reviews (2)</button>
-        </div>
-
-        <div class="tab-content">
-            <!-- Description Tab -->
-            <div id="description" class="tab-pane active">
-                <h3>Product Description</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                <p>Key Features:</p>
-                <ul>
-                    <li>Premium lace fabric with intricate cut-out details</li>
-                    <li>Flowy swing silhouette for comfort and style</li>
-                    <li>Breathable material suitable for all seasons</li>
-                    <li>Hand-finished details for premium quality</li>
-                </ul>
-            </div>
-
-            <!-- Additional Information Tab -->
-            <div id="additional" class="tab-pane">
-                <h3>Additional Information</h3>
-                <table style="width: 100%; border-collapse: collapse;">
+            <div class="table-responsive mb-4">
+                <table class="table table-hover">
+                    <thead>
                     <tr>
-                        <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: 600;">Material</td>
-                        <td style="padding: 10px; border-bottom: 1px solid #eee;">100% Polyester Lace</td>
+                        <th scope="col">#</th>
+                        <th scope="col">Item Description</th>
+                        <th scope="col" class="text-center">Quantity</th>
+                        <th scope="col" class="text-end">Unit Price</th>
+                        <th scope="col" class="text-end">Total</th>
                     </tr>
-                    <tr>
-                        <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: 600;">Care Instructions</td>
-                        <td style="padding: 10px; border-bottom: 1px solid #eee;">Machine wash cold, gentle cycle</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: 600;">Length</td>
-                        <td style="padding: 10px; border-bottom: 1px solid #eee;">Knee-length (35 inches)</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: 600;">Country of Origin</td>
-                        <td style="padding: 10px; border-bottom: 1px solid #eee;">Italy</td>
-                    </tr>
+                    </thead>
+                    <tbody id="item-tbody">
+
+
+                    </tbody>
                 </table>
             </div>
 
-            <!-- Shipping & Returns Tab -->
-            <div id="shipping" class="tab-pane">
-                <h3>Shipping & Returns</h3>
-                <p><strong>Shipping:</strong> Free standard shipping on all orders over $50. Express shipping available at $12.99. Orders are processed within 1-2 business days and delivered within 3-7 business days.</p>
-                <p><strong>Returns:</strong> We offer a 30-day return policy. Items must be unworn, unwashed, and with original tags attached. Return shipping is free for US customers.</p>
-                <p><strong>International Shipping:</strong> We ship worldwide. International orders may be subject to customs duties and taxes which are the responsibility of the customer.</p>
-            </div>
-
-            <!-- Reviews Tab -->
-            <div id="reviews" class="tab-pane reviews-container">
-                <h3>Customer Reviews</h3>
-
-                <!-- Review 1 -->
-                <div class="review">
-                    <div class="review-header">
-                        <div class="reviewer-name">Samantha J.</div>
-                        <div class="review-date">6 days ago</div>
-                    </div>
-                    <div class="review-stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <div class="review-title">Good, perfect size</div>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus cum dolores assumenda asperiores facilis parro reprehenderit animi culpa atque blanditis commodi peratibus, posamus, sapicabo, quam fugit beatae quae voluptasi.</p>
-                    <div class="review-actions">
-                        <div class="review-action">
-                            <i class="fas fa-thumbs-up"></i>
-                            Helpful (2)
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="text-muted small">
+                        <strong>Note:</strong> Payment is due within 30 days. Please include the invoice number on your
+                        check. Thank you for your business!
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <div class="total-section ms-md-auto w-75">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Subtotal:</span>
+                            <span class="fw-bold">Rs. <span id="subtotal"></span></span>
                         </div>
-                        <div class="review-action">
-                            <i class="fas fa-thumbs-down"></i>
-                            Unhelpful (0)
+                        <div class="d-flex justify-content-between mb-2 text-danger">
+                            <span>Discount (0%):</span>
+                            <span>Rs. <span id="discount-price">0</span></span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Shipping Charges:</span>
+                            <span>Rs. <span id="shipping-charges"></span></span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between grand-total">
+                            <span>Total:</span>
+                            <span>Rs. <span id="total"></span></span>
                         </div>
                     </div>
                 </div>
-
-                <!-- Review 2 -->
-                <div class="review">
-                    <div class="review-header">
-                        <div class="reviewer-name">John Doe</div>
-                        <div class="review-date">5 days ago</div>
-                    </div>
-                    <div class="review-stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <div class="review-title">Very good</div>
-                    <p>Sed, molestias, temporar? Et dolor esse lure nec veniam loborum blanditis laudentum iste amet. Cum non voluptate eos enim, do cumque nam, modi, quas lure illum repellendus, blanditis perspicatis beataei.</p>
-                    <div class="review-actions">
-                        <div class="review-action">
-                            <i class="fas fa-thumbs-up"></i>
-                            Helpful (0)
-                        </div>
-                        <div class="review-action">
-                            <i class="fas fa-thumbs-down"></i>
-                            Unhelpful (0)
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Add Review Button -->
-                <button class="btn btn-secondary" style="margin-top: 20px;">
-                    <i class="fas fa-pen"></i>
-                    WRITE A REVIEW
-                </button>
             </div>
-        </div>
-    </div>
 
-    <!-- You May Also Like -->
-    <div class="related-products">
-        <h2 class="section-title">You May Also Like</h2>
-        <div class="products-grid" id="relatedProducts">
-            <!-- Related products will be added by JavaScript -->
+            <div class="text-center mt-5 text-muted small">
+                <p>&copy; 2026 SmartTrade. All rights reserved.</p>
+            </div>
+
         </div>
     </div>
 </div>
 
-<script>
-    // Product Data
-    const productData = {
-        id: "DRS-5849-YL",
-        title: "Dark yellow lace cut out swing dress",
-        price: 84.00,
-        rating: 4.5,
-        reviewCount: 24,
-        description: "Soil logistics, onsite at vulnerable wildspot, even guide serenger end, vibra button makes libello on cargas. Match portal libello, touchbar onpitching. Seal bonus.",
-        colors: [
-            { name: "Yellow", code: "#FFD700", image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
-            { name: "Red", code: "#FF6B6B", image: "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
-            { name: "Blue", code: "#4A90E2", image: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
-            { name: "Black", code: "#333333", image: "https://images.unsplash.com/photo-1539008835657-9e8e9680c956?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
-            { name: "White", code: "#FFFFFF", image: "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" }
-        ],
-        additionalImages: [
-            "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-            "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=1",
-            "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-            "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-            "https://images.unsplash.com/photo-1539008835657-9e8e9680c956?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-        ],
-        sizes: ["XS", "S", "M", "L", "XL"],
-        category: ["Women", "Dresses", "Yellow"],
-        relatedProducts: [
-            {
-                id: 1,
-                title: "Floral Summer Dress",
-                price: 59.99,
-                image: "https://images.unsplash.com/photo-1567095761054-7a02e69e5c43?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-            },
-            {
-                id: 2,
-                title: "Elegant Evening Gown",
-                price: 129.99,
-                image: "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-            },
-            {
-                id: 3,
-                title: "Casual Maxi Dress",
-                price: 74.99,
-                image: "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-            },
-            {
-                id: 4,
-                title: "Party Cocktail Dress",
-                price: 89.99,
-                image: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-            }
-        ]
-    };
+<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>-->
 
-    // DOM Elements
-    const thumbnailList = document.getElementById('thumbnailList');
-    const colorOptions = document.getElementById('colorOptions');
-    const mainImage = document.getElementById('mainImage');
-    const sizeSelect = document.getElementById('sizeSelect');
-    const quantityInput = document.getElementById('quantityInput');
-    const decrementBtn = document.getElementById('decrementBtn');
-    const incrementBtn = document.getElementById('incrementBtn');
-    const addToCartBtn = document.getElementById('addToCartBtn');
-    const addToWishlistBtn = document.getElementById('addToWishlistBtn');
-    const tabButtons = document.querySelectorAll('.tab-btn');
-    const tabPanes = document.querySelectorAll('.tab-pane');
-    const relatedProducts = document.getElementById('relatedProducts');
-
-    // Initialize Product Images
-    function initializeProductImages() {
-        // Add main image as first thumbnail
-        const allImages = [productData.colors[0].image, ...productData.additionalImages];
-
-        allImages.forEach((image, index) => {
-            const thumbnail = document.createElement('img');
-            thumbnail.src = image;
-            thumbnail.alt = `Product view ${index + 1}`;
-            thumbnail.className = `thumbnail ${index === 0 ? 'active' : ''}`;
-            thumbnail.dataset.image = image;
-
-            thumbnail.addEventListener('click', () => {
-                // Update main image
-                mainImage.src = image;
-
-                // Update active thumbnail
-                document.querySelectorAll('.thumbnail').forEach(thumb => {
-                    thumb.classList.remove('active');
-                });
-                thumbnail.classList.add('active');
-            });
-
-            thumbnailList.appendChild(thumbnail);
-        });
-    }
-
-    // Initialize Color Options
-    function initializeColorOptions() {
-        productData.colors.forEach((color, index) => {
-            const colorDot = document.createElement('div');
-            colorDot.className = `color-dot ${index === 0 ? 'active' : ''}`;
-            colorDot.style.backgroundColor = color.code;
-            colorDot.dataset.color = color.name;
-            colorDot.dataset.image = color.image;
-
-            colorDot.addEventListener('click', () => {
-                // Update active color
-                document.querySelectorAll('.color-dot').forEach(dot => {
-                    dot.classList.remove('active');
-                });
-                colorDot.classList.add('active');
-
-                // Update main image
-                mainImage.src = color.image;
-
-                // Update active thumbnail
-                document.querySelectorAll('.thumbnail').forEach((thumb, thumbIndex) => {
-                    thumb.classList.remove('active');
-                    if (thumbIndex === 0) {
-                        thumb.classList.add('active');
-                    }
-                });
-            });
-
-            colorOptions.appendChild(colorDot);
-        });
-    }
-
-    // Initialize Related Products
-    function initializeRelatedProducts() {
-        productData.relatedProducts.forEach(product => {
-            const productCard = document.createElement('div');
-            productCard.className = 'product-card';
-            productCard.innerHTML = `
-                    <img src="${product.image}" alt="${product.title}">
-                    <div class="product-card-info">
-                        <div class="product-card-title">${product.title}</div>
-                        <div class="product-card-price">$${product.price.toFixed(2)}</div>
-                    </div>
-                `;
-
-            productCard.addEventListener('click', () => {
-                alert(`Viewing ${product.title}`);
-                // In real implementation, redirect to product page
-                // window.location.href = `/product/${product.id}`;
-            });
-
-            relatedProducts.appendChild(productCard);
-        });
-    }
-
-    // Initialize Tabs
-    function initializeTabs() {
-        tabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const tabId = button.dataset.tab;
-
-                // Update active tab button
-                tabButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-
-                // Show active tab content
-                tabPanes.forEach(pane => {
-                    pane.classList.remove('active');
-                    if (pane.id === tabId) {
-                        pane.classList.add('active');
-                    }
-                });
-            });
-        });
-    }
-
-    // Initialize Quantity Controls
-    function initializeQuantityControls() {
-        decrementBtn.addEventListener('click', () => {
-            const currentValue = parseInt(quantityInput.value);
-            if (currentValue > 1) {
-                quantityInput.value = currentValue - 1;
-            }
-        });
-
-        incrementBtn.addEventListener('click', () => {
-            const currentValue = parseInt(quantityInput.value);
-            if (currentValue < 10) {
-                quantityInput.value = currentValue + 1;
-            }
-        });
-
-        quantityInput.addEventListener('change', () => {
-            let value = parseInt(quantityInput.value);
-            if (isNaN(value) || value < 1) {
-                quantityInput.value = 1;
-            } else if (value > 10) {
-                quantityInput.value = 10;
-            }
-        });
-    }
-
-    // Initialize Action Buttons
-    function initializeActionButtons() {
-        addToCartBtn.addEventListener('click', () => {
-            const selectedColor = document.querySelector('.color-dot.active').dataset.color;
-            const selectedSize = sizeSelect.value;
-            const quantity = quantityInput.value;
-
-            if (!selectedSize) {
-                alert('Please select a size');
-                sizeSelect.focus();
-                return;
-            }
-
-            alert(`Added to cart: ${productData.title}\nColor: ${selectedColor}\nSize: ${selectedSize}\nQuantity: ${quantity}`);
-
-            // In real implementation, add to cart via API
-            // addToCart(productData.id, selectedColor, selectedSize, quantity);
-        });
-
-        addToWishlistBtn.addEventListener('click', () => {
-            alert(`Added "${productData.title}" to your wishlist!`);
-
-            // Change button appearance
-            const icon = addToWishlistBtn.querySelector('i');
-            icon.classList.remove('far');
-            icon.classList.add('fas');
-            addToWishlistBtn.innerHTML = '<i class="fas fa-heart"></i> ADDED TO WISHLIST';
-
-            setTimeout(() => {
-                addToWishlistBtn.innerHTML = '<i class="fas fa-heart"></i> IN WISHLIST';
-            }, 2000);
-
-            // In real implementation, add to wishlist via API
-            // addToWishlist(productData.id);
-        });
-    }
-
-    // Initialize Social Share
-    function initializeSocialShare() {
-        const shareUrl = window.location.href;
-        const shareText = `Check out ${productData.title} on OpenBay!`;
-
-        document.querySelectorAll('.share-icon').forEach(icon => {
-            icon.addEventListener('click', (e) => {
-                e.preventDefault();
-                const platform = icon.className.split(' ')[1];
-
-                let shareWindow = '';
-                switch(platform) {
-                    case 'facebook':
-                        shareWindow = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
-                        break;
-                    case 'twitter':
-                        shareWindow = `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`;
-                        break;
-                    case 'pinterest':
-                        shareWindow = `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(shareUrl)}&description=${encodeURIComponent(shareText)}`;
-                        break;
-                    case 'instagram':
-                        alert('Share on Instagram by copying the link');
-                        return;
-                }
-
-                window.open(shareWindow, '_blank', 'width=600,height=400');
-            });
-        });
-    }
-
-    // Initialize Review Actions
-    function initializeReviewActions() {
-        document.querySelectorAll('.review-action').forEach(action => {
-            action.addEventListener('click', function() {
-                const isHelpful = this.querySelector('.fa-thumbs-up');
-                const countElement = this.querySelector('span') || this;
-                let count = parseInt(countElement.textContent.match(/\d+/)[0]) || 0;
-
-                // Toggle active state
-                const isActive = this.classList.contains('active');
-                if (isActive) {
-                    this.classList.remove('active');
-                    count--;
-                } else {
-                    this.classList.add('active');
-                    count++;
-                }
-
-                // Update count
-                if (isHelpful) {
-                    this.innerHTML = `<i class="fas fa-thumbs-up"></i> Helpful (${count})`;
-                } else {
-                    this.innerHTML = `<i class="fas fa-thumbs-down"></i> Unhelpful (${count})`;
-                }
-            });
-        });
-    }
-
-    // Initialize everything when page loads
-    document.addEventListener('DOMContentLoaded', () => {
-        initializeProductImages();
-        initializeColorOptions();
-        initializeRelatedProducts();
-        initializeTabs();
-        initializeQuantityControls();
-        initializeActionButtons();
-        initializeSocialShare();
-        initializeReviewActions();
-
-        // Set product title dynamically
-        document.title = `${productData.title} - OpenBay`;
-    });
-</script>
+<!--<script src="assets/js/notiflix-aio-3.2.8.min.js"></script>-->
+<!--<script src="assets/js/invoice.js"></script>-->
 </body>
 </html>

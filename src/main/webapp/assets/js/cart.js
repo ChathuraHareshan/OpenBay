@@ -1,3 +1,13 @@
+/*********************************
+ * GLOBAL STATE
+ *********************************/
+let GLOBAL_TOTAL_QTY = 0;
+let GLOBAL_SUBTOTAL = 0;
+let GLOBAL_SHIPPING_PRICE = 0;
+
+/*********************************
+ * PAGE LOAD
+ *********************************/
 window.addEventListener("load", async () => {
     Notiflix.Loading.pulse("Wait...", {
         clickToClose: false,
@@ -6,44 +16,89 @@ window.addEventListener("load", async () => {
 
     try {
         await loadCartItems();
+        await renderShippingPanel();
     } finally {
         Notiflix.Loading.remove();
     }
 });
 
+
+function renderShippingPanel() {
+    const tbody = document.getElementById("shipping-row");
+    tbody.innerHTML = "";
+
+
+
+        const minQty = 20;
+        const isDisabled = GLOBAL_TOTAL_QTY <= minQty;
+
+
+        // Keep your original design exactly
+        tbody.innerHTML += `
+            <tr class="summary-shipping-row ${isDisabled ? '' : 'text-muted'}">
+                <td style="margin-top: 10px">
+                    <div class="custom-control custom-radio">
+                        <input 
+                            type="radio"
+                            id="1"
+                            name="shipping"
+                            class="custom-control-input"
+                            value="1"
+                            data-price="500"
+                            ${isDisabled ? "checked" : "disabled"}>
+                        <label class="custom-control-label" for="1">
+                            Standard
+                            
+                            ${isDisabled ? "" : `<span class="text-danger"> (Free Shipping Available)</span>`}
+                        </label>
+                    </div>
+                </td>
+                <td>Rs. 500.00</td>
+            </tr>
+            
+            <tr class="summary-shipping-row ${isDisabled ? 'text-muted' : ''}">
+                <td style="margin-top: 10px">
+                    <div class="custom-control custom-radio">
+                        <input 
+                            type="radio"
+                            id="2"
+                            name="shipping"
+                            class="custom-control-input"
+                            value="2"
+                            data-price="0"
+                            ${isDisabled ? "disabled" : "checked"}>
+                        <label class="custom-control-label" for="2">
+                            Free Shipping
+                            ${minQty > 1 ? `(Min qty: ${minQty})` : ""}
+                            ${isDisabled ? `<span class="text-danger"> (Unavailable)</span>` : ""}
+                        </label>
+                    </div>
+                </td>
+                <td>Rs. 0.00</td>
+            </tr>
+        `;
+
+    const selected = document.querySelector("input[name='shipping']:checked");
+    GLOBAL_SHIPPING_PRICE = selected ? parseFloat(selected.dataset.price) : 0;
+
+    calculateFinalTotal();
+}
+
+
+
+/*********************************
+ * CART
+ *********************************/
 async function loadCartItems() {
     try {
-        Notiflix.Loading.pulse("Loading cart...", {
-            clickToClose: false,
-            svgColor: '#0284c7'
-        });
-
         const response = await fetch("api/carts/all-carts");
-        if (response.ok) {
-            const data = await response.json();
-            if (data.status) {
-                console.log("Cart data:", data);
-                renderingCartPanel(data.cartItems || data.carts || []);
-            } else {
-                Notiflix.Notify.info(data.message || "Cart is empty", {
-                    position: 'center-top'
-                });
-                renderingCartPanel([]);
-            }
-        } else {
-            Notiflix.Notify.failure("Failed to load cart items", {
-                position: 'center-top'
-            });
-            renderingCartPanel([]);
-        }
+        if (!response.ok) throw new Error("Cart load failed");
+
+        const data = await response.json();
+        renderingCartPanel(data.cartItems || []);
     } catch (e) {
-        console.error("Error loading cart:", e);
-        Notiflix.Notify.failure("Network error occurred", {
-            position: 'center-top'
-        });
+        console.error(e);
         renderingCartPanel([]);
-    } finally {
-        Notiflix.Loading.remove();
     }
 }
 
@@ -57,45 +112,31 @@ function renderingCartPanel(cartItems) {
         return;
     }
 
-    // Clear the container
     cartItemContainer.innerHTML = "";
+    let subtotal = 0;
+    let totalQty = 0;
 
     if (!cartItems || cartItems.length === 0) {
-        // Show empty cart message
         cartEmptyContainer.style.display = 'block';
         cartContentContainer.style.display = 'none';
         updateCartSummary(0, 0);
         return;
     }
 
-    // Show cart content
     cartEmptyContainer.style.display = 'none';
     cartContentContainer.style.display = 'block';
 
-    let subtotal = 0;
-    let totalQty = 0;
-
-    cartItems.forEach((cart, index) => {
-        // Make sure cart properties exist with fallback values
+    cartItems.forEach(cart => {
         const price = parseFloat(cart.price) || 0;
         const qty = parseInt(cart.qty) || 1;
         const itemTotal = price * qty;
         subtotal += itemTotal;
         totalQty += qty;
 
-        // Use the cartId from backend - this should be a number (1, 2, 3...)
         const cartId = cart.cartId || cart.id;
-        console.log(`Rendering cart item - ID: ${cartId}, Type: ${typeof cartId}`);
-
-        // Create a new row element
-        const row = document.createElement("tr");
-        row.id = `cart-row-${cartId}`;
-        row.setAttribute("data-cart-id", cartId);
-
-        // Check if it's a number, if not convert it
         const numericCartId = parseInt(cartId) || cartId;
 
-
+        // Keep your design exactly
         cartItemContainer.innerHTML += `<tr id="cart-row-${numericCartId}">
 											<td class="product-col">
 												<div class="product">
@@ -104,7 +145,6 @@ function renderingCartPanel(cartItems) {
 															<img src="${cart.image}" alt="Product image">
 														</a>
 													</figure>
-
 													<h4 class="product-title">
 														<a href="product.html?id=${cart.productId}" style="font-size: medium" target="_blank">${cart.title}</a>
 													</h4>
@@ -121,81 +161,43 @@ function renderingCartPanel(cartItems) {
                                                 </div>
                                             </td>
                                             <td class="size-col">${cart.size}</td>
-
                                             <td class="price-col">Rs. ${cart.price.toFixed(2)}</td>
-                                            
 											<td class="quantity-col">
                                                 <div class="qty-wrapper">
-                                                
                                       <button class="qty-btn minus" data-cart-id="${numericCartId}">−</button>
-                    <input type="number" class="qty-input" value="${qty}" min="1" 
-                           data-cart-id="${numericCartId}">
-                    <button class="qty-btn plus" data-cart-id="${numericCartId}">+</button>
-                                
+                                      <input type="number" class="qty-input" value="${qty}" min="1" data-cart-id="${numericCartId}">
+                                      <button class="qty-btn plus" data-cart-id="${numericCartId}">+</button>
                                                 </div>
                                             </td>
-                                            
-											<td class="total-col">Rs.${cart.price * cart.qty}.00</td>
- <td class="remove-col">
-                <button class="btn-remove" data-cart-id="${numericCartId}">
-                    <i class="icon-close"></i>
-                </button>
-            </td>										</tr>`;
-
-
-
+											<td class="total-col">Rs.${itemTotal}.00</td>
+                                            <td class="remove-col">
+                                                <button class="btn-remove" data-cart-id="${numericCartId}">
+                                                    <i class="icon-close"></i>
+                                                </button>
+                                            </td>
+										</tr>`;
     });
 
+    GLOBAL_TOTAL_QTY = totalQty;
+    GLOBAL_SUBTOTAL = subtotal;
 
     updateCartSummary(subtotal, totalQty);
 }
 
+
 document.addEventListener("click", async function (e) {
-    // Handle plus button click
     if (e.target.classList.contains("plus") || e.target.closest(".plus")) {
         const button = e.target.classList.contains("plus") ? e.target : e.target.closest(".plus");
-        const cartId = button.dataset.cartId;
-
-        console.log("Plus clicked, cartId:", cartId, "Type:", typeof cartId);
-
-        if (cartId) {
-            const row = button.closest("tr");
-            const input = row.querySelector(".qty-input");
-            let currentQty = parseInt(input.value) || 1;
-
-            input.value = currentQty + 1;
-
-            await updateCartItemQuantity(cartId, 1);
-        }
+        await updateCartItemQuantity(button.dataset.cartId, 1);
     }
 
-    // Handle minus button click
     if (e.target.classList.contains("minus") || e.target.closest(".minus")) {
         const button = e.target.classList.contains("minus") ? e.target : e.target.closest(".minus");
-        const cartId = button.dataset.cartId;
-
-        console.log("Minus clicked, cartId:", cartId, "Type:", typeof cartId);
-
-        if (cartId) {
-            const row = button.closest("tr");
-            const input = row.querySelector(".qty-input");
-            let currentQty = parseInt(input.value) || 1;
-
-            if (currentQty > 1) {
-                input.value = currentQty - 1;
-
-                await updateCartItemQuantity(cartId, -1);
-            }
-        }
+        await updateCartItemQuantity(button.dataset.cartId, -1);
     }
 
     if (e.target.classList.contains("btn-remove") || e.target.closest(".btn-remove")) {
         const button = e.target.classList.contains("btn-remove") ? e.target : e.target.closest(".btn-remove");
-        const cartId = button.dataset.cartId;
-
-        console.log("Remove clicked, cartId:", cartId);
-
-
 
         Notiflix.Confirm.show(
             'Remove Item',
@@ -203,8 +205,7 @@ document.addEventListener("click", async function (e) {
             'Remove',
             'Cancel',
             async function() {
-                // User clicked "Remove"
-                await removeCartItem(cartId);
+                await removeCartItem(button.dataset.cartId);
             },
             function() {
                 // User clicked "Cancel"
@@ -213,156 +214,37 @@ document.addEventListener("click", async function (e) {
                     timeout: 1500
                 });
             }
-        );
-    }
+        );    }
 });
 
+async function updateCartItemQuantity(cartId, qtyChange) {
+    await fetch(`api/carts/update-quantity/${cartId}`, {
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ qty: qtyChange })
+    });
+    await loadCartItems();
+    await renderShippingPanel();
+}
 
 async function removeCartItem(cartId) {
-    try {
-        let numericCartId = cartId;
-
-        if (typeof cartId === 'string') {
-            numericCartId = parseInt(cartId.replace(/[^0-9]/g, ''));
-        }
-
-        if (isNaN(numericCartId) || numericCartId <= 0) {
-            Notiflix.Notify.failure("Invalid cart item");
-            return;
-        }
-
-        Notiflix.Loading.pulse("Removing item...", {
-            clickToClose: false,
-            svgColor: '#0284c7'
-        });
-
-        const response = await fetch(`api/carts/remove/${numericCartId}`, {
-            method: "DELETE"
-        });
-
-        const data = await response.json();
-        if (data.status) {
-            Notiflix.Notify.success(data.message);
-            await loadCartItems();
-        } else {
-            Notiflix.Notify.failure(data.message);
-        }
-
-    } catch (e) {
-        console.error("Error removing cart item:", e);
-        Notiflix.Notify.failure("Network error: " + e.message);
-    } finally {
-        Notiflix.Loading.remove();
-    }
-}
-
-async function updateCartItemQuantity(cartId, qtyChange) {
-    try {
-        // Ensure cartId is a number
-        let numericCartId = cartId;
-
-        // If it's a string, try to convert to number
-        if (typeof cartId === 'string') {
-            // Remove any non-numeric characters
-            numericCartId = parseInt(cartId.replace(/[^0-9]/g, ''));
-        }
-
-        // Check if we got a valid number
-        if (isNaN(numericCartId) || numericCartId <= 0) {
-            console.error("Invalid cart ID:", cartId, "Parsed as:", numericCartId);
-            Notiflix.Notify.failure("Invalid cart item");
-            return;
-        }
-
-        console.log("Updating cart ID:", numericCartId, "Change:", qtyChange);
-
-        Notiflix.Loading.pulse("Updating quantity...", {
-            clickToClose: false,
-            svgColor: '#0284c7'
-        });
-
-        const response = await fetch(`api/carts/update-quantity/${numericCartId}`, {
-            method: "PUT",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ qty: qtyChange })
-        });
-
-        const data = await response.json();
-        if (data.status) {
-            Notiflix.Notify.success(data.message);
-            // Refresh the entire cart to get updated prices and totals
-            await loadCartItems();
-        } else {
-            Notiflix.Notify.failure(data.message);
-            // If update failed, reload cart to reset quantities
-            await loadCartItems();
-        }
-
-    } catch (e) {
-        console.error("Error updating cart quantity:", e);
-        Notiflix.Notify.failure("Network error: " + e.message);
-        // Reload cart on error too
-        await loadCartItems();
-    } finally {
-        Notiflix.Loading.remove();
-    }
-}
-
-
-async function removeFromSessionCart(productId, color, size) {
-    try {
-        Notiflix.Loading.pulse("ඉවත් කෙරේ...", {
-            clickToClose: false,
-            svgColor: '#0284c7'
-        });
-
-        const response = await fetch(`/api/carts/remove-session-item`, {
-            method: "DELETE",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({
-                productId: productId,
-                color: color,
-                size: size
-            })
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            if (data.status) {
-                Notiflix.Notify.success(data.message);
-                await loadCartItems();
-            } else {
-                Notiflix.Notify.failure(data.message);
-            }
-        }
-    } catch (error) {
-        console.error("Error:", error);
-        Notiflix.Notify.failure("Network error occurred");
-    } finally {
-        Notiflix.Loading.remove();
-    }
+    await fetch(`api/carts/remove/${cartId}`, {method: "DELETE"});
+    await loadCartItems();
+    await renderShippingPanel();
 }
 
 
 
-function updateCartSummary(subtotal, totalQty) {
-    // Update subtotal
-    const subtotalElement = document.getElementById("cart-subtotal");
-    if (subtotalElement) {
-        subtotalElement.textContent = `Rs. ${subtotal.toFixed(2)}`;
-    }
-
-    // Update total
-    const totalElement = document.getElementById("cart-total");
-    if (totalElement) {
-        totalElement.textContent = `Rs. ${subtotal.toFixed(2)}`;
-    }
-
-    // Update total items in cart count (header)
-    updateCartCount();
+function updateCartSummary() {
+    const subtotalEl = document.getElementById("cart-subtotal");
+    if (subtotalEl) subtotalEl.textContent = `Rs. ${GLOBAL_SUBTOTAL.toFixed(2)}`;
+    calculateFinalTotal();
 }
 
-window.loadCartItems = loadCartItems;
+function calculateFinalTotal() {
+    const totalEl = document.getElementById("cart-total");
+    if (totalEl) totalEl.textContent = `Rs. ${(GLOBAL_SUBTOTAL + GLOBAL_SHIPPING_PRICE).toFixed(2)}`;
+}
 
 
 async function addToCart(productId, color, size, qty) {

@@ -13,6 +13,21 @@ public class CartDTO implements Serializable {
     private double price;
     private int variantSizeId;
     private long productId;
+    private double totalPrice;
+
+
+
+    public void setProductId(long productId) {
+        this.productId = productId;
+    }
+
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
 
     public long getProductId() {
         return productId;

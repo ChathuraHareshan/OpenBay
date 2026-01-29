@@ -1,5 +1,6 @@
 package lk.karu.openbay.service;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -9,6 +10,7 @@ import lk.karu.openbay.dto.ProductDTO;
 import lk.karu.openbay.entity.*;
 import lk.karu.openbay.util.AppUtil;
 import lk.karu.openbay.util.HibernateUtil;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -16,6 +18,44 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CartService {
+
+    public String getShippingData() {
+        JsonObject responseObject = new JsonObject();
+        boolean status = false;
+
+
+
+        try{
+
+            Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
+            List<Shipping> shippingList = hibernateSession.createQuery("FROM Shipping order by minQty", Shipping.class)
+                    .getResultList();
+
+            JsonArray shippingArray = new JsonArray();
+            for(Shipping shipping : shippingList){
+                JsonObject shippingObj = new JsonObject();
+                shippingObj.addProperty("id", shipping.getId());
+                shippingObj.addProperty("type", shipping.getType());
+                shippingObj.addProperty("minQty", shipping.getMinQty());
+                shippingObj.addProperty("price", shipping.getPrice());
+                shippingArray.add(shippingObj);
+            }
+
+            status = true;
+            hibernateSession.close();
+            responseObject.add("data", shippingArray);
+
+
+
+        }catch (HibernateException e){
+            e.getMessage();
+
+        }
+
+        responseObject.addProperty("status", status);
+        return AppUtil.GSON.toJson(responseObject);
+
+    }
 
     public String removeCartItem(int cartId, HttpServletRequest request) {
         JsonObject responseObject = new JsonObject();
@@ -165,6 +205,7 @@ public class CartService {
         boolean status = false;
         String message = "";
 
+
         try {
             HttpSession httpSession = request.getSession();
             User sessionUser = (User) httpSession.getAttribute("user");
@@ -290,9 +331,6 @@ public class CartService {
                             // Set size
                             cartDTO.setSize(variantSize.getSize());
 
-
-                            // Calculate total for this item
-                            cartDTO.setPrice(variantSize.getPrice());
 
                             // Check stock availability
 //                            if (variantSize.getQuantity() < cart.getQty()) {
@@ -594,4 +632,6 @@ public class CartService {
     private <T> T getSessionAttribute(HttpSession httpSession) {
         return (T) httpSession.getAttribute("sessionCart");
     }
+
+
 }

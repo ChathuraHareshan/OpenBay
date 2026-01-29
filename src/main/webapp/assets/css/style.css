@@ -2927,7 +2927,6 @@ blockquote.text-white cite span {
 
 .product-nav-dots {
     display: flex;
-    align-items: center;
     gap: 0.9rem;
     margin-bottom: .75rem;
 }
@@ -2941,6 +2940,8 @@ blockquote.text-white cite span {
     border-radius: 50%;
     border: 1px solid #959191;
     cursor: pointer;
+    justify-content: center;
+    align-items: center;
     transition:
             transform 0.2s ease,
             box-shadow 0.25s ease,
