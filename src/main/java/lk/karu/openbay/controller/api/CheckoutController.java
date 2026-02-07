@@ -6,12 +6,24 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import lk.karu.openbay.annotation.IsUser;
+import lk.karu.openbay.dto.CheckoutRequestDTO;
 import lk.karu.openbay.service.checkoutService;
+import lk.karu.openbay.util.AppUtil;
 
 @Path("/checkouts")
 public class CheckoutController {
     private final checkoutService checkoutService = new checkoutService();
 
+    @IsUser
+    @Path("/user-checkout")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response userCheckout(String requestData,@Context HttpServletRequest request){
+        CheckoutRequestDTO checkoutRequestDTO = AppUtil.GSON.fromJson(requestData, CheckoutRequestDTO.class);
+        String responseJson = checkoutService.processCheckout(checkoutRequestDTO, request);
+        return Response.ok().entity(responseJson).build();
+    }
 
     @IsUser
     @Path("/user-checkout-data")

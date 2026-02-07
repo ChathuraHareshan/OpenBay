@@ -1,18 +1,24 @@
 package lk.karu.openbay.service;
 
 import com.google.gson.JsonObject;
+import jakarta.persistence.criteria.Order;
 import jakarta.servlet.http.HttpServletRequest;
 import lk.karu.openbay.dto.AddressDTO;
 import lk.karu.openbay.dto.CartDTO;
+import lk.karu.openbay.dto.CheckoutRequestDTO;
+import lk.karu.openbay.dto.PayHereDTO;
 import lk.karu.openbay.entity.*;
 import lk.karu.openbay.util.AppUtil;
 import lk.karu.openbay.util.HibernateUtil;
+import lk.karu.openbay.validation.Validator;
 import org.hibernate.Session;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class checkoutService {
+
+    private OrderService orderService = new OrderService();
 
     public String getCheckoutUerData(HttpServletRequest request){
 
@@ -121,4 +127,96 @@ public class checkoutService {
 
     }
 
-}
+    public String processCheckout(CheckoutRequestDTO requestDTO, HttpServletRequest request){
+        JsonObject responseObject = new JsonObject();
+        boolean status = false;
+        String message = "";
+
+        Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
+        User sessionUser = (User) request.getSession().getAttribute("user");
+
+        if(sessionUser == null){
+            message = "Session expired. Please login again and try!";
+        }else {
+            User dbUser = hibernateSession.find(User.class, sessionUser.getId());
+            if (requestDTO.isCurrentAddress()) {
+                Address address = hibernateSession.createQuery("FROM Address a WHERE a.user=:user AND a.isPrimary=:primary", Address.class)
+                        .setParameter("user", dbUser)
+                        .setParameter("primary", requestDTO.isCurrentAddress())
+                        .getSingleResultOrNull();
+
+                if (address == null) {
+                    message = "Address not found. Please check again!";
+                } else {
+                    Order pendingOrder = orderService.createPendingOrder(dbUser, hibernateSession);
+                    PayHereDTO paymentDetails = createPaymentDetails(hibernateSession, pendingOrder);
+                    responseObject.add("paymentDetails", AppUtil.GSON.toJsonTree(paymentDetails));
+                    status = true;
+                }
+            } else {
+                if (requestDTO.getFirstName().isBlank()) {
+                    message = "First Name is required!";
+                }else if (requestDTO.getLastName().isBlank()) {
+                    message = "Last Name is required!";
+                } else if (requestDTO.getEmail().isBlank()) {
+                    message = "Email is required!";
+                }else if (requestDTO.getEmail().matches(Validator.EMAIL_VALIDATION)) {
+                    message = "Last Name is required!";
+                } else if (requestDTO.getCity() == AppUtil.DEFAULT_SELECTOR_VALUE) {
+                    message = "Please select a city!";
+                } else if (requestDTO.getLineOne().isBlank()) {
+                    message = "Address line one is required!";
+                } else if (requestDTO.getPostalCode().isBlank()) {
+                    message = "Postal code is required!";
+                } else if (!requestDTO.getPostalCode().matches(Validator.POSTAL_CODE_VALIDATION)) {
+                    message = "Enter a valid postal code!";
+                } else if (requestDTO.getMobile().isBlank()) {
+                    message = "Mobile number is required!";
+                } else if (!requestDTO.getMobile().matches(Validator.MOBILE_VALIDATION)) {
+                    message = "Enter a valid mobile number!";
+                } else {
+
+                    City city = hibernateSession.find(City.class, requestDTO.getCity());
+                    if(city == null){
+                        message = "City not found. Select correct city!";
+                    }else{
+                        Address existingPrimary = hibernateSession.createQuery("from Address a where a.user=:user AND a.isPrimary=:primary", Address.class)
+                                .setParameter("user", dbUser)
+                                .setParameter("primary", true)
+                                .getSingleResultOrNull();
+
+                        if(existingPrimary != null){
+                            existingPrimary.setPrimary(false);
+                            hibernateSession.merge(existingPrimary);
+                        }
+
+                        Address address = new Address();
+                        address.setPrimary(true);
+                        address.setLineOne(requestDTO.getLineOne());
+                        address.setLineTwo(requestDTO.getLineTwo());
+                        address.setPostalCode(requestDTO.getPostalCode());
+                        address.setMobile(requestDTO.getMobile());
+                        address.setCity(city);
+                        address.setUser(dbUser);
+                        hibernateSession.persist(address);
+
+                        ord
+
+
+                    }
+
+                }
+            }
+
+        }
+
+
+
+    }
+
+    private PayHereDTO createPaymentDetails(Session hibernateSession, Order o) {
+
+    }
+
+
+    }

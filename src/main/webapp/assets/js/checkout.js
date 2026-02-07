@@ -4,8 +4,23 @@
                 clickToClose: false,
                 svgColor: '#0284c7'
             });
+
+
             await getCities();
             await loadCheckoutData();
+
+            const shippingData = JSON.parse(sessionStorage.getItem("selectedShipping"));
+
+            if (!shippingData) {
+                alert("Please select a shipping method");
+                window.location.href = "cart.html";
+                return;
+            }
+
+            document.getElementById("shipping-method").innerText = shippingData.label;
+            document.getElementById("shipping-price").innerText = `Rs. ${shippingData.price.toFixed(2)}`;
+
+
         } finally {
             Notiflix.Loading.remove();
         }
@@ -99,11 +114,17 @@
     function renderPriceSummaryPanel(subTotal, totalQty){
 
         const summaryPanel = document.getElementById("checkout-price-summary");
-
         summaryPanel.innerHTML = "";
+
         const NumberSubTotal = Number(subTotal) || 0;
 
+        const shippingData = JSON.parse(sessionStorage.getItem("selectedShipping")) || {
+            price: 0,
+            label: "Not Selected"
+        };
 
+        const shippingPrice = Number(shippingData.price) || 0;
+        const finalTotal = NumberSubTotal + shippingPrice;
 
         summaryPanel.innerHTML += `<tr class="summary-subtotal">
           <td>Subtotal:</td>
@@ -111,15 +132,14 @@
               </tr><!-- End .summary-subtotal -->
               <tr>
              <td>Shipping:</td>
-             <td>${totalQty >= 20 ? `Free Shipping` : `Rs. 500.00`}</td>
+            <td>${shippingData.label} <br> Rs. ${shippingPrice.toFixed(2)}</td>
               </tr>
               <tr class="summary-total">
               <td>Total:</td>
-              <td>$160.00</td>
+            <td>Rs. ${finalTotal.toFixed(2)}</td>
               </tr><!-- End .summary-total -->`
 
     }
-
 
 
     function fillUserCurrentAddress(address) {
@@ -211,3 +231,63 @@
     }
 
 
+    async function checkOut(){
+
+        let firstName = document.getElementById("fname");
+        let lastName = document.getElementById("lname");
+        let email = document.getElementById("email");
+        let lineOne = document.getElementById("line1");
+        let lineTwo = document.getElementById("line2");
+        let city = document.getElementById("citySelect");
+        let postalCode = document.getElementById("pcode");
+        let mobile = document.getElementById("mobile");
+
+        const checkoutData ={
+            firstName: firstName.value,
+            lastName: lastName.value,
+            email: email.value,
+            lineOne: lineOne.value,
+            lineTwo: lineTwo.value,
+            city: city.value,
+            postalCode: postalCode.value,
+            mobile: mobile.value
+        }
+
+        const checkoutDaraJson = JSON.stringify(checkoutData);
+
+        try {
+            Notiflix.Loading.pulse("Wait...", {
+                clickToClose: false,
+                svgColor: '#0284c7'
+            });
+
+            const response = await fetch("api/checkouts/user-checkout", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: checkoutDataJSON
+            })
+            if (response.ok) {
+                const data = await response.json();
+                if (data.status) {
+                    console.log(data);
+                    // payhere.startPayment(data.paymentDetails);
+                } else {
+                    Notiflix.Notify.failure(data.message, {
+                        position: 'center-top'
+                    });
+                }
+            } else {
+                Notiflix.Notify.failure("Checkout process failed!", {
+                    position: 'center-top'
+                });
+            }
+        } catch (e) {
+            Notiflix.Notify.failure(e.message, {
+                position: 'center-top'
+            });
+        } finally {
+            Notiflix.Loading.remove();
+        }
+    }
