@@ -149,8 +149,8 @@ public class checkoutService {
                     message = "Address not found. Please check again!";
                 } else {
                     Order pendingOrder = orderService.createPendingOrder(dbUser, hibernateSession);
-                    PayHereDTO paymentDetails = createPaymentDetails(hibernateSession, pendingOrder);
-                    responseObject.add("paymentDetails", AppUtil.GSON.toJsonTree(paymentDetails));
+//                    PayHereDTO paymentDetails = createPaymentDetails(hibernateSession, pendingOrder);
+//                    responseObject.add("paymentDetails", AppUtil.GSON.toJsonTree(paymentDetails));
                     status = true;
                 }
             } else {
@@ -200,8 +200,6 @@ public class checkoutService {
                         address.setUser(dbUser);
                         hibernateSession.persist(address);
 
-                        ord
-
 
                     }
 
@@ -211,12 +209,10 @@ public class checkoutService {
         }
 
 
-
+        return message;
     }
 
-    private PayHereDTO createPaymentDetails(Session hibernateSession, Order o) {
 
-    }
 
 
     }
