@@ -12,7 +12,7 @@ public class ProductVariant {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     private String colorName;
     private String colorHex;
@@ -28,12 +28,11 @@ public class ProductVariant {
     private Set<VariantImage> images = new HashSet<>();
 
 
-
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

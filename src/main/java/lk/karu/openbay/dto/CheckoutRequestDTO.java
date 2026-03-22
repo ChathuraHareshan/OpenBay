@@ -11,6 +11,7 @@ public class CheckoutRequestDTO {
     private int city;
     private String postalCode;
     private String mobile;
+    private double shippingFee;
 
     public boolean isCurrentAddress() {
         return isCurrentAddress;
@@ -84,5 +85,11 @@ public class CheckoutRequestDTO {
         this.mobile = mobile;
     }
 
+    public double getShippingFee() {
+        return shippingFee;
+    }
 
+    public void setShippingFee(double shippingFee) {
+        this.shippingFee = shippingFee;
+    }
 }

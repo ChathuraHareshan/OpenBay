@@ -8,7 +8,7 @@ import jakarta.persistence.*;
 public class Color {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @Column(nullable = false, unique = true)
     private String name;
@@ -17,11 +17,11 @@ public class Color {
     private String hexCode;
 
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

@@ -10,7 +10,7 @@ public class VariantImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     private String fileName;
     private String fileType;
@@ -20,11 +20,11 @@ public class VariantImage {
     @JoinColumn(name = "variant_id")
     private ProductVariant variant;
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

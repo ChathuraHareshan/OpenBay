@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <link rel="stylesheet" href="assets/css/custom.css">
-    <link rel='shortcut icon' type='image/x-icon' href='assets/icon.png'/>
+    <link rel='shortcut icon' type='image/x-icon' href='assets/images/icon.png'/>
 
     <link rel="stylesheet" href="assets/richtexteditor/rte_theme_default.css"/>
     <script type="text/javascript" src="assets/richtexteditor/rte.js"></script>
@@ -187,6 +187,1027 @@
         .section-title i {
             margin-right: 8px;
         }
+
+
+
+
+
+
+        /* Product List Tab - Complete Styles */
+
+        /* Stats Cards */
+        .product-stats {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 20px 24px;
+            border-radius: 12px;
+            border: 1px solid #e9ecef;
+            flex: 1;
+            min-width: 180px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: #6777ef;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-item:hover::before {
+            opacity: 1;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #98a6ad;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #34395e;
+            line-height: 1.2;
+        }
+
+        .stat-trend {
+            font-size: 12px;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .trend-up {
+            color: #47c363;
+        }
+
+        .trend-down {
+            color: #fc544b;
+        }
+
+        /* Product List Header */
+        .product-list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        /* Filter Section */
+        .product-filters {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 0 12px;
+            height: 42px;
+        }
+
+        .filter-group i {
+            color: #98a6ad;
+            font-size: 14px;
+        }
+
+        .filter-select {
+            padding: 0 8px 0 0;
+            border: none;
+            font-size: 14px;
+            color: #495057;
+            background: transparent;
+            cursor: pointer;
+            outline: none;
+            height: 100%;
+            min-width: 140px;
+        }
+
+        .filter-select option {
+            padding: 8px;
+        }
+
+        /* Search Box */
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 0 16px;
+            height: 42px;
+            min-width: 300px;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus-within {
+            border-color: #6777ef;
+            box-shadow: 0 0 0 3px rgba(103, 119, 239, 0.1);
+        }
+
+        .search-box i {
+            color: #98a6ad;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            width: 100%;
+            font-size: 14px;
+            color: #34395e;
+            background: transparent;
+        }
+
+        .search-box input::placeholder {
+            color: #adb5bd;
+        }
+
+        /* View Toggle */
+        .view-toggle {
+            display: flex;
+            gap: 4px;
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 4px;
+        }
+
+        .view-btn {
+            width: 34px;
+            height: 34px;
+            border: none;
+            background: transparent;
+            border-radius: 6px;
+            color: #98a6ad;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .view-btn:hover {
+            background: #f8f9fa;
+            color: #6777ef;
+        }
+
+        .view-btn.active {
+            background: #6777ef;
+            color: white;
+        }
+
+        /* Product Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 20px;
+        }
+
+        /* Product Card */
+        .admin-product-card {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+            border: 1px solid #e9ecef;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .admin-product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(103, 119, 239, 0.15);
+            border-color: #6777ef;
+        }
+
+        /* Product Badges */
+        .product-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            z-index: 2;
+            display: flex;
+            gap: 8px;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .badge-new {
+            background: #6777ef;
+            color: white;
+        }
+
+        .badge-sale {
+            background: #ffa426;
+            color: white;
+        }
+
+        .badge-out {
+            background: #fc544b;
+            color: white;
+        }
+
+        .badge-featured {
+            background: #47c363;
+            color: white;
+        }
+
+        /* Product Image */
+        .product-image-container {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+            background: #f8fafd;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .admin-product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+
+        /* Quick Actions */
+        .product-quick-actions {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            opacity: 0;
+            transform: translateX(10px);
+            transition: all 0.3s ease;
+            z-index: 3;
+        }
+
+        .admin-product-card:hover .product-quick-actions {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .quick-action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: white;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            color: #34395e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 16px;
+        }
+
+        .quick-action-btn:hover {
+            background: #6777ef;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .quick-action-btn.delete:hover {
+            background: #fc544b;
+        }
+
+        .quick-action-btn.edit:hover {
+            background: #47c363;
+        }
+
+        /* Product Info */
+        .product-info {
+            padding: 20px;
+        }
+
+        .product-category {
+            font-size: 12px;
+            color: #98a6ad;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .product-category i {
+            font-size: 12px;
+        }
+
+        .product-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #34395e;
+            margin-bottom: 10px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            height: 44px;
+        }
+
+        .product-title a {
+            color: #34395e;
+            text-decoration: none;
+        }
+
+        .product-title a:hover {
+            color: #6777ef;
+        }
+
+        .product-sku {
+            font-size: 12px;
+            color: #98a6ad;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .product-sku i {
+            font-size: 12px;
+        }
+
+        /* Product Colors */
+        .product-colors {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .color-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            position: relative;
+        }
+
+        .color-dot:hover {
+            transform: scale(1.2);
+            z-index: 2;
+        }
+
+        .color-dot:hover::after {
+            content: attr(title);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #34395e;
+            color: white;
+            font-size: 10px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            white-space: nowrap;
+            margin-bottom: 5px;
+            z-index: 10;
+        }
+
+        .more-colors {
+            font-size: 12px;
+            color: #98a6ad;
+            background: #f8f9fa;
+            padding: 4px 8px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .more-colors:hover {
+            background: #6777ef;
+            color: white;
+        }
+
+        /* Price and Stock */
+        .product-price-stock {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #e9ecef;
+        }
+
+        .product-price {
+            font-size: 20px;
+            font-weight: 700;
+            color: #6777ef;
+        }
+
+        .product-price small {
+            font-size: 12px;
+            font-weight: 400;
+            color: #98a6ad;
+            margin-left: 4px;
+        }
+
+        .product-stock {
+            font-size: 13px;
+            padding: 5px 12px;
+            border-radius: 30px;
+            background: #e3f2fd;
+            color: #0d6efd;
+            font-weight: 500;
+        }
+
+        .product-stock.low {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .product-stock.out {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Product Sizes */
+        .product-sizes {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .size-tag {
+            padding: 4px 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #495057;
+            border: 1px solid #e9ecef;
+            transition: all 0.2s ease;
+        }
+
+        .size-tag:hover {
+            background: #6777ef;
+            border-color: #6777ef;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Product Footer */
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+        }
+
+        .product-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .status-active {
+            background: #47c363;
+            box-shadow: 0 0 0 2px rgba(71, 195, 99, 0.2);
+        }
+
+        .status-draft {
+            background: #fc544b;
+            box-shadow: 0 0 0 2px rgba(252, 84, 75, 0.2);
+        }
+
+        .status-archived {
+            background: #98a6ad;
+            box-shadow: 0 0 0 2px rgba(152, 166, 173, 0.2);
+        }
+
+        /* Action Buttons */
+        .product-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+            background: white;
+            color: #98a6ad;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+
+        .action-btn:hover {
+            background: #6777ef;
+            border-color: #6777ef;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .action-btn.edit:hover {
+            background: #47c363;
+            border-color: #47c363;
+        }
+
+        .action-btn.delete:hover {
+            background: #fc544b;
+            border-color: #fc544b;
+        }
+
+        .action-btn.view:hover {
+            background: #ffa426;
+            border-color: #ffa426;
+        }
+
+        /* Bulk Actions */
+        .bulk-actions {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            display: none;
+        }
+
+        .bulk-actions.show {
+            display: flex;
+        }
+
+        .bulk-select-all {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bulk-select-all input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .bulk-actions-btns {
+            display: flex;
+            gap: 12px;
+            margin-left: auto;
+        }
+
+        .bulk-action-btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: 1px solid #e9ecef;
+            background: white;
+            color: #495057;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .bulk-action-btn:hover {
+            background: #6777ef;
+            border-color: #6777ef;
+            color: white;
+        }
+
+        .bulk-action-btn.delete:hover {
+            background: #fc544b;
+            border-color: #fc544b;
+        }
+
+        /* Empty State */
+        .empty-product-list {
+            text-align: center;
+            padding: 60px 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border: 2px dashed #dee2e6;
+        }
+
+        .empty-product-list i {
+            font-size: 48px;
+            color: #adb5bd;
+            margin-bottom: 16px;
+        }
+
+        .empty-product-list h5 {
+            font-size: 18px;
+            color: #495057;
+            margin-bottom: 8px;
+        }
+
+        .empty-product-list p {
+            color: #98a6ad;
+            margin-bottom: 20px;
+        }
+
+        .btn-add-first {
+            padding: 10px 24px;
+            background: #6777ef;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-add-first:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(103, 119, 239, 0.3);
+        }
+
+        /* Pagination */
+        .pagination-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .pagination-info {
+            color: #98a6ad;
+            font-size: 14px;
+        }
+
+        .pagination {
+            display: flex;
+            gap: 6px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .page-item {
+            display: inline-block;
+        }
+
+        .page-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+            background: white;
+            color: #495057;
+            font-size: 14px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .page-item:first-child .page-link,
+        .page-item:last-child .page-link {
+            width: auto;
+            padding: 0 14px;
+        }
+
+        .page-link:hover {
+            background: #6777ef;
+            border-color: #6777ef;
+            color: white;
+        }
+
+        .page-item.active .page-link {
+            background: #6777ef;
+            border-color: #6777ef;
+            color: white;
+        }
+
+        .page-item.disabled .page-link {
+            background: #f8f9fa;
+            color: #ced4da;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* Loading State */
+        .product-list-loading {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e9ecef;
+            border-top-color: #6777ef;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Table View (Alternative Layout) */
+        .product-table-view {
+            display: none;
+            width: 100%;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e9ecef;
+            overflow: hidden;
+        }
+
+        .product-table-view.active {
+            display: table;
+        }
+
+        .product-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .product-table th {
+            background: #f8f9fa;
+            padding: 16px 20px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            color: #495057;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .product-table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid #e9ecef;
+            vertical-align: middle;
+        }
+
+        .product-table tr:hover td {
+            background: #f8f9fa;
+        }
+
+        .table-product-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .table-product-image {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1px solid #e9ecef;
+        }
+
+        .table-product-details h6 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #34395e;
+        }
+
+        .table-product-details span {
+            font-size: 12px;
+            color: #98a6ad;
+        }
+
+        .table-colors {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
+        .table-color-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .table-stock {
+            font-size: 12px;
+            font-weight: 500;
+            padding: 4px 10px;
+            border-radius: 30px;
+            display: inline-block;
+        }
+
+        .table-stock.in {
+            background: #e3f2fd;
+            color: #0d6efd;
+        }
+
+        .table-stock.low {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .table-stock.out {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .table-action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            border: none;
+            background: transparent;
+            color: #98a6ad;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .table-action-btn:hover {
+            background: #6777ef;
+            color: white;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .product-stats {
+                gap: 16px;
+            }
+
+            .stat-item {
+                min-width: 160px;
+                padding: 16px 20px;
+            }
+
+            .stat-value {
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .product-list-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-box {
+                width: 100%;
+                min-width: auto;
+            }
+
+            .product-filters {
+                width: 100%;
+            }
+
+            .filter-select {
+                min-width: 120px;
+            }
+
+            .product-table-view {
+                overflow-x: auto;
+            }
+
+            .product-table {
+                min-width: 800px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .product-stats {
+                flex-direction: column;
+            }
+
+            .stat-item {
+                width: 100%;
+            }
+
+            .product-filters {
+                flex-direction: column;
+            }
+
+            .filter-group {
+                width: 100%;
+            }
+
+            .filter-select {
+                width: 100%;
+            }
+
+            .pagination-wrapper {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .bulk-actions {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .bulk-actions-btns {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .bulk-action-btn {
+                flex: 1;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .product-footer {
+                flex-direction: column;
+                gap: 12px;
+                align-items: flex-start;
+            }
+
+            .product-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            .pagination {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 
@@ -222,7 +1243,7 @@
                         </div>
                         <div class="dropdown-list-content dropdown-list-message">
                             <a href="#" class="dropdown-item"> <span class="dropdown-item-avatar text-white"> <img
-                                    alt="image" src="assets/img/users/user-1.png"
+                                    alt="image" src="assets/images/team/member-1.jpg"
                                     class="rounded-circle">
                   </span> <span class="dropdown-item-desc"> <span class="message-user">John
                       Deo</span>
@@ -230,20 +1251,20 @@
                     <span class="time">2 Min Ago</span>
                   </span>
                             </a> <a href="#" class="dropdown-item"> <span class="dropdown-item-avatar text-white">
-                    <img alt="image" src="assets/img/users/user-2.png" class="rounded-circle">
+                    <img alt="image" src="assets/images/team/member-2.jpg" class="rounded-circle">
                   </span> <span class="dropdown-item-desc"> <span class="message-user">Sarah
                       Smith</span> <span class="time messege-text">Request for leave
                       application</span>
                     <span class="time">5 Min Ago</span>
                   </span>
                         </a> <a href="#" class="dropdown-item"> <span class="dropdown-item-avatar text-white">
-                    <img alt="image" src="assets/img/users/user-5.png" class="rounded-circle">
+                    <img alt="image" src="assets/images/team/member-1.jpg" class="rounded-circle">
                   </span> <span class="dropdown-item-desc"> <span class="message-user">Jacob
                       Ryan</span> <span class="time messege-text">Your payment invoice is
                       generated.</span> <span class="time">12 Min Ago</span>
                   </span>
                         </a> <a href="#" class="dropdown-item"> <span class="dropdown-item-avatar text-white">
-                    <img alt="image" src="assets/img/users/user-4.png" class="rounded-circle">
+                    <img alt="image" src="assets/images/team/member-1.jpg" class="rounded-circle">
                   </span> <span class="dropdown-item-desc"> <span class="message-user">Lina
                       Smith</span> <span class="time messege-text">hii John, I have upload
                       doc
@@ -251,7 +1272,7 @@
                       Min Ago</span>
                   </span>
                         </a> <a href="#" class="dropdown-item"> <span class="dropdown-item-avatar text-white">
-                    <img alt="image" src="assets/img/users/user-3.png" class="rounded-circle">
+                    <img alt="image" src="assets/images/team/member-1.jpg" class="rounded-circle">
                   </span> <span class="dropdown-item-desc"> <span class="message-user">Jalpa
                       Joshi</span> <span class="time messege-text">Please do as specify.
                       Let me
@@ -259,7 +1280,7 @@
                       Days Ago</span>
                   </span>
                         </a> <a href="#" class="dropdown-item"> <span class="dropdown-item-avatar text-white">
-                    <img alt="image" src="assets/img/users/user-2.png" class="rounded-circle">
+                    <img alt="image" src="assets/images/team/member-1.jpg" class="rounded-circle">
                   </span> <span class="dropdown-item-desc"> <span class="message-user">Sarah
                       Smith</span> <span class="time messege-text">Client Requirements</span>
                     <span class="time">2 Days Ago</span>
@@ -346,7 +1367,7 @@
         <div class="main-sidebar sidebar-style-2">
             <aside id="sidebar-wrapper">
                 <div class="sidebar-brand">
-                    <a href="#" onclick="showDashboard(event)"> <img alt="image" src="assets/icon.png" class="header-logo"/> <span
+                    <a href="#" onclick="showDashboard(event)"> <img alt="image" src="assets/images/icon.png" class="header-logo"/> <span
                             class="logo-name">OpenBay</span>
                     </a>
                 </div>
@@ -619,9 +1640,286 @@
                 <div class="card">
                     <div class="card-header">
                         <h4>Product List</h4>
+                        <div class="card-header-action">
+                            <button class="btn btn-primary" onclick="showAddProduct(event)">
+                                <i class="fas fa-plus"></i> Add New Product
+                            </button>
+                        </div>
                     </div>
                     <div class="card-body">
-                        <p>Product list content will go here.</p>
+                        <!-- Product Stats -->
+                        <div class="product-stats">
+                            <div class="stat-item">
+                                <div class="stat-label">Total Products</div>
+                                <div class="stat-value">156</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Active</div>
+                                <div class="stat-value">142</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Low Stock</div>
+                                <div class="stat-value">12</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Out of Stock</div>
+                                <div class="stat-value">8</div>
+                            </div>
+                        </div>
+
+                        <!-- Filters -->
+                        <div class="product-list-header">
+                            <div class="product-filters">
+                                <select class="filter-select">
+                                    <option value="">All Categories</option>
+                                    <option value="men">MEN</option>
+                                    <option value="women">WOMEN</option>
+                                    <option value="tshirts">T-Shirts</option>
+                                </select>
+                                <select class="filter-select">
+                                    <option value="">All Status</option>
+                                    <option value="active">Active</option>
+                                    <option value="draft">Draft</option>
+                                    <option value="out">Out of Stock</option>
+                                </select>
+                                <select class="filter-select">
+                                    <option value="">Sort By</option>
+                                    <option value="newest">Newest</option>
+                                    <option value="price-low">Price: Low to High</option>
+                                    <option value="price-high">Price: High to Low</option>
+                                    <option value="name">Name</option>
+                                </select>
+                            </div>
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" placeholder="Search products...">
+                            </div>
+                        </div>
+
+                        <!-- Product Grid -->
+                        <div class="product-grid" id="product-grid">
+                            <!-- Product Card 1 -->
+                            <div class="admin-product-card">
+                                <div class="product-badge">
+                                    <span class="badge badge-new">New</span>
+                                    <span class="badge badge-sale">-20%</span>
+                                </div>
+                                <div class="product-image-container">
+                                    <img src="https://via.placeholder.com/300x220/6777ef/ffffff?text=Polo+Shirt" alt="Product" class="product-image">
+                                    <div class="product-quick-actions">
+                                        <button class="quick-action-btn" title="Quick View">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="quick-action-btn" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="quick-action-btn delete" title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="product-info">
+                                    <div class="product-category">MEN / T-Shirts</div>
+                                    <h5 class="product-title">
+                                        <a href="#">Long Sleeved Basic Polo-Shirt</a>
+                                    </h5>
+                                    <div class="product-sku">
+                                        <i class="fas fa-barcode"></i> SKU: PL-2024-001
+                                    </div>
+
+                                    <!-- Color Variations -->
+                                    <div class="product-colors">
+                                        <div class="color-dot" style="background: #000000;" title="Black"></div>
+                                        <div class="color-dot" style="background: #ff4444;" title="Red"></div>
+                                        <div class="color-dot" style="background: #4a90e2;" title="Blue"></div>
+                                        <div class="color-dot" style="background: #7ed321;" title="Green"></div>
+                                        <span class="more-colors">+2 more</span>
+                                    </div>
+
+                                    <!-- Price and Stock -->
+                                    <div class="product-price-stock">
+                                        <div class="product-price">
+                                            Rs.2,400.00
+                                            <small><s>Rs.3,000.00</s></small>
+                                        </div>
+                                        <div class="product-stock">In Stock: 45</div>
+                                    </div>
+
+                                    <!-- Available Sizes -->
+                                    <div class="product-sizes">
+                                        <span class="size-tag">S</span>
+                                        <span class="size-tag">M</span>
+                                        <span class="size-tag">L</span>
+                                        <span class="size-tag">XL</span>
+                                        <span class="size-tag">XXL</span>
+                                    </div>
+
+                                    <!-- Footer Actions -->
+                                    <div class="product-footer">
+                                        <div class="product-status">
+                                            <span class="status-indicator status-active"></span>
+                                            <span>Active</span>
+                                        </div>
+                                        <div class="product-actions">
+                                            <button class="action-btn edit" title="Edit Product">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="action-btn" title="Duplicate">
+                                                <i class="fas fa-copy"></i>
+                                            </button>
+                                            <button class="action-btn delete" title="Delete">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Product Card 2 - Low Stock Example -->
+                            <div class="admin-product-card">
+                                <div class="product-image-container">
+                                    <img src="https://via.placeholder.com/300x220/fc544b/ffffff?text=Hoodie" alt="Product" class="product-image">
+                                    <div class="product-quick-actions">
+                                        <button class="quick-action-btn" title="Quick View">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="quick-action-btn" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="quick-action-btn delete" title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="product-info">
+                                    <div class="product-category">WOMEN / Hoodies</div>
+                                    <h5 class="product-title">
+                                        <a href="#">Classic Zip-Up Hoodie - Premium Cotton</a>
+                                    </h5>
+                                    <div class="product-sku">
+                                        <i class="fas fa-barcode"></i> SKU: HD-2024-089
+                                    </div>
+
+                                    <div class="product-colors">
+                                        <div class="color-dot" style="background: #800080;" title="Purple"></div>
+                                        <div class="color-dot" style="background: #ff69b4;" title="Pink"></div>
+                                        <div class="color-dot" style="background: #4169e1;" title="Royal Blue"></div>
+                                    </div>
+
+                                    <div class="product-price-stock">
+                                        <div class="product-price">
+                                            Rs.4,500.00
+                                        </div>
+                                        <div class="product-stock low">Low Stock: 5</div>
+                                    </div>
+
+                                    <div class="product-sizes">
+                                        <span class="size-tag">S</span>
+                                        <span class="size-tag">M</span>
+                                        <span class="size-tag">L</span>
+                                    </div>
+
+                                    <div class="product-footer">
+                                        <div class="product-status">
+                                            <span class="status-indicator status-active"></span>
+                                            <span>Active</span>
+                                        </div>
+                                        <div class="product-actions">
+                                            <button class="action-btn edit" title="Edit Product">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="action-btn" title="Duplicate">
+                                                <i class="fas fa-copy"></i>
+                                            </button>
+                                            <button class="action-btn delete" title="Delete">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Product Card 3 - Out of Stock Example -->
+                            <div class="admin-product-card">
+                                <div class="product-badge">
+                                    <span class="badge badge-out">Out of Stock</span>
+                                </div>
+                                <div class="product-image-container">
+                                    <img src="https://via.placeholder.com/300x220/98a6ad/ffffff?text=Jeans" alt="Product" class="product-image" style="opacity: 0.6;">
+                                    <div class="product-quick-actions">
+                                        <button class="quick-action-btn" title="Quick View">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="quick-action-btn" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="product-info">
+                                    <div class="product-category">MEN / Jeans</div>
+                                    <h5 class="product-title">
+                                        <a href="#">Slim Fit Stretch Jeans</a>
+                                    </h5>
+                                    <div class="product-sku">
+                                        <i class="fas fa-barcode"></i> SKU: JN-2024-156
+                                    </div>
+
+                                    <div class="product-colors">
+                                        <div class="color-dot" style="background: #000080;" title="Navy"></div>
+                                        <div class="color-dot" style="background: #2f4f4f;" title="Dark Gray"></div>
+                                    </div>
+
+                                    <div class="product-price-stock">
+                                        <div class="product-price">
+                                            Rs.3,999.00
+                                        </div>
+                                        <div class="product-stock out">Out of Stock</div>
+                                    </div>
+
+                                    <div class="product-sizes">
+                                        <span class="size-tag">30</span>
+                                        <span class="size-tag">32</span>
+                                        <span class="size-tag">34</span>
+                                        <span class="size-tag">36</span>
+                                    </div>
+
+                                    <div class="product-footer">
+                                        <div class="product-status">
+                                            <span class="status-indicator status-draft"></span>
+                                            <span>Draft</span>
+                                        </div>
+                                        <div class="product-actions">
+                                            <button class="action-btn edit" title="Edit Product">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="action-btn" title="Duplicate">
+                                                <i class="fas fa-copy"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pagination -->
+                        <div class="mt-4 d-flex justify-content-between align-items-center">
+                            <div class="text-muted">Showing 1 to 3 of 156 products</div>
+                            <nav>
+                                <ul class="pagination">
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                    </li>
+                                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">4</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">5</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">Next</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -634,7 +1932,7 @@
 
         <footer class="main-footer">
             <div class="footer-left">
-                <a href="templateshub.net">Templateshub</a>
+                <a href="">Templateshub</a>
             </div>
             <div class="footer-right">
             </div>
@@ -673,30 +1971,23 @@
 
     function showAddProduct(event) {
         if (event) event.preventDefault();
-
-        // Hide all dynamic content sections
         document.querySelectorAll('.dynamic-content').forEach(section => {
             section.classList.remove('active');
         });
 
-        // Show add product content
         document.getElementById('add-product-content').classList.add('active');
 
-        // Update menu active state
         document.querySelectorAll('.sidebar-menu a').forEach(link => {
             link.classList.remove('menu-active');
-            // Remove active class from parent li
             link.closest('.dropdown').classList.remove('active');
         });
 
         const addProductMenu = document.querySelector('.menu-add-product');
         if (addProductMenu) {
             addProductMenu.classList.add('menu-active');
-            // Add active class to parent li
             addProductMenu.closest('.dropdown').classList.add('active');
         }
 
-        // Initialize add product form if function exists
         if (typeof loadProductData === 'function') {
             loadProductData();
         }
@@ -705,27 +1996,24 @@
     function showProductList(event) {
         if (event) event.preventDefault();
 
-        // Hide all dynamic content sections
         document.querySelectorAll('.dynamic-content').forEach(section => {
             section.classList.remove('active');
         });
 
-        // Show product list content
         document.getElementById('product-list-content').classList.add('active');
 
-        // Update menu active state
         document.querySelectorAll('.sidebar-menu a').forEach(link => {
             link.classList.remove('menu-active');
-            // Remove active class from parent li
             link.closest('.dropdown').classList.remove('active');
         });
 
         const productListMenu = document.querySelector('.menu-product-list');
         if (productListMenu) {
             productListMenu.classList.add('menu-active');
-            // Add active class to parent li
             productListMenu.closest('.dropdown').classList.add('active');
         }
+
+        LoadProducts();
     }
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -738,23 +2026,24 @@
 </script>
 
 <!-- Check the path in your adminPanel.html -->
-<script>
-    // Initialize RTE with correct paths
-    const rte = new RichTextEditor("#description", {
-        contentCssUrl: "/path/to/correct/richtexteditor_content.css",
-        // OR use CDN
-        contentCssUrl: "https://cdn.jsdelivr.net/npm/richtexteditor@latest/runtime/richtexteditor_content.css"
-    });
-</script>
+<!--<script>-->
+<!--    // Initialize RTE with correct paths-->
+<!--    const rte = new RichTextEditor("#description", {-->
+<!--        contentCssUrl: "/path/to/correct/richtexteditor_content.css",-->
+<!--        // OR use CDN-->
+<!--        contentCssUrl: "https://cdn.jsdelivr.net/npm/richtexteditor@latest/runtime/richtexteditor_content.css"-->
+<!--    });-->
+<!--</script>-->
 
 <script src="assets/js/app.min.js"></script>
 <script src="assets/bundles/apexcharts/apexcharts.min.js"></script>
 <script src="assets/js/page/index.js"></script>
 <script src="assets/js/adminPanel.js"></script>
 <script src="assets/js/custom.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/notiflix@3.2.6/dist/notiflix-aio-3.2.6.min.js"></script>
+<script src="assets/js/notiflix-aio-3.2.8.min.js"></script>
 
 <script src="assets/js/addProduct.js"></script>
+<script src="assets/js/adminPanel/ProductList.js"></script>
 
 
 </body>

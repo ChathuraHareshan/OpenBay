@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.protobuf.Message;
 import lk.karu.openbay.dto.ColorDTO;
 import lk.karu.openbay.dto.ProductDTO;
+import lk.karu.openbay.dto.SizeDTO;
 import lk.karu.openbay.dto.TopProductDTO;
 import lk.karu.openbay.entity.*;
 import lk.karu.openbay.util.AppUtil;
@@ -96,12 +97,25 @@ public class ContentService {
         dto.setTitle(products.getTitle());
         dto.setCategory(products.getCategory().getName());
 
+        List<SizeDTO> sizeDTOList = new ArrayList<>();
+        for (ProductVariant variant : products.getVariants()) {
+            for (VariantSize size : variant.getSizes()) {
+                SizeDTO sizeDTO = new SizeDTO();
+                sizeDTO.setSize(size.getSize());
+                sizeDTOList.add(sizeDTO);
+            }
+        }
+
+        dto.setSizes(sizeDTOList);
+
         List<Double> prices = new ArrayList<>();
         for (ProductVariant variant : products.getVariants()) {
             for (VariantSize size : variant.getSizes()) {
                 prices.add(size.getPrice());
             }
         }
+        
+
 
         if (prices.isEmpty()) {
             dto.setMinPrice(0.0);

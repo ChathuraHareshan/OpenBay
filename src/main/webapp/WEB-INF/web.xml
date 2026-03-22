@@ -33,9 +33,9 @@
     <filter-mapping>
         <filter-name>AuthAccessFilter</filter-name>
         <url-pattern>/beforeVerify.html</url-pattern>
-    </filter-mapping><![CDATA[
+    </filter-mapping>
 
-    ]]><filter>
+    <filter>
         <filter-name>AccessControllerFilter</filter-name>
         <filter-class>lk.karu.openbay.middleware.AccessControlFilter</filter-class>
     </filter>

@@ -110,8 +110,7 @@
 
     }
 
-
-    function renderPriceSummaryPanel(subTotal, totalQty){
+    function renderPriceSummaryPanel(subTotal){
 
         const summaryPanel = document.getElementById("checkout-price-summary");
         summaryPanel.innerHTML = "";
@@ -141,20 +140,45 @@
 
     }
 
-
     function fillUserCurrentAddress(address) {
-
         const currentAddressTick = document.getElementById("checkout-use-primary");
-        currentAddressTick.addEventListener("change", () => {
-            let fname = document.getElementById("fname");
-            let lname = document.getElementById("lname");
-            let email = document.getElementById("email");
-            let line1 = document.getElementById("line1");
-            let line2 = document.getElementById("line2");
-            let pcode = document.getElementById("pcode");
-            let city = document.getElementById("citySelect");
-            let mobile = document.getElementById("mobile");
 
+        // Auto-check the checkbox and load address on page load
+        currentAddressTick.checked = true;
+
+        let fname = document.getElementById("fname");
+        let lname = document.getElementById("lname");
+        let email = document.getElementById("email");
+        let line1 = document.getElementById("line1");
+        let line2 = document.getElementById("line2");
+        let pcode = document.getElementById("pcode");
+        let city = document.getElementById("citySelect");
+        let mobile = document.getElementById("mobile");
+
+        // Load address immediately
+        fname.value = address.firstName;
+        lname.value = address.lastName;
+        email.value = address.email;
+        line1.value = address.lineOne;
+        line2.value = address.lineTwo;
+        pcode.value = address.postalCode;
+        city.value = address.cityId;
+        mobile.value = address.mobile;
+
+        // Disable fields
+        fname.disabled = true;
+        lname.disabled = true;
+        email.disabled = true;
+        city.disabled = true;
+        line1.disabled = true;
+        line2.disabled = true;
+        pcode.disabled = true;
+        mobile.disabled = true;
+
+        city.dispatchEvent(new Event("change"));
+
+        // Add change listener for when user wants to uncheck
+        currentAddressTick.addEventListener("change", () => {
             if (currentAddressTick.checked) {
                 fname.value = address.firstName;
                 lname.value = address.lastName;
@@ -196,9 +220,7 @@
 
                 city.dispatchEvent(new Event("change"));
             }
-
         });
-
     }
 
     async function getCities() {
@@ -233,6 +255,8 @@
 
     async function checkOut(){
 
+        const shippingData = JSON.parse(sessionStorage.getItem("selectedShipping"));
+
         let firstName = document.getElementById("fname");
         let lastName = document.getElementById("lname");
         let email = document.getElementById("email");
@@ -241,8 +265,9 @@
         let city = document.getElementById("citySelect");
         let postalCode = document.getElementById("pcode");
         let mobile = document.getElementById("mobile");
+        let currentAddressTick = document.getElementById("checkout-use-primary");
 
-        const checkoutData ={
+        const checkoutData = {
             firstName: firstName.value,
             lastName: lastName.value,
             email: email.value,
@@ -250,10 +275,12 @@
             lineTwo: lineTwo.value,
             city: city.value,
             postalCode: postalCode.value,
-            mobile: mobile.value
+            mobile: mobile.value,
+            isCurrentAddress: currentAddressTick.checked,
+            shippingFee: parseFloat(shippingData.price)
         }
 
-        const checkoutDaraJson = JSON.stringify(checkoutData);
+        console.log("Sending checkout data:", checkoutData); // Debugging
 
         try {
             Notiflix.Loading.pulse("Wait...", {
@@ -266,20 +293,79 @@
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: checkoutDataJSON
+                body: JSON.stringify(checkoutData)
             })
+
+            const responseText = await response.text();
+            console.log("response:", responseText);
+
+            let data;
+            try {
+                data = JSON.parse(responseText);
+            } catch (e) {
+                console.error("Failed to parse JSON:", responseText);
+                // throw new Error("Invalid response from server");
+            }
+
             if (response.ok) {
-                const data = await response.json();
                 if (data.status) {
-                    console.log(data);
-                    // payhere.startPayment(data.paymentDetails);
+                    console.log("Checkout success:", data);
+                    payhere.startPayment(data.paymentDetails);
+                    Notiflix.Notify.success("Checkout successful!", {
+                        position: 'center-top'
+                    });
                 } else {
-                    Notiflix.Notify.failure(data.message, {
+                    Notiflix.Notify.failure(data.message || "Checkout failed", {
                         position: 'center-top'
                     });
                 }
             } else {
-                Notiflix.Notify.failure("Checkout process failed!", {
+                Notiflix.Notify.failure(`Server error: ${response.status} - ${data.message || "Unknown error"}`, {
+                    position: 'center-top'
+                });
+            }
+        } catch (e) {
+            console.error("Checkout error:", e);
+            Notiflix.Notify.failure(e.message || "Checkout process failed!", {
+                position: 'center-top'
+            });
+        } finally {
+            Notiflix.Loading.remove();
+        }
+    }
+
+    // Payment completed. It can be a successful failure.
+    payhere.onCompleted = async function onCompleted(orderId) {
+        console.log("Payment completed. OrderID:" + orderId);
+        // Note: validate the payment and show success or failure page to the customer
+        await verifyOrder(orderId);
+    };
+
+    // Payment window closed
+    payhere.onDismissed = function onDismissed() {
+        // Note: Prompt user to pay again or show an error page
+        console.log("Payment dismissed");
+    };
+
+    // Error occurred
+    payhere.onError = function onError(error) {
+        // Note: show an error page
+        console.log("Error:" + error);
+    };
+
+    async function verifyOrder(orderId) {
+        try {
+            const response = await fetch(`api/orders/verify-order?orderId=${orderId}`);
+            if (response.ok) {
+                const data = await response.json();
+                if (data.status) {
+                    window.location = `invoice.html?orderId=${orderId}`;
+                } else {
+                    console.log("invoicce failed.")
+                }
+
+            } else {
+                Notiflix.Notify.failure("Order verifying failed!", {
                     position: 'center-top'
                 });
             }
@@ -287,7 +373,5 @@
             Notiflix.Notify.failure(e.message, {
                 position: 'center-top'
             });
-        } finally {
-            Notiflix.Loading.remove();
         }
     }

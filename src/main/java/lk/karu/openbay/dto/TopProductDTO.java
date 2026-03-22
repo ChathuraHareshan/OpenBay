@@ -5,7 +5,7 @@ import lk.karu.openbay.entity.Model;
 import java.util.List;
 
 public class TopProductDTO {
-    private Long productId;
+    private int productId;
     private String title;
     private String description;
     private String category;
@@ -24,11 +24,11 @@ public class TopProductDTO {
         this.model = model;
     }
 
-    public Long getProductId() {
+    public int getProductId() {
         return productId;
     }
 
-    public void setProductId(Long productId) {
+    public void setProductId(int productId) {
         this.productId = productId;
     }
 

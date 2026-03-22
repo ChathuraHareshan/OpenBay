@@ -89,7 +89,7 @@ public class ProductService {
 
             session.persist(product);
             session.flush();
-            Long productId = product.getId();
+            int productId = product.getId();
 
             for (ProductVariantDTO vDTO : productDTO.getVariants()) {
                 ProductVariant variant = new ProductVariant();
@@ -221,7 +221,7 @@ public class ProductService {
         return true;
     }
 
-    private String saveImage(ProductImageDTO dto, Long productId, HttpServletRequest request) throws Exception {
+    private String saveImage(ProductImageDTO dto, int productId, HttpServletRequest request) throws Exception {
         try {
             // Get real path to webapp/uploads
             String uploadsPathStr = request.getServletContext().getRealPath("/uploads/product/" + productId);
