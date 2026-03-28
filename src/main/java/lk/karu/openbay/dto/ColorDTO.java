@@ -1,28 +1,26 @@
 package lk.karu.openbay.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ColorDTO {
+
     private String name;
     private String hexCode;
-    private List<SizeDTO> sizes;
+    private List<SizeDTO> sizes = new ArrayList<>();
 
+    // ✅ Each color now carries its own image URL list
+    private List<String> images = new ArrayList<>();
 
-    // Constructors
-    public ColorDTO() {}
-
-    // Getters and Setters
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
     public String getHexCode() { return hexCode; }
     public void setHexCode(String hexCode) { this.hexCode = hexCode; }
 
-    public List<SizeDTO> getSizes() {
-        return sizes;
-    }
+    public List<SizeDTO> getSizes() { return sizes; }
+    public void setSizes(List<SizeDTO> sizes) { this.sizes = sizes; }
 
-    public void setSizes(List<SizeDTO> sizes) {
-        this.sizes = sizes;
-    }
+    public List<String> getImages() { return images; }
+    public void setImages(List<String> images) { this.images = images; }
 }

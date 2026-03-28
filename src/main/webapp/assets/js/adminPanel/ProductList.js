@@ -140,7 +140,7 @@ function renderProductCard(data) {
                         <span>${product.status === 'active' ? 'Active' : 'Draft'}</span>
                     </div>
                     <div class="product-actions">
-                        <button class="action-btn edit" title="Edit Product" onclick=" showEditProduct(null, ${product.productId})">
+                        <button class="action-btn edit" title="Edit Product" onclick="showEditProduct(null, ${product.productId})">
                             <i class="fas fa-edit"></i>
                         </button>
                         <button class="action-btn" title="Duplicate" onclick="duplicateProduct(${product.productId})">

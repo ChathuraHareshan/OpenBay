@@ -4,7 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import lk.karu.openbay.dto.ColorDTO;
 import lk.karu.openbay.dto.ProductDTO;
-import lk.karu.openbay.dto.SizeDTO;          // ← NEW: SizeDTO import කරන්න
+import lk.karu.openbay.dto.SizeDTO;
 import lk.karu.openbay.dto.TopProductDTO;
 import lk.karu.openbay.entity.Product;
 import lk.karu.openbay.entity.ProductVariant;
@@ -20,15 +20,15 @@ import java.util.*;
 
 public class SingleProductService {
 
-    public String getSingleProduct(String id){
+    public String getSingleProduct(String id) {
         JsonObject responseObject = new JsonObject();
         boolean status = true;
         String message = "";
 
-        if(id == null || id.isBlank()){
+        if (id == null || id.isBlank()) {
             status = false;
             message = "Product Not Found.";
-        } else if(!id.matches(Validator.IS_INTEGER)){
+        } else if (!id.matches(Validator.IS_INTEGER)) {
             message = "Invalid product!";
         } else {
 
@@ -37,49 +37,59 @@ public class SingleProductService {
                 int productId = Integer.parseInt(id);
                 hibernateSession = HibernateUtil.getSessionFactory().openSession();
 
+                // Load product with variants only (single JOIN FETCH — safe)
                 Product product = hibernateSession.createQuery(
-                                "FROM Product p " +
+                                "SELECT DISTINCT p FROM Product p " +
                                         "LEFT JOIN FETCH p.variants v " +
-                                        "LEFT JOIN FETCH v.sizes " +
-                                        "LEFT JOIN FETCH v.images " +       // ← FETCH add කළා (images ද load වෙන්න)
                                         "JOIN FETCH p.category " +
-                                        "WHERE p.id = :proId AND p.status.id = :status", Product.class)
+                                        "WHERE p.id = :proId AND p.status.id = :status",
+                                Product.class)
                         .setParameter("proId", productId)
                         .setParameter("status", 1)
                         .getSingleResult();
+
+                // Load sizes and images per variant separately (avoids MultipleBagFetchException)
+                for (ProductVariant variant : product.getVariants()) {
+                    List<VariantSize> sizes = hibernateSession.createQuery(
+                                    "FROM VariantSize s WHERE s.variant.id = :vid", VariantSize.class)
+                            .setParameter("vid", variant.getId())
+                            .getResultList();
+                    variant.getSizes().addAll(sizes);
+
+                    List<VariantImage> images = hibernateSession.createQuery(
+                                    "FROM VariantImage i WHERE i.variant.id = :vid", VariantImage.class)
+                            .setParameter("vid", variant.getId())
+                            .getResultList();
+                    variant.getImages().addAll(images);
+                }
 
                 TopProductDTO productDTO = new TopProductDTO();
                 productDTO.setProductId(product.getId());
                 productDTO.setTitle(product.getTitle());
                 productDTO.setCategory(product.getCategory().getName());
                 productDTO.setDescription(product.getDescription());
-                productDTO.setModel(product.getModel().getName());
+                productDTO.setModel(product.getModel() != null ? product.getModel().getName() : "");
 
-                // ── Min / Max price calculation (ඒ ගොඩ ඒ විදිහටම) ──────────────
+                // Min / Max price
                 List<Double> prices = new ArrayList<>();
                 for (ProductVariant variant : product.getVariants()) {
                     for (VariantSize size : variant.getSizes()) {
                         prices.add(size.getPrice());
                     }
                 }
-                if (prices.isEmpty()) {
-                    productDTO.setMinPrice(0.0);
-                    productDTO.setMaxPrice(0.0);
-                } else {
-                    productDTO.setMinPrice(Collections.min(prices));
-                    productDTO.setMaxPrice(Collections.max(prices));
-                }
+                productDTO.setMinPrice(prices.isEmpty() ? 0.0 : Collections.min(prices));
+                productDTO.setMaxPrice(prices.isEmpty() ? 0.0 : Collections.max(prices));
 
-                // ── Images (ඒ ගොඩ ඒ විදිහටම) ─────────────────────────────────
-                Set<String> imageSet = new LinkedHashSet<>();
+                // Flat images list (for product page display — keeps backward compat)
+                List<String> allImages = new ArrayList<>();
                 for (ProductVariant variant : product.getVariants()) {
                     for (VariantImage image : variant.getImages()) {
-                        imageSet.add(image.getFilePath());
+                        allImages.add(image.getFilePath());
                     }
                 }
-                productDTO.setImages(new ArrayList<>(imageSet));
+                productDTO.setImages(allImages);
 
-                // ── Colors + Sizes per color (FIX එක මෙතනයි) ─────────────────
+                // Colors — each ColorDTO now carries its OWN images + sizes
                 List<ColorDTO> colorDTOList = new ArrayList<>();
 
                 for (ProductVariant variant : product.getVariants()) {
@@ -87,7 +97,7 @@ public class SingleProductService {
                     colorDTO.setName(variant.getColorName());
                     colorDTO.setHexCode(variant.getColorHex());
 
-                    // *** FIX: sizes list එක color DTO එකට set කරනවා ***
+                    // Sizes for this variant
                     List<SizeDTO> sizeDTOList = new ArrayList<>();
                     for (VariantSize vs : variant.getSizes()) {
                         SizeDTO sizeDTO = new SizeDTO();
@@ -96,7 +106,14 @@ public class SingleProductService {
                         sizeDTO.setQuantity(vs.getQuantity());
                         sizeDTOList.add(sizeDTO);
                     }
-                    colorDTO.setSizes(sizeDTOList);  // ← ColorDTO එකට sizes add කළා
+                    colorDTO.setSizes(sizeDTOList);
+
+                    // ✅ FIX: Images for THIS variant attached to its own ColorDTO
+                    List<String> variantImagePaths = new ArrayList<>();
+                    for (VariantImage image : variant.getImages()) {
+                        variantImagePaths.add(image.getFilePath());
+                    }
+                    colorDTO.setImages(variantImagePaths); // ← each color has its own images
 
                     colorDTOList.add(colorDTO);
                 }

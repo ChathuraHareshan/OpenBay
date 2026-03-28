@@ -60,7 +60,6 @@ function renderingNewArrivals(products) {
     carousel.html('');
 
     products.forEach(product => {
-        // NO category name for new arrivals
         const productHtml = createProductCard(product);
         carousel.append(productHtml);
     });

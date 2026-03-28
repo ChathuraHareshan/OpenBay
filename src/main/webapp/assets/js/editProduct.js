@@ -56,7 +56,6 @@ async function editLoadSizes() {
     }
 }
 
-
 async function editLoadCategories() {
     try {
         const res = await fetch("api/data/category");
@@ -138,7 +137,6 @@ async function fetchProductForEdit(productId) {
     }
 }
 
-
 async function renderEditForm(product) {
 
     document.getElementById('editProductTitle').value = product.title || '';
@@ -147,19 +145,18 @@ async function renderEditForm(product) {
     const badge = document.getElementById('editProductIdBadge');
     if (badge) badge.textContent = '#' + (product.productId || '–');
 
+    // Category
     const catSel   = document.getElementById('editProductCategory');
     const catValue = product.category || '';
-    let catMatched = false;
     for (let i = 0; i < catSel.options.length; i++) {
         if (catSel.options[i].text.trim().toUpperCase() === catValue.trim().toUpperCase() ||
             String(catSel.options[i].value) === String(catValue)) {
             catSel.selectedIndex = i;
-            catMatched = true;
             break;
         }
     }
-    if (!catMatched) catSel.value = catValue;
 
+    // Model
     await editLoadModels(catSel.value, null);
     const modelName = product.model || '';
     const modelSel  = document.getElementById('editProductModel');
@@ -173,31 +170,30 @@ async function renderEditForm(product) {
 
     editor2.setHTMLCode(product.description || '');
 
-
     const rawColors = product.colors || [];
-    const rawImages = product.images || [];
+    const colorMap  = new Map();
 
+    rawColors.forEach(c => {
+        const hex = (c.hexCode || '#000000').toLowerCase();
 
-    const colorMap = new Map();
+        // ✅ c.images is now a List<String> of URLs from the fixed Java service
+        const imageUrls = Array.isArray(c.images) ? c.images : [];
 
-    rawColors.forEach((c, i) => {
-        const hex    = (c.hexCode || '#000000').toLowerCase();
-        const imgUrl = rawImages[i] || null;
-
-        const mappedSizes = (c.sizes || []).map(s => ({
-            size:     s.size || '',
-            price:    parseFloat(s.price)    || 0,
-            quantity: parseInt(s.quantity, 10) || 0
-        }));
-
-        const imgEntry = imgUrl ? [{
+        const imgEntries = imageUrls.map(imgUrl => ({
             name:       imgUrl.split('/').pop(),
             type:       imgUrl.toLowerCase().endsWith('.png') ? 'image/png' : 'image/jpeg',
             size:       0,
             preview:    imgUrl,
-            base64Data: imgUrl,
-            isExisting: true
-        }] : [];
+            base64Data: null,       // null = existing image, not a new upload
+            isExisting: true,
+            filePath:   imgUrl      // sent to backend to retain the file
+        }));
+
+        const mappedSizes = (c.sizes || []).map(s => ({
+            size:     s.size     || '',
+            price:    parseFloat(s.price)      || 0,
+            quantity: parseInt(s.quantity, 10) || 0
+        }));
 
         if (!colorMap.has(hex)) {
             colorMap.set(hex, {
@@ -205,16 +201,18 @@ async function renderEditForm(product) {
                 name:   c.name || 'Unknown',
                 value:  hex,
                 sizes:  mappedSizes,
-                images: imgEntry
+                images: imgEntries
             });
         } else {
-            if (imgUrl) {
-                colorMap.get(hex).images.push(imgEntry[0]);
-            }
+            // Merge extra images if same color appears twice (safety guard)
+            const existing = colorMap.get(hex);
+            imgEntries.forEach(img => {
+                if (!existing.images.some(e => e.filePath === img.filePath)) {
+                    existing.images.push(img);
+                }
+            });
         }
     });
-
-    console.log("editProductData.colors after mapping:", Array.from(colorMap.values()));
 
     editProductData.colors = Array.from(colorMap.values());
 
@@ -222,7 +220,6 @@ async function renderEditForm(product) {
     editGenerateSizeSections();
     editGenerateImageSections();
 }
-
 
 function editInitializeColorOptions() {
     const grid = document.getElementById('editColorOptionsGrid');
@@ -377,7 +374,6 @@ function editRemoveSize(ci, si) {
     });
 }
 
-// ─── IMAGE SECTIONS ──────────────────────────────────────────────────────────
 
 function editGenerateImageSections() {
     const container = document.getElementById('editColorImagesContainer');
@@ -461,7 +457,6 @@ function editRemoveImage(ci, ii) {
     });
 }
 
-// ─── EVENT LISTENERS ─────────────────────────────────────────────────────────
 
 function editSetupEventListeners() {
     const addColorBtn = document.getElementById('editAddColorBtn');
@@ -496,7 +491,6 @@ function editAddCustomColor() {
     document.getElementById('editCustomColorName').value = '';
 }
 
-// ─── VALIDATION ──────────────────────────────────────────────────────────────
 
 function editValidate() {
     const title = document.getElementById('editProductTitle').value.trim();
@@ -518,7 +512,7 @@ function editValidate() {
     return true;
 }
 
-// ─── UPDATE ──────────────────────────────────────────────────────────────────
+
 
 async function updateProduct() {
     if (!editValidate()) return;
@@ -537,23 +531,27 @@ async function updateProduct() {
         variants: editProductData.colors.map(color => ({
             color:  { name: color.name, hexCode: color.value },
             sizes:  color.sizes.map(s => ({ size: s.size, price: s.price, quantity: s.quantity })),
+            // ✅ CORRECT — filePath matches what ProductImageDTO.getFilePath() reads
             images: color.images.map(img => ({
-                fileName:    img.name,
-                fileType:    img.type,
-                base64Data:  img.isExisting ? null : img.base64Data.split(',')[1],
-                fileSize:    img.size,
-                isExisting:  img.isExisting,
-                url:         img.isExisting ? img.preview : null
+                fileName:   img.name,
+                fileType:   img.type,
+                base64Data: img.isExisting ? null : (img.base64Data.includes(',') ? img.base64Data.split(',')[1] : img.base64Data),
+                filePath:   img.isExisting ? img.preview : null    // ← backend reads this
             }))
         }))
     };
 
+    console.log(finalData)
+
     Notiflix.Loading.pulse("Updating product...", { clickToClose: false, svgColor: '#6777ef' });
     try {
-        const res = await fetch(`api/product/update-product`, {
-            method:  "PUT",
-            headers: { "Content-Type": "application/json", "Accept": "application/json" },
-            body:    JSON.stringify(finalData)
+        const res = await fetch("api/product/update-product", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(finalData)
         });
 
         if (res.ok) {

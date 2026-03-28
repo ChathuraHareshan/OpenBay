@@ -1,9 +1,7 @@
 package lk.karu.openbay.entity;
 
 import jakarta.persistence.*;
-
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -21,59 +19,29 @@ public class ProductVariant {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @OneToMany(mappedBy = "variant", cascade = CascadeType.ALL)
-    private Set<VariantSize> sizes = new HashSet<>();
-
-    @OneToMany(mappedBy = "variant", cascade = CascadeType.ALL)
+    // ✅ Set instead of List — fixes MultipleBagFetchException
+    // Hibernate can JOIN FETCH multiple Sets simultaneously, but NOT multiple Lists (Bags)
+    @OneToMany(mappedBy = "variant", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<VariantImage> images = new HashSet<>();
 
+    @OneToMany(mappedBy = "variant", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<VariantSize> sizes = new HashSet<>();
 
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public String getColorName() { return colorName; }
+    public void setColorName(String colorName) { this.colorName = colorName; }
 
-    public String getColorName() {
-        return colorName;
-    }
+    public String getColorHex() { return colorHex; }
+    public void setColorHex(String colorHex) { this.colorHex = colorHex; }
 
-    public void setColorName(String colorName) {
-        this.colorName = colorName;
-    }
+    public Product getProduct() { return product; }
+    public void setProduct(Product product) { this.product = product; }
 
-    public String getColorHex() {
-        return colorHex;
-    }
+    public Set<VariantImage> getImages() { return images; }
+    public void setImages(Set<VariantImage> images) { this.images = images; }
 
-    public void setColorHex(String colorHex) {
-        this.colorHex = colorHex;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public Set<VariantSize> getSizes() {
-        return sizes;
-    }
-
-    public void setSizes(Set<VariantSize> sizes) {
-        this.sizes = sizes;
-    }
-
-    public Set<VariantImage> getImages() {
-        return images;
-    }
-
-    public void setImages(Set<VariantImage> images) {
-        this.images = images;
-    }
+    public Set<VariantSize> getSizes() { return sizes; }
+    public void setSizes(Set<VariantSize> sizes) { this.sizes = sizes; }
 }
-

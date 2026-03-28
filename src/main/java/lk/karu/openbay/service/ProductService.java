@@ -13,22 +13,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.Base64;
+import java.util.*;
 
 public class ProductService {
 
-    public String addProduct(ProductDTO productDTO, HttpServletRequest request) {
-        JsonObject responseObject = new JsonObject();
-        boolean status = false;
-        String message = "";
+    // ADD ─────────────────────────────────────────────────────────────────────
 
-        if (!validateProductDTO(productDTO, responseObject)) {
-            return AppUtil.GSON.toJson(responseObject);
-        }
+    public String addProduct(ProductDTO productDTO, HttpServletRequest request) {
+        JsonObject resp = new JsonObject();
+        if (!validate(productDTO, resp)) return AppUtil.GSON.toJson(resp);
 
         Session session = null;
         Transaction tx = null;
-
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             tx = session.beginTransaction();
@@ -36,223 +32,340 @@ public class ProductService {
             Product product = new Product();
             product.setTitle(productDTO.getTitle().trim());
             product.setDescription(productDTO.getDescription().trim());
-
-            String categoryStr = productDTO.getCategory();
-            Category category = null;
-
-            try {
-                Long categoryId = Long.parseLong(categoryStr);
-                category = session.get(Category.class, categoryId);
-                if (category == null) {
-                    throw new IllegalArgumentException("Category not found with ID: " + categoryId);
-                }
-            } catch (NumberFormatException e) {
-                category = session.createQuery("FROM Category c WHERE c.name = :name", Category.class)
-                        .setParameter("name", categoryStr)
-                        .uniqueResult();
-                if (category == null) {
-                    category = new Category();
-                    category.setName(categoryStr);
-                    session.persist(category);
-                }
-            }
-            product.setCategory(category);
-
-            String modelStr = productDTO.getModel();
-            Model model = null;
-
-            try {
-                Long modelId = Long.parseLong(modelStr);
-                model = session.get(Model.class, modelId);
-                if (model == null) {
-                    throw new IllegalArgumentException("Model not found with ID: " + modelId);
-                }
-            } catch (NumberFormatException e) {
-                model = session.createQuery("FROM Model m WHERE m.name = :name", Model.class)
-                        .setParameter("name", modelStr)
-                        .uniqueResult();
-                if (model == null) {
-                    model = new Model();
-                    model.setName(modelStr);
-                    session.persist(model);
-                }
-            }
-            product.setModel(model);
-
+            product.setCategory(resolveCategory(session, productDTO.getCategory()));
+            product.setModel(resolveModel(session, productDTO.getModel()));
             product.setSku(productDTO.getSku() != null ? productDTO.getSku().trim() : "");
-
-            Status activeStatus = session.createNamedQuery("Status.findByValue", Status.class)
-                    .setParameter("value", String.valueOf(Status.Type.ACTIVE))
-                    .getSingleResult();
-
-            product.setStatus(activeStatus);
+            product.setStatus(activeStatus(session));
 
             session.persist(product);
             session.flush();
-            int productId = product.getId();
 
             for (ProductVariantDTO vDTO : productDTO.getVariants()) {
-                ProductVariant variant = new ProductVariant();
-                variant.setColorName(vDTO.getColor().getName());
-                variant.setColorHex(vDTO.getColor().getHexCode());
-                variant.setProduct(product);
-
-                for (SizeDTO sDTO : vDTO.getSizes()) {
-                    VariantSize size = new VariantSize();
-                    size.setSize(sDTO.getSize());
-                    size.setPrice(sDTO.getPrice());
-                    size.setQuantity(sDTO.getQuantity());
-                    size.setVariant(variant);
-                    variant.getSizes().add(size);
-                }
-
+                ProductVariant variant = buildVariant(vDTO, product);
                 for (ProductImageDTO iDTO : vDTO.getImages()) {
-                    try {
-                        String url = saveImage(iDTO, productId, request);
-
-                        VariantImage image = new VariantImage();
-                        image.setFileName(iDTO.getFileName());
-                        image.setFileType(iDTO.getFileType());
-                        image.setFilePath(url);
-                        image.setVariant(variant);
-
-                        variant.getImages().add(image);
-                    } catch (Exception e) {
-                        System.err.println("Failed to save image: " + e.getMessage());
-                    }
+                    attachImage(iDTO, variant, product.getId(), request);
                 }
-
                 product.getVariants().add(variant);
             }
 
-            session.persist(product);
+            session.merge(product);
             tx.commit();
 
-            status = true;
-            message = "Product saved successfully!";
+            resp.addProperty("status", true);
+            resp.addProperty("message", "Product saved successfully!");
 
         } catch (Exception e) {
-            if (tx != null && tx.isActive()) {
-                tx.rollback();
-            }
-            status = false;
-            message = "Error saving product: " + e.getMessage();
+            rollback(tx);
+            resp.addProperty("status", false);
+            resp.addProperty("message", "Error saving product: " + e.getMessage());
             e.printStackTrace();
         } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
+            close(session);
         }
-
-        responseObject.addProperty("status", status);
-        responseObject.addProperty("message", message);
-        return AppUtil.GSON.toJson(responseObject);
+        return AppUtil.GSON.toJson(resp);
     }
 
-    private boolean validateProductDTO(ProductDTO productDTO, JsonObject responseObject) {
-        // Validate title
-        if (productDTO.getTitle() == null || productDTO.getTitle().trim().isEmpty()) {
-            responseObject.addProperty("status", false);
-            responseObject.addProperty("message", "Product title is required");
-            return false;
-        }
+    // UPDATE ──────────────────────────────────────────────────────────────────
+    // Per-variant, per-image smart reconciliation:
+    //   Variant matched by colorHex:
+    //     - EXISTS in DB + in form  -> update sizes, reconcile images
+    //     - NEW in form only        -> insert variant + all images
+    //     - EXISTS in DB but not in form -> delete variant + image files
+    //   Per image inside a matched variant:
+    //     - has base64Data          -> new upload, save to disk + insert DB row
+    //     - has filePath only       -> existing image, keep DB row unchanged
+    //     - in DB but not in form   -> remove DB row + delete disk file
 
-        // Validate description
-        if (productDTO.getDescription() == null || productDTO.getDescription().trim().isEmpty()) {
-            responseObject.addProperty("status", false);
-            responseObject.addProperty("message", "Product description is required");
-            return false;
-        }
+    public String updateProduct(ProductDTO productDTO, HttpServletRequest request) {
+        JsonObject resp = new JsonObject();
+        if (!validate(productDTO, resp)) return AppUtil.GSON.toJson(resp);
 
-        // Validate category
-        if (productDTO.getCategory() == null || productDTO.getCategory().trim().isEmpty()) {
-            responseObject.addProperty("status", false);
-            responseObject.addProperty("message", "Product category is required");
-            return false;
-        }
+        Session session = null;
+        Transaction tx = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            tx = session.beginTransaction();
 
-        // Validate variants
-        if (productDTO.getVariants() == null || productDTO.getVariants().isEmpty()) {
-            responseObject.addProperty("status", false);
-            responseObject.addProperty("message", "At least one product variant (color) is required");
-            return false;
-        }
+            // Load product + variants (single join - safe)
+            Product product = session.createQuery(
+                            "SELECT DISTINCT p FROM Product p " +
+                                    "LEFT JOIN FETCH p.variants v " +
+                                    "WHERE p.id = :id", Product.class)
+                    .setParameter("id", productDTO.getProductId())
+                    .uniqueResult();
 
-        // Validate each variant
-        for (int i = 0; i < productDTO.getVariants().size(); i++) {
-            ProductVariantDTO variant = productDTO.getVariants().get(i);
-
-            if (variant.getColor() == null || variant.getColor().getName() == null ||
-                    variant.getColor().getName().trim().isEmpty()) {
-                responseObject.addProperty("status", false);
-                responseObject.addProperty("message", "Color name is required for variant " + (i + 1));
-                return false;
+            if (product == null) {
+                resp.addProperty("status", false);
+                resp.addProperty("message", "Product not found: " + productDTO.getProductId());
+                return AppUtil.GSON.toJson(resp);
             }
 
-            if (variant.getSizes() == null || variant.getSizes().isEmpty()) {
-                responseObject.addProperty("status", false);
-                responseObject.addProperty("message", "At least one size is required for color: " + variant.getColor().getName());
-                return false;
+            // Load sizes and images per variant (separate queries = no bag conflict)
+            for (ProductVariant v : product.getVariants()) {
+                List<VariantSize> sizes = session.createQuery(
+                                "FROM VariantSize s WHERE s.variant.id = :vid", VariantSize.class)
+                        .setParameter("vid", v.getId()).getResultList();
+                v.getSizes().addAll(sizes);
+
+                List<VariantImage> images = session.createQuery(
+                                "FROM VariantImage i WHERE i.variant.id = :vid", VariantImage.class)
+                        .setParameter("vid", v.getId()).getResultList();
+                v.getImages().addAll(images);
             }
 
-            for (int j = 0; j < variant.getSizes().size(); j++) {
-                SizeDTO size = variant.getSizes().get(j);
+            // Update basic product fields
+            product.setTitle(productDTO.getTitle().trim());
+            product.setDescription(productDTO.getDescription().trim());
+            product.setCategory(resolveCategory(session, productDTO.getCategory()));
+            product.setModel(resolveModel(session, productDTO.getModel()));
+            product.setSku(productDTO.getSku() != null ? productDTO.getSku().trim() : "");
+            product.setStatus(activeStatus(session));
 
-                if (size.getSize() == null || size.getSize().trim().isEmpty()) {
-                    responseObject.addProperty("status", false);
-                    responseObject.addProperty("message", "Size is required for color: " + variant.getColor().getName());
-                    return false;
-                }
+            int productId = product.getId();
+            List<String> filesToDelete = new ArrayList<>();
 
-                if (size.getPrice() <= 0) {
-                    responseObject.addProperty("status", false);
-                    responseObject.addProperty("message", "Price must be greater than 0 for size: " + size.getSize());
-                    return false;
-                }
+            // Map existing DB variants by colorHex for O(1) lookup
+            Map<String, ProductVariant> existingByHex = new LinkedHashMap<>();
+            for (ProductVariant v : product.getVariants()) {
+                existingByHex.put(v.getColorHex().toLowerCase(), v);
+            }
 
-                if (size.getQuantity() < 0) {
-                    responseObject.addProperty("status", false);
-                    responseObject.addProperty("message", "Quantity cannot be negative for size: " + size.getSize());
-                    return false;
+            // Track which colors the form still has
+            Set<String> submittedHexes = new HashSet<>();
+
+            for (ProductVariantDTO vDTO : productDTO.getVariants()) {
+                String hex = vDTO.getColor().getHexCode().toLowerCase();
+                submittedHexes.add(hex);
+
+                ProductVariant variant = existingByHex.get(hex);
+
+                if (variant == null) {
+                    // ── Completely new variant ────────────────────────────────
+                    variant = buildVariant(vDTO, product);
+                    for (ProductImageDTO iDTO : vDTO.getImages()) {
+                        attachImage(iDTO, variant, productId, request);
+                    }
+                    product.getVariants().add(variant);
+
+                } else {
+                    // ── Existing variant: update name + reconcile ─────────────
+                    variant.setColorName(vDTO.getColor().getName());
+                    variant.setColorHex(vDTO.getColor().getHexCode());
+
+                    // Sizes: replace entirely (no disk files involved)
+                    variant.getSizes().clear();
+                    for (SizeDTO sDTO : vDTO.getSizes()) {
+                        VariantSize sz = new VariantSize();
+                        sz.setSize(sDTO.getSize());
+                        sz.setPrice(sDTO.getPrice());
+                        sz.setQuantity(sDTO.getQuantity());
+                        sz.setVariant(variant);
+                        variant.getSizes().add(sz);
+                    }
+
+                    // Images: smart reconcile
+                    // Step A: build map of what currently exists in DB for this variant
+                    Map<String, VariantImage> dbImagesByPath = new LinkedHashMap<>();
+                    for (VariantImage img : variant.getImages()) {
+                        if (img.getFilePath() != null) {
+                            dbImagesByPath.put(img.getFilePath(), img);
+                        }
+                    }
+
+                    // Step B: process each image the client submitted
+                    Set<String> retainedPaths = new HashSet<>();
+                    for (ProductImageDTO iDTO : vDTO.getImages()) {
+                        boolean hasNewData = iDTO.getBase64Data() != null
+                                && !iDTO.getBase64Data().isBlank();
+                        boolean hasExistingPath = iDTO.getFilePath() != null
+                                && !iDTO.getFilePath().isBlank();
+
+                        if (hasNewData) {
+                            // New image — save to disk + create DB row
+                            try {
+                                String url = saveToDisk(iDTO.getBase64Data(),
+                                        iDTO.getFileName(), productId, request);
+                                VariantImage img = new VariantImage();
+                                img.setFileName(iDTO.getFileName());
+                                img.setFileType(iDTO.getFileType());
+                                img.setFilePath(url);
+                                img.setVariant(variant);
+                                variant.getImages().add(img);
+                            } catch (Exception e) {
+                                System.err.println("Image save failed: " + e.getMessage());
+                            }
+                        } else if (hasExistingPath
+                                && dbImagesByPath.containsKey(iDTO.getFilePath())) {
+                            // Existing image the user kept — retain it
+                            retainedPaths.add(iDTO.getFilePath());
+                        }
+                        // else: no data, no matching path → skip
+                    }
+
+                    // Step C: remove images that were in DB but NOT retained
+                    Iterator<VariantImage> imgIt = variant.getImages().iterator();
+                    while (imgIt.hasNext()) {
+                        VariantImage img = imgIt.next();
+                        if (dbImagesByPath.containsKey(img.getFilePath())
+                                && !retainedPaths.contains(img.getFilePath())) {
+                            filesToDelete.add(img.getFilePath());
+                            imgIt.remove(); // orphanRemoval removes the DB row
+                        }
+                    }
                 }
+            }
+
+            // Remove variants that were deleted from the form entirely
+            Iterator<ProductVariant> varIt = product.getVariants().iterator();
+            while (varIt.hasNext()) {
+                ProductVariant v = varIt.next();
+                if (!submittedHexes.contains(v.getColorHex().toLowerCase())) {
+                    for (VariantImage img : v.getImages()) {
+                        if (img.getFilePath() != null) filesToDelete.add(img.getFilePath());
+                    }
+                    varIt.remove(); // orphanRemoval cascades to sizes + images DB rows
+                }
+            }
+
+            session.merge(product);
+            tx.commit();
+
+            // Delete obsolete files from disk only after a successful commit
+            deleteImageFiles(filesToDelete, request);
+
+            resp.addProperty("status", true);
+            resp.addProperty("message", "Product updated successfully!");
+
+        } catch (Exception e) {
+            rollback(tx);
+            resp.addProperty("status", false);
+            resp.addProperty("message", "Error updating product: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            close(session);
+        }
+        return AppUtil.GSON.toJson(resp);
+    }
+
+    // HELPERS ─────────────────────────────────────────────────────────────────
+
+    private ProductVariant buildVariant(ProductVariantDTO vDTO, Product product) {
+        ProductVariant v = new ProductVariant();
+        v.setColorName(vDTO.getColor().getName());
+        v.setColorHex(vDTO.getColor().getHexCode());
+        v.setProduct(product);
+        for (SizeDTO sDTO : vDTO.getSizes()) {
+            VariantSize sz = new VariantSize();
+            sz.setSize(sDTO.getSize()); sz.setPrice(sDTO.getPrice());
+            sz.setQuantity(sDTO.getQuantity()); sz.setVariant(v);
+            v.getSizes().add(sz);
+        }
+        return v;
+    }
+
+    private void attachImage(ProductImageDTO iDTO, ProductVariant variant,
+                             int productId, HttpServletRequest request) {
+        boolean hasNew  = iDTO.getBase64Data() != null && !iDTO.getBase64Data().isBlank();
+        boolean hasPath = iDTO.getFilePath()   != null && !iDTO.getFilePath().isBlank();
+        String url = null;
+        if (hasNew) {
+            try { url = saveToDisk(iDTO.getBase64Data(), iDTO.getFileName(), productId, request); }
+            catch (Exception e) { System.err.println("Image failed: " + e.getMessage()); return; }
+        } else if (hasPath) {
+            url = iDTO.getFilePath();
+        } else { return; }
+
+        VariantImage img = new VariantImage();
+        img.setFileName(iDTO.getFileName());
+        img.setFileType(iDTO.getFileType());
+        img.setFilePath(url);
+        img.setVariant(variant);
+        variant.getImages().add(img);
+    }
+
+    private String saveToDisk(String base64, String name,
+                              int productId, HttpServletRequest req) throws Exception {
+        Path dir = Paths.get(req.getServletContext().getRealPath("/uploads/product/" + productId));
+        if (!Files.exists(dir)) Files.createDirectories(dir);
+        String raw = base64.contains(",") ? base64.split(",")[1] : base64;
+        String fname = System.currentTimeMillis() + "_" + name;
+        Files.write(dir.resolve(fname), Base64.getDecoder().decode(raw), StandardOpenOption.CREATE);
+        return req.getContextPath() + "/uploads/product/" + productId + "/" + fname;
+    }
+
+    private void deleteImageFiles(List<String> paths, HttpServletRequest req) {
+        String ctx = req.getContextPath();
+        for (String p : paths) {
+            try {
+                String rel  = p.startsWith(ctx) ? p.substring(ctx.length()) : p;
+                String real = req.getServletContext().getRealPath(rel);
+                if (real != null) Files.deleteIfExists(Paths.get(real));
+            } catch (Exception e) { System.err.println("Delete failed: " + p); }
+        }
+    }
+
+    private Status activeStatus(Session s) {
+        return s.createNamedQuery("Status.findByValue", Status.class)
+                .setParameter("value", String.valueOf(Status.Type.ACTIVE)).getSingleResult();
+    }
+
+    private Category resolveCategory(Session session, String input) {
+        try {
+            Long id = Long.parseLong(input);
+            Category c = session.get(Category.class, id);
+            if (c == null) throw new IllegalArgumentException("Not found: " + id);
+            return c;
+        } catch (NumberFormatException e) {
+            Category c = session.createQuery("FROM Category c WHERE c.name=:n", Category.class)
+                    .setParameter("n", input).uniqueResult();
+            if (c == null) { c = new Category(); c.setName(input); session.persist(c); }
+            return c;
+        }
+    }
+
+    private Model resolveModel(Session session, String input) {
+        try {
+            Long id = Long.parseLong(input);
+            Model m = session.get(Model.class, id);
+            if (m == null) throw new IllegalArgumentException("Not found: " + id);
+            return m;
+        } catch (NumberFormatException e) {
+            Model m = session.createQuery("FROM Model m WHERE m.name=:n", Model.class)
+                    .setParameter("n", input).uniqueResult();
+            if (m == null) { m = new Model(); m.setName(input); session.persist(m); }
+            return m;
+        }
+    }
+
+    private void rollback(Transaction tx) {
+        if (tx != null && tx.isActive()) { try { tx.rollback(); } catch (Exception ignored) {} }
+    }
+
+    private void close(Session s) { if (s != null && s.isOpen()) s.close(); }
+
+    private boolean validate(ProductDTO dto, JsonObject resp) {
+        if (empty(dto.getTitle()))       return fail(resp, "Product title is required");
+        if (empty(dto.getDescription())) return fail(resp, "Product description is required");
+        if (empty(dto.getCategory()))    return fail(resp, "Product category is required");
+        if (dto.getVariants() == null || dto.getVariants().isEmpty())
+            return fail(resp, "At least one variant is required");
+        for (int i = 0; i < dto.getVariants().size(); i++) {
+            ProductVariantDTO v = dto.getVariants().get(i);
+            if (v.getColor()==null || empty(v.getColor().getName()))
+                return fail(resp, "Color name required for variant " + (i+1));
+            if (v.getSizes()==null || v.getSizes().isEmpty())
+                return fail(resp, "At least one size required for: " + v.getColor().getName());
+            for (SizeDTO s : v.getSizes()) {
+                if (empty(s.getSize()))  return fail(resp, "Size value required");
+                if (s.getPrice() <= 0)   return fail(resp, "Price must be > 0 for: " + s.getSize());
+                if (s.getQuantity() < 0) return fail(resp, "Quantity cannot be negative");
             }
         }
-
         return true;
     }
 
-    private String saveImage(ProductImageDTO dto, int productId, HttpServletRequest request) throws Exception {
-        try {
-            // Get real path to webapp/uploads
-            String uploadsPathStr = request.getServletContext().getRealPath("/uploads/product/" + productId);
-            Path uploadsDir = Paths.get(uploadsPathStr);
-
-            if (!Files.exists(uploadsDir)) {
-                Files.createDirectories(uploadsDir);
-            }
-
-            // Decode Base64
-            String base64Data = dto.getBase64Data();
-            if (base64Data.contains(",")) {
-                base64Data = base64Data.split(",")[1];
-            }
-            byte[] data = Base64.getDecoder().decode(base64Data);
-
-            // Generate unique filename
-            String fileName = System.currentTimeMillis() + "_" + dto.getFileName();
-            Path filePath = uploadsDir.resolve(fileName);
-
-            // Save file
-            Files.write(filePath, data, StandardOpenOption.CREATE);
-
-            // Generate full HTTP URL
-            String contextPath = request.getContextPath(); // e.g., /openbay
-            String fullUrl = contextPath + "/uploads/product/" + productId + "/" + fileName;
-
-            return fullUrl;
-        } catch (Exception e) {
-            throw new Exception("Failed to save image: " + e.getMessage());
-        }
+    private boolean empty(String s) { return s == null || s.trim().isEmpty(); }
+    private boolean fail(JsonObject r, String m) {
+        r.addProperty("status", false); r.addProperty("message", m); return false;
     }
-
 }

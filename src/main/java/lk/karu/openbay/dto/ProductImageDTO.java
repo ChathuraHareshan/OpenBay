@@ -1,15 +1,12 @@
 package lk.karu.openbay.dto;
 
 public class ProductImageDTO {
+
     private String fileName;
     private String fileType;
-    private String base64Data;
-    private Long fileSize;
+    private String base64Data;  // present only for NEW uploads
+    private String filePath;    // present only for EXISTING images (returned from server)
 
-    // Constructors
-    public ProductImageDTO() {}
-
-    // Getters and Setters
     public String getFileName() { return fileName; }
     public void setFileName(String fileName) { this.fileName = fileName; }
 
@@ -19,6 +16,6 @@ public class ProductImageDTO {
     public String getBase64Data() { return base64Data; }
     public void setBase64Data(String base64Data) { this.base64Data = base64Data; }
 
-    public Long getFileSize() { return fileSize; }
-    public void setFileSize(Long fileSize) { this.fileSize = fileSize; }
+    public String getFilePath() { return filePath; }
+    public void setFilePath(String filePath) { this.filePath = filePath; }
 }

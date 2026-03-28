@@ -1,14 +1,12 @@
 package lk.karu.openbay.entity;
 
 import jakarta.persistence.*;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "product")
-public class Product extends BaseEntity{
+public class Product extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,8 +23,9 @@ public class Product extends BaseEntity{
     @JoinColumn(name = "status_id")
     private Status status;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private List<ProductVariant> variants = new ArrayList<>();
+    // ✅ Set instead of List — allows multiple JOIN FETCH without MultipleBagFetchException
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ProductVariant> variants = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -36,67 +35,27 @@ public class Product extends BaseEntity{
     @JoinColumn(name = "model_id")
     private Model model;
 
-    public Status getStatus() {
-        return status;
-    }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public void setStatus(Status status) {
-        this.status = status;
-    }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-    public int getId() {
-        return id;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public String getSku() { return sku; }
+    public void setSku(String sku) { this.sku = sku; }
 
-    public String getTitle() {
-        return title;
-    }
+    public Status getStatus() { return status; }
+    public void setStatus(Status status) { this.status = status; }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public Set<ProductVariant> getVariants() { return variants; }
+    public void setVariants(Set<ProductVariant> variants) { this.variants = variants; }
 
-    public String getDescription() {
-        return description;
-    }
+    public Category getCategory() { return category; }
+    public void setCategory(Category category) { this.category = category; }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public String getSku() {
-        return sku;
-    }
-
-    public void setSku(String sku) {
-        this.sku = sku;
-    }
-
-    public List<ProductVariant> getVariants() {
-        return variants;
-    }
-
-    public void setVariants(List<ProductVariant> variants) {
-        this.variants = variants;
-    }
-
-    public Model getModel() {
-        return model;
-    }
-
-    public void setModel(Model model) {
-        this.model = model;
-    }
+    public Model getModel() { return model; }
+    public void setModel(Model model) { this.model = model; }
 }

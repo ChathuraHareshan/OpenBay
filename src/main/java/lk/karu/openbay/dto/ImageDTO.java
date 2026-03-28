@@ -6,6 +6,8 @@ public class ImageDTO {
     public String fileType;
     public String base64Data;
     public long fileSize;
+    public String filePath;
+
 
     // Getters and setters
     public String getFileName() {
@@ -38,5 +40,13 @@ public class ImageDTO {
 
     public void setFileSize(long fileSize) {
         this.fileSize = fileSize;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 }
