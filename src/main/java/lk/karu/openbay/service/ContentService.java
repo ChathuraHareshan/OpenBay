@@ -246,7 +246,7 @@ public class ContentService {
 
                 for (ProductVariant variant : product.getVariants()) {
                     for (VariantImage image : variant.getImages()) {
-                        if (images.size() < 2) {
+                        if (images.size() < variant.getImages().size()) {
                             images.add(image.getFilePath());
                         }
                     }
