@@ -1,9 +1,9 @@
 const params = new URLSearchParams(window.location.search);
 const productId = params.get("id");
-let selectedColor = null; // Track selected color globally
-let selectedSize = null; // Track selected size globally
-let currentProduct = null; // Store product data globally
-let currentSizes = []; // Store current sizes data for the selected color
+let selectedColor = null;
+let selectedSize = null;
+let currentProduct = null;
+let currentSizes = [];
 
 window.addEventListener("load", async () => {
     try {

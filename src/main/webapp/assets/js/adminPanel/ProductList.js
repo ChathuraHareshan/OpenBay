@@ -65,7 +65,6 @@ function renderProductCard(data) {
         // Status
         const isActive = product.status === 'active';
 
-        // Visible color dots (max 4, then show count)
         const visibleColors = uniqueColors.slice(0, 4);
         const extraColors   = uniqueColors.length - 4;
         const colorDotsHtml = visibleColors.map(c =>
@@ -74,7 +73,6 @@ function renderProductCard(data) {
             ? `<span class="pc-color-more">+${extraColors}</span>`
             : '');
 
-        // Size tags (max 5 shown)
         const visibleSizes = uniqueSize.slice(0, 5);
         const extraSizes   = uniqueSize.length - 5;
         const sizeTagsHtml = visibleSizes.map(s =>
@@ -86,7 +84,6 @@ function renderProductCard(data) {
         const productCard = `
             <div class="pc-card" data-product-id="${product.productId}">
 
-                <!-- ── Image + Carousel ─────────────────────────────── -->
                 <div class="pc-image-wrap">
                     <div class="pc-carousel-track" id="${carouselId}">
                         ${imageHtml}
@@ -126,7 +123,6 @@ function renderProductCard(data) {
                     </div>
                 </div>
 
-                <!-- ── Card Body ────────────────────────────────────── -->
                 <div class="pc-body">
 
                     <!-- Category -->
@@ -142,26 +138,21 @@ function renderProductCard(data) {
                         </a>
                     </h5>
 
-                    <!-- Color swatches -->
                     <div class="pc-colors">
                         ${colorDotsHtml || '<span class="pc-empty-hint">No colors</span>'}
                     </div>
 
-                    <!-- Divider -->
                     <div class="pc-divider"></div>
 
-                    <!-- Price + Stock -->
                     <div class="pc-price-row">
                         <span class="pc-price">${priceDisplay}</span>
                         <span class="pc-stock-badge ${stockClass}">${stockLabel}</span>
                     </div>
 
-                    <!-- Sizes -->
                     <div class="pc-sizes">
                         ${sizeTagsHtml || '<span class="pc-empty-hint">No sizes</span>'}
                     </div>
 
-                    <!-- Footer -->
                     <div class="pc-footer">
                         <div class="pc-footer-actions">
                             <button class="pc-btn pc-btn-edit" title="Edit Product"
@@ -179,17 +170,15 @@ function renderProductCard(data) {
                         </div>
                     </div>
 
-                </div><!-- /pc-body -->
-            </div><!-- /pc-card -->
+                </div>
+            </div>
         `;
 
         productGrid.innerHTML += productCard;
     });
 
-    // Inject card styles once
     injectProductCardStyles();
 
-    // Init carousels
     allProducts.forEach((product, index) => {
         const images = product.images || [];
         if (images.length > 1) {
@@ -207,7 +196,6 @@ function renderProductCard(data) {
     });
 }
 
-// ─── Image HTML ──────────────────────────────────────────────────────────────
 function generateCarouselImages(images, carouselId, productId) {
     if (!images || images.length === 0) {
         return `<div class="pc-slide pc-no-image">
@@ -223,7 +211,6 @@ function generateCarouselImages(images, carouselId, productId) {
     `).join('');
 }
 
-// ─── Carousel logic ───────────────────────────────────────────────────────────
 function initCarousel(carousel, prevBtn, nextBtn, dots) {
     let current = 0;
     const slides = carousel.querySelectorAll('.pc-slide');
@@ -247,7 +234,6 @@ function initCarousel(carousel, prevBtn, nextBtn, dots) {
         dots.forEach((d, i) => d.addEventListener('click', e => { e.stopPropagation(); go(i); }));
     }
 
-    // Auto-advance
     let timer = setInterval(() => go(current < total - 1 ? current + 1 : 0), 5000);
     const wrap = carousel.closest('.pc-image-wrap');
     wrap.addEventListener('mouseenter', () => clearInterval(timer));
@@ -258,7 +244,6 @@ function initCarousel(carousel, prevBtn, nextBtn, dots) {
     go(0);
 }
 
-// ─── Styles ───────────────────────────────────────────────────────────────────
 function injectProductCardStyles() {
     if (document.getElementById('pc-styles')) return;
     const style = document.createElement('style');
@@ -560,7 +545,6 @@ function injectProductCardStyles() {
     document.head.appendChild(style);
 }
 
-// ─── Product action stubs ─────────────────────────────────────────────────────
 function quickView(productId) {
     Notiflix.Notify.info(`Quick view for product ${productId}`);
 }
