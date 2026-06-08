@@ -13,12 +13,19 @@ const editor2 = new RichTextEditor("editProductDescription");
 async function showEditProduct(event, productId) {
     if (event) event.preventDefault();
 
-    document.querySelectorAll('.dynamic-content').forEach(s => s.classList.remove('active'));
-    document.getElementById('edit-product-content').classList.add('active');
+    // Hide all dynamic sections, show edit section
+    document.querySelectorAll('.dynamic-content').forEach(section => {
+        section.classList.remove('active');
+    });
 
-    document.querySelectorAll('.sidebar-menu a').forEach(link => {
-        link.classList.remove('menu-active');
-        link.closest('.dropdown').classList.remove('active');
+    const editSection = document.getElementById('edit-product-content');
+    if (editSection) {
+        editSection.classList.add('active');
+    }
+
+    // Remove active state from all sidebar links
+    document.querySelectorAll('.sidebar-menu li').forEach(li => {
+        li.classList.remove('active');
     });
 
     editProductData = { productId, basicInfo: {}, colors: [] };

@@ -96,4 +96,6 @@ public class Address implements Serializable {
     public void setCity(City city) {
         this.city = city;
     }
+
+
 }

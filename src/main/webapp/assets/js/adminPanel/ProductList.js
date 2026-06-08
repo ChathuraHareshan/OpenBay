@@ -1,11 +1,16 @@
-async function LoadProducts(){
-
+async function LoadProducts() {
     try {
         const response = await fetch("api/data/productTab");
         if (response.ok) {
             const data = await response.json();
             console.log(data);
-            renderProductCard(data)
+            renderProductCard(data);
+
+            // Ensure product list section is visible on page load
+            const productSection = document.getElementById('product-list-content');
+            if (productSection && !productSection.classList.contains('active')) {
+                productSection.classList.add('active');
+            }
         } else {
             Notiflix.Notify.failure("Product loading failed!", {
                 position: 'center-top'
@@ -16,7 +21,6 @@ async function LoadProducts(){
             position: 'center-top'
         });
     }
-
 }
 
 function renderProductCard(data) {
@@ -111,9 +115,7 @@ function renderProductCard(data) {
                         <button class="pc-action-icon" title="Edit" onclick="showEditProduct(null, ${product.productId})">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="pc-action-icon danger" title="Delete" onclick="deleteProduct(${product.productId})">
-                            <i class="fas fa-trash"></i>
-                        </button>
+                        
                     </div>
 
                     <!-- Status badge top-left -->
@@ -482,7 +484,7 @@ function injectProductCardStyles() {
 
     /* Size tags */
     .pc-sizes {
-        display: flex; flex-wrap: wrap; gap: 6px;
+        display: flex; flex-wrap: wrap; gap: 6px;edit
         margin-bottom: 16px;
     }
     .pc-size-tag {
@@ -570,3 +572,44 @@ function duplicateProduct(productId) {
 function viewProduct(productId) {
     Notiflix.Notify.info(`View product ${productId}`);
 }
+
+function showProductList(event) {
+    if (event) event.preventDefault();
+
+    // Hide edit section, show product list
+    document.querySelectorAll('.dynamic-content').forEach(section => {
+        section.classList.remove('active');
+    });
+
+    const productListSection = document.getElementById('product-list-content');
+    if (productListSection) {
+        productListSection.classList.add('active');
+    }
+
+    // Refresh products to ensure latest data
+    LoadProducts();
+
+    // Update sidebar active state
+    document.querySelectorAll('.sidebar-menu li').forEach(li => {
+        li.classList.remove('active');
+    });
+
+    // Find and activate the Product List menu item
+    const productListLink = document.querySelector('.sidebar-menu a[href="productList.html"]');
+    if (productListLink) {
+        productListLink.closest('li').classList.add('active');
+    }
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Show product list section, hide edit section
+    const productSection = document.getElementById('product-list-content');
+    const editSection = document.getElementById('edit-product-content');
+
+    if (productSection) productSection.classList.add('active');
+    if (editSection) editSection.classList.remove('active');
+
+    // Load products
+    LoadProducts();
+});

@@ -1415,7 +1415,7 @@
                 </li>
                 <li class="dropdown"><a href="#" data-toggle="dropdown"
                                         class="nav-link dropdown-toggle nav-link-lg nav-link-user"> <img alt="image"
-                                                                                                         src="assets/img/user.png"
+                                                                                                         src="assets/images/adminPanel/user.png"
                                                                                                          class="user-img-radious-style">
                     <span class="d-sm-none d-lg-inline-block"></span></a>
                     <div class="dropdown-menu dropdown-menu-right pullDown">
@@ -1445,7 +1445,9 @@
                 </div>
 
                 <ul class="sidebar-menu">
+
                     <li class="menu-header">Main</li>
+
                     <li class="dropdown active">
                         <a href="#" onclick="showDashboard(event)" class="nav-link menu-dashboard"><i
                                 data-feather="monitor"></i><span>Dashboard</span></a>
@@ -1462,6 +1464,15 @@
                         <a href="#" onclick="showProductList(event)" class="nav-link menu-product-list"><i
                                 data-feather="list"></i><span>Product List</span></a>
                     </li>
+
+
+                    <li class="menu-header">User Section</li>
+
+                    <li class="dropdown">
+                        <a href="#" onclick="showUserList(event)" class="nav-link menu-user-list"><i
+                                data-feather="list"></i><span>User List</span></a>
+                    </li>
+
                 </ul>
             </aside>
         </div>
@@ -1486,7 +1497,7 @@
                                         </div>
                                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
                                             <div class="banner-img">
-                                                <img src="assets/img/banner/1.png" alt="">
+                                                <img src="assets/images/adminPanel/banner/1.png" alt="">
                                             </div>
                                         </div>
                                     </div>
@@ -1508,7 +1519,7 @@
                                         </div>
                                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
                                             <div class="banner-img">
-                                                <img src="assets/img/banner/2.png" alt="">
+                                                <img src="assets/images/adminPanel/banner/2.png" alt="">
                                             </div>
                                         </div>
                                     </div>
@@ -1531,7 +1542,7 @@
                                         </div>
                                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
                                             <div class="banner-img">
-                                                <img src="assets/img/banner/3.png" alt="">
+                                                <img src="assets/images/adminPanel/banner/3.png" alt="">
                                             </div>
                                         </div>
                                     </div>
@@ -1553,7 +1564,7 @@
                                         </div>
                                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
                                             <div class="banner-img">
-                                                <img src="assets/img/banner/4.png" alt="">
+                                                <img src="assets/images/adminPanel/banner/4.png" alt="">
                                             </div>
                                         </div>
                                     </div>
@@ -1997,30 +2008,94 @@
             </section>
 
 
-            <!--
-  ════════════════════════════════════════════════════════════════
-  EDIT PRODUCT SECTION  — paste inside <div class="main-content">
-  after the #add-product-content section.
-  ════════════════════════════════════════════════════════════════
--->
+            <section class="section dynamic-content" id="user-list-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Product List</h4>
+                        <div class="card-header-action">
+                            <button class="btn btn-primary" onclick="showAddProduct(event)">
+                                <i class="fas fa-plus"></i> Add New Product
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- Product Stats -->
+                        <div class="product-stats">
+                            <div class="stat-item">
+                                <div class="stat-label">Total Products</div>
+                                <div class="stat-value">156</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Active</div>
+                                <div class="stat-value">142</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Low Stock</div>
+                                <div class="stat-value">12</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Out of Stock</div>
+                                <div class="stat-value">8</div>
+                            </div>
+                        </div>
 
-            <!-- ① Add this entry to the sidebar <ul class="sidebar-menu"> (optional shortcut) -->
-            <!--
-            <li class="dropdown">
-                <a href="#" class="nav-link menu-edit-product" style="display:none;">
-                    <i data-feather="edit"></i><span>Edit Product</span>
-                </a>
-            </li>
-            -->
+                        <!-- Filters -->
+                        <div class="product-list-header">
+                            <div class="product-filters">
+                                <select class="filter-select">
+                                    <option value="">All Categories</option>
+                                    <option value="men">MEN</option>
+                                    <option value="women">WOMEN</option>
+                                    <option value="tshirts">T-Shirts</option>
+                                </select>
+                                <select class="filter-select">
+                                    <option value="">All Status</option>
+                                    <option value="active">Active</option>
+                                    <option value="draft">Draft</option>
+                                    <option value="out">Out of Stock</option>
+                                </select>
+                                <select class="filter-select">
+                                    <option value="">Sort By</option>
+                                    <option value="newest">Newest</option>
+                                    <option value="price-low">Price: Low to High</option>
+                                    <option value="price-high">Price: High to Low</option>
+                                    <option value="name">Name</option>
+                                </select>
+                            </div>
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" placeholder="Search products...">
+                            </div>
+                        </div>
 
-            <!-- ② Replace your editProduct() stub in ProductList.js with: -->
-            <!--
-            function editProduct(productId) {
-                showEditProduct(null, productId);
-            }
-            -->
+                        <!-- Product Grid -->
 
-            <!-- ③ Add the section below to index.html inside .main-content -->
+
+                        <!-- Pagination -->
+                        <div class="mt-4 d-flex justify-content-between align-items-center">
+                            <div class="text-muted">Showing 1 to 3 of 156 products</div>
+                            <nav>
+                                <ul class="pagination">
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                    </li>
+                                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">4</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">5</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">Next</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+
 
             <section class="section dynamic-content" id="edit-product-content">
                 <div class="card">
@@ -2174,7 +2249,6 @@
 
                         <hr class="my-4">
 
-                        <!-- ══ SECTION 3: SIZES & PRICES ══════════════════════════ -->
                         <div class="section-title">
                             <i class="fas fa-ruler-combined"></i> Sizes &amp; Prices
                         </div>
@@ -2322,6 +2396,31 @@
 
         LoadProducts();
     }
+
+
+    function showUserList(event) {
+        if (event) event.preventDefault();
+
+        document.querySelectorAll('.dynamic-content').forEach(section => {
+            section.classList.remove('active');
+        });
+
+        document.getElementById('user-list-content').classList.add('active');
+
+        document.querySelectorAll('.sidebar-menu a').forEach(link => {
+            link.classList.remove('menu-active');
+            link.closest('.dropdown').classList.remove('active');
+        });
+
+        const productListMenu = document.querySelector('.menu-user-list');
+        if (productListMenu) {
+            productListMenu.classList.add('menu-active');
+            productListMenu.closest('.dropdown').classList.add('active');
+        }
+
+        LoadProducts();
+    }
+
 
     document.addEventListener('DOMContentLoaded', function () {
         showDashboard({preventDefault: () => {}});

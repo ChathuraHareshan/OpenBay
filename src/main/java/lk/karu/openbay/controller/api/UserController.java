@@ -12,12 +12,30 @@ import jakarta.ws.rs.core.Response;
 import lk.karu.openbay.annotation.IsUser;
 import lk.karu.openbay.dto.UserDTO;
 import lk.karu.openbay.service.CartService;
+import lk.karu.openbay.service.ContentService;
 import lk.karu.openbay.service.UserService;
 import lk.karu.openbay.util.AppUtil;
 
 @Path("/user")
 public class UserController {
 
+
+    @Path("/{id}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response loadUserById(@PathParam("id") int id) {
+        String result = new UserService().loadUserById(id);
+        return Response.ok().entity(result).build();
+    }
+
+
+    @Path("/all")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response loadUsers(){
+        String loadAllUsers = new UserService().loadAllUsers();
+        return Response.ok().entity(loadAllUsers).build();
+    }
 
     @IsUser
     @Path("/logout")

@@ -314,7 +314,6 @@ public class ContentService {
         try {
             Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
 
-            // Query to get all active colors
             List<Color> colorList = hibernateSession.createQuery(
                     "FROM Color c ",
                     Color.class

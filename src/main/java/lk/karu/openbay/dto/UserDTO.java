@@ -22,6 +22,7 @@ public class UserDTO implements Serializable {
     private String sinceAt;
     private String newPassword;
     private String confirmPassword;
+    private String status;
 
 
     public UserDTO() {
@@ -43,6 +44,14 @@ public class UserDTO implements Serializable {
         this.lname = lname;
         this.email = email;
         this.password = password;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Integer getAddressId() {

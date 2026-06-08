@@ -7,6 +7,12 @@ let productData = {
 let colorOptions = [];
 let commonSizes = [];
 
+window.addEventListener("load", async () => {
+
+    loadProductData();
+
+});
+
 function loadProductData() {
     loadColors();
     loadSizes();
@@ -776,9 +782,9 @@ async function saveProduct() {
             if (data.status) {
                 Notiflix.Report.success('Success', data.message, 'Okay', () => {
                     resetForm();
-                    showDashboard({
-                        preventDefault: () => {}
-                    });
+                    // showDashboard({
+                    //     preventDefault: () => {}
+                    // });
                 });
             } else {
                 Notiflix.Notify.failure("Error: " + (data.message || "Unknown error"), {
@@ -857,12 +863,12 @@ function resetForm() {
 
 
 
-document.addEventListener('DOMContentLoaded', function () {
-    // Set dashboard as active by default
-    showDashboard({preventDefault: () => {}});
-
-    // Initialize feather icons
-    if (typeof feather !== 'undefined') {
-        feather.replace();
-    }
-});
+// document.addEventListener('DOMContentLoaded', function () {
+//     // Set dashboard as active by default
+//     showDashboard({preventDefault: () => {}});
+//
+//     // Initialize feather icons
+//     if (typeof feather !== 'undefined') {
+//         feather.replace();
+//     }
+// });

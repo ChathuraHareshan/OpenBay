@@ -5,10 +5,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.jsp.tagext.TryCatchFinally;
 import jakarta.ws.rs.core.Context;
+import lk.karu.openbay.dto.AddressDTO;
+import lk.karu.openbay.dto.SizeDTO;
 import lk.karu.openbay.dto.UserDTO;
-import lk.karu.openbay.entity.Admin;
-import lk.karu.openbay.entity.Status;
-import lk.karu.openbay.entity.User;
+import lk.karu.openbay.entity.*;
 import lk.karu.openbay.mail.VerificationMail;
 import lk.karu.openbay.provider.MailServiceProvider;
 import lk.karu.openbay.util.AppUtil;
@@ -18,6 +18,9 @@ import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserService {
 
@@ -283,6 +286,96 @@ public class UserService {
         responseObject.addProperty("message", message);
         return AppUtil.GSON.toJson(responseObject);
 
+    }
+
+
+    public String loadAllUsers() {
+        JsonObject responseObject = new JsonObject();
+        try {
+            Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
+
+            List<User> userList = hibernateSession.createQuery("FROM User u", User.class)
+                    .getResultList();
+
+            List<UserDTO> users = new ArrayList<>();
+
+            for (User u : userList) {
+                UserDTO userDTO = new UserDTO();
+                userDTO.setId(u.getId());
+                userDTO.setFname(u.getFname());
+                userDTO.setLname(u.getLname());
+                userDTO.setEmail(u.getEmail());
+                userDTO.setSinceAt(u.getCreatedAt().toString()); // adjust field name
+                userDTO.setStatus(u.getStatus().getValue());
+
+                users.add(userDTO); // ← THIS WAS MISSING
+            }
+
+            responseObject.addProperty("status", true);
+            responseObject.add("users", AppUtil.GSON.toJsonTree(users));
+            hibernateSession.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseObject.addProperty("status", false);
+            responseObject.addProperty("message", "Failed to load users.");
+        }
+        return AppUtil.GSON.toJson(responseObject);
+    }
+
+    public String loadUserById(int userId) {
+        JsonObject responseObject = new JsonObject();
+        try {
+            Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
+
+            User u = hibernateSession.get(User.class, userId);
+            if (u == null) {
+                responseObject.addProperty("status", false);
+                responseObject.addProperty("message", "User not found.");
+                return AppUtil.GSON.toJson(responseObject);
+            }
+
+            UserDTO userDTO = new UserDTO();
+            userDTO.setId(u.getId());
+            userDTO.setFname(u.getFname());
+            userDTO.setLname(u.getLname());
+            userDTO.setEmail(u.getEmail());
+            userDTO.setSinceAt(u.getCreatedAt().toString());
+            userDTO.setStatus(u.getStatus().getValue());
+
+            // Load addresses
+            List<Address> addresses = hibernateSession
+                    .createQuery("FROM Address a WHERE a.user.id = :uid", Address.class)
+                    .setParameter("uid", userId)
+                    .getResultList();
+
+            List<AddressDTO> addressDTOs = new ArrayList<>();
+            for (Address a : addresses) {
+                AddressDTO dto = new AddressDTO();
+                dto.setId(a.getId());
+                dto.setLineOne(a.getLineOne());
+                dto.setLineTwo(a.getLineTwo());
+                dto.setPostalCode(a.getPostalCode());
+                dto.setMobile(a.getMobile());
+                dto.setPrimary(a.isPrimary());
+                if (a.getCity() != null) {
+                    dto.setCityName(a.getCity().getName()); // adjust field name
+                    dto.setCityId(a.getCity().getId());
+                }
+                addressDTOs.add(dto);
+            }
+
+            responseObject.addProperty("status", true);
+            responseObject.add("user", AppUtil.GSON.toJsonTree(userDTO));
+            responseObject.add("addresses", AppUtil.GSON.toJsonTree(addressDTOs));
+            hibernateSession.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseObject.addProperty("status", false);
+            responseObject.addProperty("message", "Failed to load user details.");
+        }
+        return AppUtil.GSON.toJson(responseObject);
     }
 
 }

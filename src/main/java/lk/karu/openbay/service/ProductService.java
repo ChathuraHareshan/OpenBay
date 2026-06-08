@@ -19,9 +19,6 @@ import java.util.List;
 
 public class ProductService {
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // ADD
-    // ─────────────────────────────────────────────────────────────────────────
 
     public String addProduct(ProductDTO productDTO, HttpServletRequest request) {
         JsonObject resp = new JsonObject();
@@ -63,9 +60,7 @@ public class ProductService {
         return AppUtil.GSON.toJson(resp);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // UPDATE  — delete ALL old variants/sizes/images then re-insert fresh ones
-    // ─────────────────────────────────────────────────────────────────────────
+
 
     public String updateProduct(ProductDTO productDTO, HttpServletRequest request) {
         JsonObject resp = new JsonObject();
@@ -77,7 +72,6 @@ public class ProductService {
             session = HibernateUtil.getSessionFactory().openSession();
             tx = session.beginTransaction();
 
-            // ── 1. Load product + variants (one join only — safe) ────────────
             Product product = session.createQuery(
                             "SELECT DISTINCT p FROM Product p " +
                                     "LEFT JOIN FETCH p.variants v " +
@@ -91,10 +85,8 @@ public class ProductService {
                 return AppUtil.GSON.toJson(resp);
             }
 
-            // ── 2. Collect old image paths for disk cleanup later ────────────
             List<String> oldImagePaths = new ArrayList<>();
             for (ProductVariant v : product.getVariants()) {
-                // Load images for this variant individually — avoids bag conflict
                 List<VariantImage> imgs = session.createQuery(
                                 "FROM VariantImage i WHERE i.variant.id = :vid", VariantImage.class)
                         .setParameter("vid", v.getId())
@@ -106,12 +98,10 @@ public class ProductService {
                 }
             }
 
-            // ── 3. DELETE all variants from DB ───────────────────────────────
-            // orphanRemoval=true cascades: variant → sizes → images (DB rows)
-            product.getVariants().clear();
-            session.flush();  // execute DELETEs NOW
 
-            // ── 4. Update basic product fields ────────────────────────────────
+            product.getVariants().clear();
+            session.flush();
+
             product.setTitle(productDTO.getTitle().trim());
             product.setDescription(productDTO.getDescription().trim());
             product.setCategory(resolveCategory(session, productDTO.getCategory()));
@@ -119,14 +109,11 @@ public class ProductService {
             product.setSku(productDTO.getSku() != null ? productDTO.getSku().trim() : "");
             product.setStatus(activeStatus(session));
 
-            // ── 5. Build fresh variants from submitted form data ──────────────
             buildAndAttachVariants(product, productDTO.getVariants(), request, product.getId());
 
-            // ── 6. Save updated product ───────────────────────────────────────
             session.merge(product);
             tx.commit();
 
-            // ── 7. Delete only old image files that were NOT retained ─────────
             List<String> retainedPaths = productDTO.getVariants().stream()
                     .flatMap(v -> v.getImages().stream())
                     .filter(i -> i.getFilePath() != null && !i.getFilePath().isBlank())
@@ -150,14 +137,9 @@ public class ProductService {
         return AppUtil.GSON.toJson(resp);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // BUILD VARIANTS (shared by add + update)
-    // ─────────────────────────────────────────────────────────────────────────
 
-    private void buildAndAttachVariants(Product product,
-                                        List<ProductVariantDTO> variantDTOs,
-                                        HttpServletRequest request,
-                                        int productId) {
+
+    private void buildAndAttachVariants(Product product, List<ProductVariantDTO> variantDTOs, HttpServletRequest request, int productId) {
         for (ProductVariantDTO vDTO : variantDTOs) {
             ProductVariant variant = new ProductVariant();
             variant.setColorName(vDTO.getColor().getName());
@@ -180,7 +162,7 @@ public class ProductService {
                 boolean isExisting  = iDTO.getFilePath()   != null && !iDTO.getFilePath().isBlank();
 
                 if (isNewUpload) {
-                    // Brand-new upload — save to disk
+
                     try {
                         String url = saveToDisk(iDTO.getBase64Data(), iDTO.getFileName(), productId, request);
                         image.setFilePath(url);
@@ -189,7 +171,7 @@ public class ProductService {
                         continue;
                     }
                 } else if (isExisting) {
-                    // Existing image — keep the old path as-is, don't touch the file
+
                     image.setFilePath(iDTO.getFilePath());
                 } else {
                     System.err.println("Skipping image with no data or path: " + iDTO.getFileName());
@@ -206,12 +188,10 @@ public class ProductService {
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // DISK I/O
-    // ─────────────────────────────────────────────────────────────────────────
 
-    private String saveToDisk(String base64Data, String originalName,
-                              int productId, HttpServletRequest request) throws Exception {
+
+    private String saveToDisk(String base64Data, String originalName, int productId, HttpServletRequest request) throws Exception {
+
         Path dir = Paths.get(request.getServletContext().getRealPath("/uploads/product/" + productId));
         if (!Files.exists(dir)) Files.createDirectories(dir);
 
@@ -240,9 +220,7 @@ public class ProductService {
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // DB HELPERS
-    // ─────────────────────────────────────────────────────────────────────────
+
 
     private Status activeStatus(Session session) {
         return session.createNamedQuery("Status.findByValue", Status.class)
@@ -288,9 +266,7 @@ public class ProductService {
         if (session != null && session.isOpen()) session.close();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // VALIDATION
-    // ─────────────────────────────────────────────────────────────────────────
+
 
     private boolean validate(ProductDTO dto, JsonObject resp) {
         if (dto.getTitle() == null || dto.getTitle().trim().isEmpty())
