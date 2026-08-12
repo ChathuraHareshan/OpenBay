@@ -185,7 +185,7 @@ function createProductCard(product, categoryName = null) {
                 </a>
                 ${categoryBadge}
                 <div class="product-action-vertical">
-                    <a class="btn-product-icon btn-wishlist btn-expandable" onclick="addToWishlist(${product.productId})"><span>add to wishlist</span></a>
+                    <a class="btn-product-icon btn-wishlist btn-expandable" onclick="addTowatchlist(${product.productId})"><span>add to wishlist</span></a>
                 </div>
                 <div class="product-action">
                     <a  class="btn-product btn-cart" href="product.html?id=${product.productId}"><span>add to cart</span></a>

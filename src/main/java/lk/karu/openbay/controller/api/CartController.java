@@ -29,7 +29,7 @@ public class CartController {
             @PathParam("cartId") int cartId,
             @Context HttpServletRequest request) {
 
-        // Create a new method in CartService for removing items
+
         String responseJson = cartService.removeCartItem(cartId, request);
         return Response.ok(responseJson).build();
     }

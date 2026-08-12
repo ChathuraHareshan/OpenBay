@@ -9,7 +9,7 @@ public class ImageDTO {
     public String filePath;
 
 
-    // Getters and setters
+
     public String getFileName() {
         return fileName;
     }

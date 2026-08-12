@@ -2,7 +2,6 @@ package lk.karu.openbay.controller.api;
 
 
 import com.google.gson.JsonObject;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.ws.rs.*;
@@ -12,7 +11,6 @@ import jakarta.ws.rs.core.Response;
 import lk.karu.openbay.annotation.IsUser;
 import lk.karu.openbay.dto.UserDTO;
 import lk.karu.openbay.service.CartService;
-import lk.karu.openbay.service.ContentService;
 import lk.karu.openbay.service.UserService;
 import lk.karu.openbay.util.AppUtil;
 

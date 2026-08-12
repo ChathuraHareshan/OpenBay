@@ -9,7 +9,6 @@ public class ColorDTO {
     private String hexCode;
     private List<SizeDTO> sizes = new ArrayList<>();
 
-    // ✅ Each color now carries its own image URL list
     private List<String> images = new ArrayList<>();
 
     public String getName() { return name; }

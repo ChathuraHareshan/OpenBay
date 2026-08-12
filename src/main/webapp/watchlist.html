@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Molla - Bootstrap eCommerce Template</title>
+  <meta name="keywords" content="HTML5 Template">
+  <meta name="description" content="Molla - Bootstrap eCommerce Template">
+  <meta name="author" content="p-themes">
+  <!-- Favicon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/images/icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/images/icons/favicon-16x16.png">
+  <link rel="manifest" href="assets/images/icons/site.html">
+  <link rel="mask-icon" href="assets/images/icons/safari-pinned-tab.svg" color="#666666">
+  <link rel="shortcut icon" href="assets/images/icons/favicon.ico">
+  <meta name="apple-mobile-web-app-title" content="Molla">
+  <meta name="application-name" content="Molla">
+  <meta name="msapplication-TileColor" content="#cc9966">
+  <meta name="msapplication-config" content="assets/images/icons/browserconfig.xml">
+  <meta name="theme-color" content="#ffffff">
+  <!-- Plugins CSS File -->
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <!-- Main CSS File -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/header.css">
+  <link rel="stylesheet" href="assets/css/skins/skin-demo-9.css">
+  <link rel="stylesheet" href="assets/css/demos/demo-9.css">
+</head>
+
+<style>
+  /* Remove browser arrows */
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
+
+  /* Qty Design */
+  .qty-wrapper {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    width: fit-content;
+  }
+
+  .qty-input {
+    width: 40px;
+    text-align: center;
+    border: none;
+    outline: none;
+  }
+
+  .qty-btn {
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: #f5f5f5;
+    cursor: pointer;
+    font-size: 18px;
+  }
+
+  .qty-btn:hover {
+    background: #eaeaea;
+  }
+
+</style>
+
+<body>
+<div class="page-wrapper">
+  <div id="header-container"></div>
+
+  <main class="main">
+    <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
+      <div class="container">
+        <h1 class="page-title">Watchlist<span>Openbay</span></h1>
+      </div>
+    </div>
+
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+      <div class="container">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item"><a href="#">Shop</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Watchlist</li>
+        </ol>
+      </div>
+    </nav>
+
+    <div class="page-content">
+      <div id="watchlist-empty-container" class="text-center py-5" style="display: none;">
+        <i class="icon-shopping-watchlist" style="font-size: 48px; color: #ccc;"></i>
+        <p class="mt-3">Your watchlist is empty</p>
+        <a href="index.html" class="btn btn-outline-primary btn-sm mt-2">Continue Shopping</a>
+      </div>
+
+      <div id="watchlist-content-container" style="display: block;">
+        <div class="watchlist">
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-9">
+                <table class="table table-watchlist table-mobile">
+                  <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Color</th>
+                    <th>Size</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total (Rs.)</th>
+                    <th></th>
+                  </tr>
+                  </thead>
+
+                  <tbody id="watchlist-item-container">
+                  <!-- watchlist items will be dynamically added here -->
+                  </tbody>
+                </table>
+
+                <div class="watchlist-bottom">
+                  <div class="watchlist-discount">
+                    <form action="#">
+                      <div class="input-group">
+                        <input type="text" class="form-control" required
+                               placeholder="coupon code">
+                        <div class="input-group-append">
+                          <button class="btn btn-outline-primary-2" type="submit"><i
+                                  class="icon-long-arrow-right"></i></button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+
+                  <button id="update-watchlist-btn" class="btn btn-outline-dark-2"><span>UPDATE watchlist</span><i
+                          class="icon-refresh"></i></button>
+                </div>
+              </div>
+
+              <aside class="col-lg-3">
+                <div class="summary summary-watchlist">
+                  <h3 class="summary-title">watchlist Total</h3>
+
+                  <table class="table table-summary">
+                    <tbody>
+                    <tr class="summary-subtotal">
+                      <td>Subtotal:</td>
+                      <td id="watchlist-subtotal">Rs. 0.00</td>
+                    </tr>
+                    <tr class="summary-shipping">
+                      <td>Shipping:</td>
+                      <td>&nbsp;</td>
+                    </tr>
+
+                    </tbody>
+
+                    <tbody id="shipping-row">
+
+                    <tr class="summary-shipping-row">
+                      <td>
+
+                        <div class="custom-control custom-radio disabled">
+                          <input type="radio" id="free-shipping" name="shipping"
+                                 class="custom-control-input" checked>
+                          <label class="custom-control-label" for="free-shipping">Free
+                            Shipping</label>
+                        </div>
+                      </td>
+                      <td id="free-shipping-price">0</td>
+                    </tr>
+
+                    </tbody>
+
+                    <tbody>
+
+
+                    <tr class="summary-total">
+                      <td>Total:</td>
+                      <td id="watchlist-total">Rs. 0.00</td>
+                    </tr>
+                    </tbody>
+                  </table>
+
+                  <a href="checkout.html" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED
+                    TO CHECKOUT</a>
+                </div>
+
+                <a href="category.html" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i
+                        class="icon-refresh"></i></a>
+              </aside>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-middle">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-6 col-lg-3">
+            <div class="widget widget-about">
+              <img src="assets/images/logo.png" class="footer-logo" alt="Footer Logo" width="105"
+                   height="25">
+              <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu vulputate magna
+                eros eu erat. </p>
+
+              <div class="social-icons">
+                <a href="#" class="social-icon" target="_blank" title="Facebook"><i
+                        class="icon-facebook-f"></i></a>
+                <a href="#" class="social-icon" target="_blank" title="Twitter"><i
+                        class="icon-twitter"></i></a>
+                <a href="#" class="social-icon" target="_blank" title="Instagram"><i
+                        class="icon-instagram"></i></a>
+                <a href="#" class="social-icon" target="_blank" title="Youtube"><i
+                        class="icon-youtube"></i></a>
+                <a href="#" class="social-icon" target="_blank" title="Pinterest"><i
+                        class="icon-pinterest"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-lg-3">
+            <div class="widget">
+              <h4 class="widget-title">Useful Links</h4>
+
+              <ul class="widget-list">
+                <li><a href="about.html">About Molla</a></li>
+                <li><a href="#">How to shop on Molla</a></li>
+                <li><a href="#">FAQ</a></li>
+                <li><a href="contact.html">Contact us</a></li>
+                <li><a href="login.html">Log in</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-lg-3">
+            <div class="widget">
+              <h4 class="widget-title">Customer Service</h4>
+
+              <ul class="widget-list">
+                <li><a href="#">Payment Methods</a></li>
+                <li><a href="#">Money-back guarantee!</a></li>
+                <li><a href="#">Returns</a></li>
+                <li><a href="#">Shipping</a></li>
+                <li><a href="#">Terms and conditions</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-lg-3">
+            <div class="widget">
+              <h4 class="widget-title">My Account</h4>
+
+              <ul class="widget-list">
+                <li><a href="#">Sign In</a></li>
+                <li><a href="watchlist.html">View watchlist</a></li>
+                <li><a href="#">My Wishlist</a></li>
+                <li><a href="#">Track My Order</a></li>
+                <li><a href="#">Help</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container">
+        <p class="footer-copyright">Copyright © 2019 Molla Store. All Rights Reserved.</p>
+        <figure class="footer-payments">
+          <img src="assets/images/payments.png" alt="Payment methods" width="272" height="20">
+        </figure>
+      </div>
+    </div>
+  </footer>
+</div>
+<button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
+
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/notiflix-aio-3.2.8.min.js"></script>
+<script src="assets/js/header.js"></script>
+<script src="assets/js/watchlist.js"></script>
+<script src="assets/js/vendor/main.js"></script>
+</body>
+</html>

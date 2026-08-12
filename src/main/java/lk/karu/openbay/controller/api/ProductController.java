@@ -7,7 +7,6 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import lk.karu.openbay.annotation.IsAdmin;
-import lk.karu.openbay.annotation.IsUser;
 import lk.karu.openbay.dto.ProductDTO;
 import lk.karu.openbay.service.ProductService;
 import lk.karu.openbay.util.AppUtil;

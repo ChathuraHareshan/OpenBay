@@ -18,7 +18,6 @@ function loadProductData() {
     loadSizes();
     loadCategories();
 
-    // Initialize after data is loaded
     setTimeout(() => {
         initializeColorOptions();
         setupEventListeners();
@@ -210,7 +209,7 @@ function setupEventListeners() {
     }
 }
 
-// Step 1: Basic Info
+
 function validateStep1() {
     const title = document.getElementById('productTitle')?.value.trim();
     const description = document.getElementById('productDescription')?.value.trim();

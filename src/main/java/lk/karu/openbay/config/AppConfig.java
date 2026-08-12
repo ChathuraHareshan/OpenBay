@@ -1,6 +1,5 @@
 package lk.karu.openbay.config;
 
-import jakarta.ws.rs.ApplicationPath;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
 

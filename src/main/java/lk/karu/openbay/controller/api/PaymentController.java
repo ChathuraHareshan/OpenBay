@@ -40,10 +40,9 @@ public class PaymentController {
 
         OrderService orderService = new OrderService();
         if (Integer.parseInt(statusCode) == PayHereUtil.PAYMENT_SUCCESS) {
-            // success situation
             orderService.completeOrder(orderId);
         } else {
-            // failed situation
+
             orderService.failedOrder(orderId);
         }
         return Response.ok().build();

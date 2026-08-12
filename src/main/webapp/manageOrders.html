@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+    <title>Manage Orders - OpenBay</title>
+
+    <link rel="stylesheet" href="assets/css/app.min.css">
+    <link rel="stylesheet" href="assets/css/adminStyle.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/custom.css">
+    <link rel='shortcut icon' type='image/x-icon' href='assets/images/adminPanel/favicon.ico'/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/richtexteditor/rte_theme_default.css"/>
+
+    <style>
+        /* Status Badge Colors */
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            display: inline-block;
+        }
+
+        .status-pending { background: #ffc107; color: #212529; }
+        .status-processing { background: #17a2b8; color: #fff; }
+        .status-completed { background: #28a745; color: #fff; }
+        .status-rejected { background: #dc3545; color: #fff; }
+        .status-cancelled { background: #6c757d; color: #fff; }
+        .status-shipped { background: #007bff; color: #fff; }
+        .status-delivered { background: #28a745; color: #fff; }
+
+        /* Order Table Enhancements */
+        .order-row {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .order-row:hover {
+            background-color: #f8f9fa;
+        }
+
+        .order-id {
+            font-weight: 600;
+            color: #6777ef;
+            font-size: 14px;
+        }
+
+        .order-total {
+            font-weight: 700;
+            color: #2d3748;
+            font-size: 15px;
+        }
+
+        .order-date {
+            font-size: 13px;
+            color: #6c757d;
+        }
+
+        /* Order Detail Modal */
+        .detail-label {
+            font-weight: 600;
+            color: #4a5568;
+            min-width: 100px;
+            display: inline-block;
+            font-size: 13px;
+        }
+
+        .detail-value {
+            color: #2d3748;
+            font-size: 14px;
+        }
+
+        .item-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 10px;
+            transition: all 0.2s;
+            background: #f8fafc;
+        }
+
+        .item-card:hover {
+            border-color: #6777ef;
+            background: #f0f4ff;
+        }
+
+        .item-color-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            display: inline-block;
+            border: 1px solid #ddd;
+        }
+
+        .item-title {
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 14px;
+        }
+
+        .item-detail {
+            font-size: 13px;
+            color: #718096;
+        }
+
+        .order-summary-box {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 15px 20px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+        }
+
+        .summary-row.total {
+            border-top: 2px solid #e2e8f0;
+            padding-top: 10px;
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .status-select {
+            min-width: 130px;
+        }
+
+        .table-actions .btn {
+            margin: 0 2px;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        .empty-state i {
+            font-size: 60px;
+            color: #cbd5e0;
+        }
+        .empty-state h5 {
+            margin-top: 20px;
+            color: #4a5568;
+        }
+        .empty-state p {
+            color: #a0aec0;
+        }
+
+        /* Loading spinner */
+        .loading-overlay {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+        .loading-overlay .spinner-border {
+            width: 3rem;
+            height: 3rem;
+        }
+
+        /* Search filter */
+        .filter-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .filter-group .form-control {
+            min-width: 200px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .filter-group .form-control {
+                min-width: 100%;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+<div class="loader"></div>
+<div id="app">
+    <div class="main-wrapper main-wrapper-1">
+        <div class="navbar-bg"></div>
+
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg main-navbar sticky">
+            <div class="form-inline mr-auto">
+                <ul class="navbar-nav mr-3">
+                    <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg collapse-btn">
+                        <i data-feather="align-justify"></i></a></li>
+                    <li><a href="#" class="nav-link nav-link-lg fullscreen-btn">
+                        <i data-feather="maximize"></i></a></li>
+                    <li>
+                        <form class="form-inline mr-auto">
+                            <div class="search-element">
+                                <input class="form-control" type="search" placeholder="Search" aria-label="Search" data-width="200">
+                                <button class="btn" type="submit"><i class="fas fa-search"></i></button>
+                            </div>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+            <ul class="navbar-nav navbar-right">
+                <li class="dropdown dropdown-list-toggle">
+                    <a href="#" data-toggle="dropdown" class="nav-link nav-link-lg message-toggle">
+                        <i data-feather="mail"></i>
+                        <span class="badge headerBadge1">6</span>
+                    </a>
+                </li>
+                <li class="dropdown dropdown-list-toggle">
+                    <a href="#" data-toggle="dropdown" class="nav-link notification-toggle nav-link-lg">
+                        <i data-feather="bell" class="bell"></i>
+                    </a>
+                </li>
+                <li class="dropdown">
+                    <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
+                        <img alt="image" src="assets/images/adminPanel/user.png" class="user-img-radious-style">
+                        <span class="d-sm-none d-lg-inline-block"></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Sidebar -->
+        <div class="main-sidebar sidebar-style-2">
+            <aside id="sidebar-wrapper">
+                <div class="sidebar-brand">
+                    <a href="adminIndex.html">
+                        <img alt="image" src="assets/images/icon.png" class="header-logo" />
+                        <span class="logo-name">OpenBay</span>
+                    </a>
+                </div>
+                <ul class="sidebar-menu">
+                    <li class="menu-header">Main</li>
+                    <li class="dropdown">
+                        <a href="adminIndex.html" class="nav-link"><i data-feather="monitor"></i><span>Dashboard</span></a>
+                    </li>
+                    <li class="menu-header">Product Management</li>
+                    <li class="dropdown">
+                        <a href="addProduct.html" class="nav-link"><i data-feather="monitor"></i><span>Add Product</span></a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="productList.html" class="nav-link"><i data-feather="monitor"></i><span>Product List</span></a>
+                    </li>
+                    <li class="menu-header">User Management</li>
+                    <li class="dropdown">
+                        <a href="UserList.html" class="nav-link"><i data-feather="monitor"></i><span>User List</span></a>
+                    </li>
+                    <li class="menu-header">Order Management</li>
+                    <li class="dropdown active">
+                        <a href="manageOrders.html" class="nav-link"><i data-feather="shopping-bag"></i><span>Manage Orders</span></a>
+                    </li>
+                </ul>
+            </aside>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <section class="section">
+                <div class="section-header">
+                    <h1><i class="fas fa-shopping-bag mr-2"></i>Manage Orders</h1>
+                    <div class="section-header-breadcrumb">
+                        <div class="breadcrumb-item active"><a href="adminIndex.html">Dashboard</a></div>
+                        <div class="breadcrumb-item">Orders</div>
+                    </div>
+                </div>
+
+                <div class="section-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>All Orders</h4>
+                                    <div class="card-header-form">
+                                        <div class="filter-group">
+                                            <input type="text" id="searchInput" class="form-control" placeholder="Search by order ID, customer, email...">
+                                            <select id="statusFilter" class="form-control status-select">
+                                                <option value="">All Status</option>
+                                                <option value="PENDING">Pending</option>
+                                                <option value="PROCESSING">Processing</option>
+                                                <option value="SHIPPED">Shipped</option>
+                                                <option value="DELIVERED">Delivered</option>
+                                                <option value="COMPLETED">Completed</option>
+                                                <option value="CANCELLED">Cancelled</option>
+                                                <option value="REJECTED">Rejected</option>
+                                            </select>
+                                            <button class="btn btn-primary" onclick="loadOrders()">
+                                                <i class="fas fa-refresh"></i> Refresh
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <div id="loadingOverlay" class="loading-overlay">
+                                            <div class="spinner-border text-primary" role="status">
+                                                <span class="sr-only">Loading...</span>
+                                            </div>
+                                            <p class="mt-2 text-muted">Loading orders...</p>
+                                        </div>
+                                        <table class="table table-striped" id="ordersTable">
+                                            <thead>
+                                            <tr>
+                                                <th>Order ID</th>
+                                                <th>Customer</th>
+                                                <th>Items</th>
+                                                <th>Total</th>
+                                                <th>Status</th>
+                                                <th>Date</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody id="ordersTableBody">
+                                            <!-- Populated by JS -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span id="orderCount" class="text-muted">0 orders</span>
+                                        <div id="paginationControls">
+                                            <!-- Pagination will be added here if needed -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <footer class="main-footer">
+            <div class="footer-left">
+                <a href="templateshub.net">Templateshub</a>
+            </div>
+            <div class="footer-right"></div>
+        </footer>
+    </div>
+</div>
+
+<!-- Order Detail Modal -->
+<div class="modal fade" id="orderDetailModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-shopping-bag mr-2"></i>Order Details
+                </h5>
+                <button type="button" class="close text-white" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="orderDetailBody">
+                <!-- Populated by JS -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Status Update Confirmation Modal -->
+<div class="modal fade" id="statusUpdateModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update Order Status</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Update status for order <strong id="statusOrderId"></strong></p>
+                <select id="newStatusSelect" class="form-control">
+                    <option value="PENDING">Pending</option>
+                    <option value="PROCESSING">Processing</option>
+                    <option value="SHIPPED">Shipped</option>
+                    <option value="DELIVERED">Delivered</option>
+                    <option value="COMPLETED">Completed</option>
+                    <option value="CANCELLED">Cancelled</option>
+                    <option value="REJECTED">Rejected</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="confirmStatusUpdate()">
+                    <i class="fas fa-check mr-1"></i>Update Status
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="assets/js/app.min.js"></script>
+<script src="assets/js/adminPanel/scripts.js"></script>
+<script src="assets/js/custom.js"></script>
+<script src="assets/js/notiflix-aio-3.2.8.min.js"></script>
+
+<script>
+    // Global state
+    let currentOrders = [];
+    let selectedOrderId = null;
+
+    // Constants
+    const API_BASE = '/openbay/api/admin/orders';
+
+    // Status color mapping
+    const statusColors = {
+        'PENDING': 'status-pending',
+        'PROCESSING': 'status-processing',
+        'COMPLETED': 'status-completed',
+        'REJECTED': 'status-rejected',
+        'CANCELLED': 'status-cancelled',
+        'SHIPPED': 'status-shipped',
+        'DELIVERED': 'status-delivered'
+    };
+
+    // Status label mapping
+    const statusLabels = {
+        'PENDING': 'Pending',
+        'PROCESSING': 'Processing',
+        'COMPLETED': 'Completed',
+        'REJECTED': 'Rejected',
+        'CANCELLED': 'Cancelled',
+        'SHIPPED': 'Shipped',
+        'DELIVERED': 'Delivered'
+    };
+
+    // Load orders on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        loadOrders();
+
+        // Search input with debounce
+        let searchTimeout;
+        document.getElementById('searchInput').addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                searchOrders(this.value);
+            }, 400);
+        });
+
+        // Status filter
+        document.getElementById('statusFilter').addEventListener('change', function() {
+            filterByStatus(this.value);
+        });
+    });
+
+    /**
+     * Load all orders from the server
+     */
+    function loadOrders() {
+        showLoading(true);
+
+        fetch(API_BASE, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                showLoading(false);
+                if (data.status) {
+                    currentOrders = data.data || [];
+                    renderOrders(currentOrders);
+                    document.getElementById('orderCount').textContent = currentOrders.length + ' orders';
+                } else {
+                    Notiflix.Notify.failure(data.message || 'Failed to load orders');
+                    renderOrders([]);
+                }
+            })
+            .catch(error => {
+                showLoading(false);
+                console.error('Error loading orders:', error);
+                Notiflix.Notify.failure('Error loading orders. Please try again.');
+                renderOrders([]);
+            });
+    }
+
+    /**
+     * Search orders by keyword
+     */
+    function searchOrders(keyword) {
+        if (!keyword || keyword.trim() === '') {
+            loadOrders();
+            return;
+        }
+
+        showLoading(true);
+        fetch(API_BASE + '/search?keyword=' + encodeURIComponent(keyword.trim()), {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                showLoading(false);
+                if (data.status) {
+                    currentOrders = data.data || [];
+                    renderOrders(currentOrders);
+                    document.getElementById('orderCount').textContent = currentOrders.length + ' orders found';
+                } else {
+                    Notiflix.Notify.failure(data.message || 'Search failed');
+                }
+            })
+            .catch(error => {
+                showLoading(false);
+                console.error('Error searching orders:', error);
+                Notiflix.Notify.failure('Error searching orders.');
+            });
+    }
+
+    /**
+     * Filter orders by status
+     */
+    function filterByStatus(status) {
+        if (!status || status === '') {
+            renderOrders(currentOrders);
+            return;
+        }
+
+        const filtered = currentOrders.filter(order =>
+            order.status && order.status.toUpperCase() === status.toUpperCase()
+        );
+        renderOrders(filtered);
+        document.getElementById('orderCount').textContent = filtered.length + ' orders (filtered)';
+    }
+
+    /**
+     * Render orders in the table
+     */
+    function renderOrders(orders) {
+        const tbody = document.getElementById('ordersTableBody');
+
+        if (!orders || orders.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="7">
+                        <div class="empty-state">
+                            <i class="fas fa-shopping-bag"></i>
+                            <h5>No Orders Found</h5>
+                            <p class="text-muted">There are no orders to display at the moment.</p>
+                        </div>
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        let html = '';
+        orders.forEach(order => {
+            const statusClass = statusColors[order.status] || 'status-pending';
+            const statusLabel = statusLabels[order.status] || order.status || 'Pending';
+            const orderIdDisplay = order.orderId || 'ORD-' + String(order.id).padStart(6, '0');
+
+            html += `
+                <tr class="order-row" onclick="viewOrderDetails(${order.id})">
+                    <td>
+                        <span class="order-id">${orderIdDisplay}</span>
+                    </td>
+                    <td>
+                        <div class="d-flex flex-column">
+                            <span class="font-weight-bold">${order.customerName || 'Guest'}</span>
+                            <small class="text-muted">${order.customerEmail || 'N/A'}</small>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="badge badge-secondary">${order.itemCount || 0} items</span>
+                    </td>
+                    <td>
+                        <span class="order-total">$${order.totalAmount ? order.totalAmount.toFixed(2) : '0.00'}</span>
+                    </td>
+                    <td>
+                        <span class="status-badge ${statusClass}">${statusLabel}</span>
+                    </td>
+                    <td>
+                        <span class="order-date">${order.createdAt || 'N/A'}</span>
+                    </td>
+                    <td class="table-actions">
+                        <button class="btn btn-sm btn-info" onclick="event.stopPropagation(); viewOrderDetails(${order.id})" title="View Details">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-warning" onclick="event.stopPropagation(); openStatusModal(${order.id}, '${order.status || 'PENDING'}')" title="Update Status">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+
+        tbody.innerHTML = html;
+    }
+
+    /**
+     * View order details in modal
+     */
+    function viewOrderDetails(orderId) {
+        Notiflix.Loading.hourglass('Loading order details...');
+
+        fetch(API_BASE + '/' + orderId, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                Notiflix.Loading.remove();
+                if (data.status && data.data) {
+                    renderOrderDetail(data.data);
+                    $('#orderDetailModal').modal('show');
+                } else {
+                    Notiflix.Notify.failure(data.message || 'Failed to load order details');
+                }
+            })
+            .catch(error => {
+                Notiflix.Loading.remove();
+                console.error('Error loading order details:', error);
+                Notiflix.Notify.failure('Error loading order details.');
+            });
+    }
+
+    /**
+     * Render order detail in modal
+     */
+    function renderOrderDetail(order) {
+        const container = document.getElementById('orderDetailBody');
+        const statusClass = statusColors[order.status] || 'status-pending';
+        const statusLabel = statusLabels[order.status] || order.status || 'Pending';
+        const orderIdDisplay = order.orderId || 'ORD-' + String(order.id).padStart(6, '0');
+
+        // Build items HTML
+        let itemsHtml = '';
+        if (order.items && order.items.length > 0) {
+            order.items.forEach(item => {
+                const productTitle = item.productTitle || 'Product';
+                const colorName = item.colorName || 'N/A';
+                const colorHex = item.colorHex || '#ddd';
+
+                itemsHtml += `
+                    <div class="item-card">
+                        <div class="row align-items-center">
+                            <div class="col-md-5">
+                                <span class="item-title">${productTitle}</span>
+                                <div class="item-detail mt-1">
+                                    <span class="item-color-dot" style="background-color: ${colorHex};"></span>
+                                    ${colorName} · ${item.size || 'N/A'}
+                                </div>
+                            </div>
+                            <div class="col-md-3 text-center">
+                                <span class="item-detail">Qty: ${item.qty || 0}</span>
+                            </div>
+                            <div class="col-md-2 text-center">
+                                <span class="item-detail">$${item.price ? item.price.toFixed(2) : '0.00'}</span>
+                            </div>
+                            <div class="col-md-2 text-right">
+                                <span class="font-weight-bold">$${item.total ? item.total.toFixed(2) : '0.00'}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        } else {
+            itemsHtml = '<p class="text-muted text-center">No items found for this order.</p>';
+        }
+
+        container.innerHTML = `
+            <div class="row">
+                <div class="col-md-6">
+                    <h6 class="font-weight-bold mb-3">
+                        <i class="fas fa-user text-primary mr-2"></i>Customer Information
+                    </h6>
+                    <p><span class="detail-label">Name:</span> <span class="detail-value">${order.customerName || 'Guest User'}</span></p>
+                    <p><span class="detail-label">Email:</span> <span class="detail-value">${order.customerEmail || 'N/A'}</span></p>
+                    <p><span class="detail-label">Order ID:</span> <span class="detail-value font-weight-bold">${orderIdDisplay}</span></p>
+                    <p><span class="detail-label">Date:</span> <span class="detail-value">${order.createdAt || 'N/A'}</span></p>
+                    <p>
+                        <span class="detail-label">Status:</span>
+                        <span class="status-badge ${statusClass}">${statusLabel}</span>
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="font-weight-bold mb-3">
+                        <i class="fas fa-calculator text-primary mr-2"></i>Order Summary
+                    </h6>
+                    <div class="order-summary-box">
+                        <div class="summary-row">
+                            <span>Subtotal</span>
+                            <span>$${order.subtotal ? order.subtotal.toFixed(2) : '0.00'}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Shipping Fee</span>
+                            <span>$${order.shippingFee ? order.shippingFee.toFixed(2) : '0.00'}</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Total</span>
+                            <span>$${order.total ? order.total.toFixed(2) : '0.00'}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <h6 class="font-weight-bold mb-3">
+                <i class="fas fa-boxes text-primary mr-2"></i>Order Items
+                <span class="badge badge-secondary ml-2">${order.items ? order.items.length : 0} items</span>
+            </h6>
+            ${itemsHtml}
+        `;
+    }
+
+    /**
+     * Open status update modal
+     */
+    function openStatusModal(orderId, currentStatus) {
+        selectedOrderId = orderId;
+        document.getElementById('statusOrderId').textContent = '#' + (orderId.toString().padStart(6, '0'));
+
+        const select = document.getElementById('newStatusSelect');
+        // Reset and set current value
+        for (let option of select.options) {
+            option.selected = option.value === currentStatus;
+        }
+
+        $('#statusUpdateModal').modal('show');
+    }
+
+    /**
+     * Confirm and update order status
+     */
+    function confirmStatusUpdate() {
+        const newStatus = document.getElementById('newStatusSelect').value;
+
+        if (!selectedOrderId) {
+            Notiflix.Notify.warning('No order selected');
+            return;
+        }
+
+        $('#statusUpdateModal').modal('hide');
+
+        Notiflix.Loading.hourglass('Updating order status...');
+
+        fetch(API_BASE + '/' + selectedOrderId + '/status', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status: newStatus })
+        })
+            .then(response => response.json())
+            .then(data => {
+                Notiflix.Loading.remove();
+                if (data.status) {
+                    Notiflix.Notify.success(data.message || 'Status updated successfully');
+                    loadOrders(); // Refresh the list
+                } else {
+                    Notiflix.Notify.failure(data.message || 'Failed to update status');
+                }
+            })
+            .catch(error => {
+                Notiflix.Loading.remove();
+                console.error('Error updating status:', error);
+                Notiflix.Notify.failure('Error updating order status.');
+            });
+    }
+
+    /**
+     * Show/hide loading overlay
+     */
+    function showLoading(show) {
+        const overlay = document.getElementById('loadingOverlay');
+        const table = document.getElementById('ordersTable');
+        if (show) {
+            overlay.style.display = 'block';
+            table.style.opacity = '0.5';
+        } else {
+            overlay.style.display = 'none';
+            table.style.opacity = '1';
+        }
+    }
+
+    // Handle modal close to reset
+    $('#statusUpdateModal').on('hidden.bs.modal', function() {
+        selectedOrderId = null;
+    });
+</script>
+
+</body>
+</html>

@@ -37,7 +37,6 @@ public class SingleProductService {
                 int productId = Integer.parseInt(id);
                 hibernateSession = HibernateUtil.getSessionFactory().openSession();
 
-                // Load product with variants only (single JOIN FETCH — safe)
                 Product product = hibernateSession.createQuery(
                                 "SELECT DISTINCT p FROM Product p " +
                                         "LEFT JOIN FETCH p.variants v " +
@@ -48,7 +47,6 @@ public class SingleProductService {
                         .setParameter("status", 1)
                         .getSingleResult();
 
-                // Load sizes and images per variant separately (avoids MultipleBagFetchException)
                 for (ProductVariant variant : product.getVariants()) {
                     List<VariantSize> sizes = hibernateSession.createQuery(
                                     "FROM VariantSize s WHERE s.variant.id = :vid", VariantSize.class)
@@ -70,7 +68,6 @@ public class SingleProductService {
                 productDTO.setDescription(product.getDescription());
                 productDTO.setModel(product.getModel() != null ? product.getModel().getName() : "");
 
-                // Min / Max price
                 List<Double> prices = new ArrayList<>();
                 for (ProductVariant variant : product.getVariants()) {
                     for (VariantSize size : variant.getSizes()) {
@@ -80,7 +77,6 @@ public class SingleProductService {
                 productDTO.setMinPrice(prices.isEmpty() ? 0.0 : Collections.min(prices));
                 productDTO.setMaxPrice(prices.isEmpty() ? 0.0 : Collections.max(prices));
 
-                // Flat images list (for product page display — keeps backward compat)
                 List<String> allImages = new ArrayList<>();
                 for (ProductVariant variant : product.getVariants()) {
                     for (VariantImage image : variant.getImages()) {
@@ -89,7 +85,6 @@ public class SingleProductService {
                 }
                 productDTO.setImages(allImages);
 
-                // Colors — each ColorDTO now carries its OWN images + sizes
                 List<ColorDTO> colorDTOList = new ArrayList<>();
 
                 for (ProductVariant variant : product.getVariants()) {
@@ -97,7 +92,6 @@ public class SingleProductService {
                     colorDTO.setName(variant.getColorName());
                     colorDTO.setHexCode(variant.getColorHex());
 
-                    // Sizes for this variant
                     List<SizeDTO> sizeDTOList = new ArrayList<>();
                     for (VariantSize vs : variant.getSizes()) {
                         SizeDTO sizeDTO = new SizeDTO();
@@ -108,7 +102,6 @@ public class SingleProductService {
                     }
                     colorDTO.setSizes(sizeDTOList);
 
-                    // ✅ FIX: Images for THIS variant attached to its own ColorDTO
                     List<String> variantImagePaths = new ArrayList<>();
                     for (VariantImage image : variant.getImages()) {
                         variantImagePaths.add(image.getFilePath());

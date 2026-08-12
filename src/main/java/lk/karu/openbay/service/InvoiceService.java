@@ -7,7 +7,6 @@ import lk.karu.openbay.entity.*;
 import lk.karu.openbay.util.AppUtil;
 import lk.karu.openbay.util.HibernateUtil;
 import lk.karu.openbay.validation.Validator;
-import org.hibernate.Hibernate;
 import org.hibernate.Session;
 
 import java.time.format.DateTimeFormatter;
