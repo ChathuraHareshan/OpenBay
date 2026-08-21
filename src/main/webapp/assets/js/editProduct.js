@@ -13,7 +13,7 @@ const editor2 = new RichTextEditor("editProductDescription");
 async function showEditProduct(event, productId) {
     if (event) event.preventDefault();
 
-    // Hide all dynamic sections, show edit section
+
     document.querySelectorAll('.dynamic-content').forEach(section => {
         section.classList.remove('active');
     });
@@ -23,7 +23,6 @@ async function showEditProduct(event, productId) {
         editSection.classList.add('active');
     }
 
-    // Remove active state from all sidebar links
     document.querySelectorAll('.sidebar-menu li').forEach(li => {
         li.classList.remove('active');
     });
@@ -152,7 +151,6 @@ async function renderEditForm(product) {
     const badge = document.getElementById('editProductIdBadge');
     if (badge) badge.textContent = '#' + (product.productId || '–');
 
-    // Category
     const catSel   = document.getElementById('editProductCategory');
     const catValue = product.category || '';
     for (let i = 0; i < catSel.options.length; i++) {
@@ -163,7 +161,6 @@ async function renderEditForm(product) {
         }
     }
 
-    // Model
     await editLoadModels(catSel.value, null);
     const modelName = product.model || '';
     const modelSel  = document.getElementById('editProductModel');
@@ -183,7 +180,6 @@ async function renderEditForm(product) {
     rawColors.forEach(c => {
         const hex = (c.hexCode || '#000000').toLowerCase();
 
-        // ✅ c.images is now a List<String> of URLs from the fixed Java service
         const imageUrls = Array.isArray(c.images) ? c.images : [];
 
         const imgEntries = imageUrls.map(imgUrl => ({
@@ -191,9 +187,9 @@ async function renderEditForm(product) {
             type:       imgUrl.toLowerCase().endsWith('.png') ? 'image/png' : 'image/jpeg',
             size:       0,
             preview:    imgUrl,
-            base64Data: null,       // null = existing image, not a new upload
+            base64Data: null,
             isExisting: true,
-            filePath:   imgUrl      // sent to backend to retain the file
+            filePath:   imgUrl
         }));
 
         const mappedSizes = (c.sizes || []).map(s => ({
@@ -211,7 +207,7 @@ async function renderEditForm(product) {
                 images: imgEntries
             });
         } else {
-            // Merge extra images if same color appears twice (safety guard)
+
             const existing = colorMap.get(hex);
             imgEntries.forEach(img => {
                 if (!existing.images.some(e => e.filePath === img.filePath)) {
@@ -538,12 +534,12 @@ async function updateProduct() {
         variants: editProductData.colors.map(color => ({
             color:  { name: color.name, hexCode: color.value },
             sizes:  color.sizes.map(s => ({ size: s.size, price: s.price, quantity: s.quantity })),
-            // ✅ CORRECT — filePath matches what ProductImageDTO.getFilePath() reads
+
             images: color.images.map(img => ({
                 fileName:   img.name,
                 fileType:   img.type,
                 base64Data: img.isExisting ? null : (img.base64Data.includes(',') ? img.base64Data.split(',')[1] : img.base64Data),
-                filePath:   img.isExisting ? img.preview : null    // ← backend reads this
+                filePath:   img.isExisting ? img.preview : null
             }))
         }))
     };

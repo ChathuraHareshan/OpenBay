@@ -3,10 +3,8 @@ package lk.karu.openbay.service;
 import com.google.gson.JsonObject;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import jakarta.servlet.jsp.tagext.TryCatchFinally;
 import jakarta.ws.rs.core.Context;
 import lk.karu.openbay.dto.AddressDTO;
-import lk.karu.openbay.dto.SizeDTO;
 import lk.karu.openbay.dto.UserDTO;
 import lk.karu.openbay.entity.*;
 import lk.karu.openbay.mail.VerificationMail;
@@ -14,7 +12,6 @@ import lk.karu.openbay.provider.MailServiceProvider;
 import lk.karu.openbay.util.AppUtil;
 import lk.karu.openbay.util.HibernateUtil;
 import lk.karu.openbay.validation.Validator;
-import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -61,7 +58,7 @@ public class UserService {
                     .setParameter("email", userDTO.getEmail())
                     .getSingleResultOrNull();
 
-            if (singleUser != null) { // Already exists
+            if (singleUser != null) {
                 message = "This email already exists! Please try another email";
             } else {
                 User u = new User();
@@ -305,10 +302,10 @@ public class UserService {
                 userDTO.setFname(u.getFname());
                 userDTO.setLname(u.getLname());
                 userDTO.setEmail(u.getEmail());
-                userDTO.setSinceAt(u.getCreatedAt().toString()); // adjust field name
+                userDTO.setSinceAt(u.getCreatedAt().toString());
                 userDTO.setStatus(u.getStatus().getValue());
 
-                users.add(userDTO); // ← THIS WAS MISSING
+                users.add(userDTO);
             }
 
             responseObject.addProperty("status", true);
@@ -343,7 +340,7 @@ public class UserService {
             userDTO.setSinceAt(u.getCreatedAt().toString());
             userDTO.setStatus(u.getStatus().getValue());
 
-            // Load addresses
+
             List<Address> addresses = hibernateSession
                     .createQuery("FROM Address a WHERE a.user.id = :uid", Address.class)
                     .setParameter("uid", userId)
@@ -359,7 +356,7 @@ public class UserService {
                 dto.setMobile(a.getMobile());
                 dto.setPrimary(a.isPrimary());
                 if (a.getCity() != null) {
-                    dto.setCityName(a.getCity().getName()); // adjust field name
+                    dto.setCityName(a.getCity().getName());
                     dto.setCityId(a.getCity().getId());
                 }
                 addressDTOs.add(dto);
@@ -376,6 +373,70 @@ public class UserService {
             responseObject.addProperty("message", "Failed to load user details.");
         }
         return AppUtil.GSON.toJson(responseObject);
+    }
+
+    public String updateUserStatus(int userId, String newStatus) {
+        JsonObject response = new JsonObject();
+        boolean status = false;
+        String message;
+
+        if (newStatus == null || newStatus.isBlank()) {
+            response.addProperty("status", false);
+            response.addProperty("message", "Status is required");
+            return AppUtil.GSON.toJson(response);
+        }
+
+        Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
+
+        try {
+            User user = hibernateSession.find(User.class, userId);
+
+            if (user == null) {
+                message = "User not found with ID: " + userId;
+            } else {
+
+                boolean validStatus = false;
+                for (Status.Type type : Status.Type.values()) {
+                    if (type.name().equalsIgnoreCase(newStatus)) {
+                        validStatus = true;
+                        break;
+                    }
+                }
+
+                if (!validStatus) {
+                    message = "Invalid status: " + newStatus;
+                } else {
+
+                    Status resolvedStatus = hibernateSession.createNamedQuery("Status.findByValue", Status.class)
+                            .setParameter("value", newStatus.toUpperCase())
+                            .getSingleResult();
+
+                    Transaction transaction = hibernateSession.beginTransaction();
+
+                    try {
+                        user.setStatus(resolvedStatus);
+                        hibernateSession.merge(user);
+                        transaction.commit();
+
+                        status = true;
+                        message = "User status updated successfully!";
+                    } catch (HibernateException e) {
+                        transaction.rollback();
+                        message = "Failed to update user status: " + e.getMessage();
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            message = "Error updating user status: " + e.getMessage();
+            e.printStackTrace();
+        } finally {
+            hibernateSession.close();
+        }
+
+        response.addProperty("status", status);
+        response.addProperty("message", message);
+        return AppUtil.GSON.toJson(response);
     }
 
 }

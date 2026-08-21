@@ -301,4 +301,42 @@ public class ProductService {
         resp.addProperty("message", message);
         return false;
     }
+
+    public String getProductStatistics() {
+        JsonObject response = new JsonObject();
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
+        try {
+            Long totalProducts = session.createQuery(
+                            "SELECT COUNT(p) FROM Product p WHERE p.status.id = :statusId", Long.class)
+                    .setParameter("statusId", 1)
+                    .uniqueResult();
+
+            Long totalStock = session.createQuery(
+                            "SELECT SUM(vs.quantity) FROM VariantSize vs", Long.class)
+                    .uniqueResult();
+
+            Long lowStockVariants = session.createQuery(
+                            "SELECT COUNT(vs) FROM VariantSize vs WHERE vs.quantity <= :threshold", Long.class)
+                    .setParameter("threshold", 5)
+                    .uniqueResult();
+
+            JsonObject stats = new JsonObject();
+            stats.addProperty("totalProducts", totalProducts != null ? totalProducts : 0);
+            stats.addProperty("totalStock", totalStock != null ? totalStock : 0);
+            stats.addProperty("lowStockVariants", lowStockVariants != null ? lowStockVariants : 0);
+
+            response.addProperty("status", true);
+            response.add("data", stats);
+
+        } catch (Exception e) {
+            response.addProperty("status", false);
+            response.addProperty("message", "Error fetching product statistics: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            close(session);
+        }
+
+        return AppUtil.GSON.toJson(response);
+    }
 }

@@ -106,7 +106,7 @@ function renderCategoryTabs(data){
         if (products.length > 0) {
             products.forEach(product => {
                 const productCard = createProductCard(product, category.name);
-                // CHANGED: Updated column classes for 5 products per row
+
                 productsHtml += `
                     <div class="col-6 col-md-4 col-lg-3 col-xl-5col mb-4">
                         ${productCard}
@@ -147,7 +147,7 @@ function createProductCard(product, categoryName = null) {
     const img2 = product.images && product.images[1] ? product.images[1] : img1;
 
     const rating = product.rating || 4.5;
-    const reviewCount = product.reviewCount || Math.floor(Math.random() * 50) + 5; // Default reviews
+    const reviewCount = product.reviewCount || Math.floor(Math.random() * 50) + 5;
 
     const starWidth = (rating / 5) * 100;
 
@@ -169,7 +169,7 @@ function createProductCard(product, categoryName = null) {
         colorHtml += `<a href="#" class="${index === 0 ? 'active' : 'active'} mr-2" style="background:${color.hexCode};"><span class="sr-only">${color.name}</span></a>`;
     });
 
-    // Category badge - ONLY if categoryName is provided
+
     const categoryBadge = categoryName ? `
         <div class="category-name-badge">
             ${categoryName}
@@ -199,8 +199,4 @@ function createProductCard(product, categoryName = null) {
             </div>
         </div>
     `;
-}
-
-function addToWishlist(productId) {
-    alert(productId);
 }

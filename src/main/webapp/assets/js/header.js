@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     await initializeCartCount();
 
+    initializeSearch();
 
     initializeMobileMenu();
 });
@@ -73,6 +74,127 @@ function initializeMobileMenu() {
             e.stopPropagation();
             e.preventDefault();
         });
+    }
+}
+
+function initializeSearch() {
+    const searchInput = document.getElementById('q');
+    const searchForm = document.getElementById('header-search-form');
+    const resultsDropdown = document.getElementById('search-results-dropdown');
+
+    if (!searchInput || !resultsDropdown) return;
+
+    let debounceTimer = null;
+
+    searchInput.addEventListener('input', function () {
+        const keyword = this.value.trim();
+
+        clearTimeout(debounceTimer);
+
+        if (keyword.length < 2) {
+            closeSearchResults();
+            return;
+        }
+
+        debounceTimer = setTimeout(() => {
+            runProductSearch(keyword);
+        }, 300);
+    });
+
+    searchInput.addEventListener('focus', function () {
+        if (this.value.trim().length >= 2 && resultsDropdown.innerHTML.trim() !== '') {
+            resultsDropdown.classList.add('active');
+        }
+    });
+
+    if (searchForm) {
+        searchForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const keyword = searchInput.value.trim();
+            if (keyword.length >= 2) {
+                runProductSearch(keyword);
+            }
+        });
+    }
+
+    document.addEventListener('click', function (e) {
+        if (!e.target.closest('.header-search-wrapper')) {
+            closeSearchResults();
+        }
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            closeSearchResults();
+        }
+    });
+}
+
+async function runProductSearch(keyword) {
+    const resultsDropdown = document.getElementById('search-results-dropdown');
+    if (!resultsDropdown) return;
+
+    resultsDropdown.innerHTML = '<div class="search-result-loading">Searching...</div>';
+    resultsDropdown.classList.add('active');
+
+    try {
+        const response = await fetch(`api/data/search?q=${encodeURIComponent(keyword)}`);
+
+        if (response.ok) {
+            const data = await response.json();
+            if (data.status) {
+                renderSearchResults(data.results || []);
+            } else {
+                resultsDropdown.innerHTML = `<div class="search-result-empty">${data.message || 'No products found.'}</div>`;
+            }
+        } else {
+            resultsDropdown.innerHTML = '<div class="search-result-empty">Search failed. Please try again.</div>';
+        }
+    } catch (error) {
+        console.error('Search error:', error);
+        resultsDropdown.innerHTML = '<div class="search-result-empty">Search failed. Please try again.</div>';
+    }
+}
+
+function renderSearchResults(results) {
+    const resultsDropdown = document.getElementById('search-results-dropdown');
+    if (!resultsDropdown) return;
+
+    if (!results.length) {
+        resultsDropdown.innerHTML = '<div class="search-result-empty">No products found.</div>';
+        resultsDropdown.classList.add('active');
+        return;
+    }
+
+    const rowsHtml = results.map(product => {
+        const image = (product.images && product.images[0]) ? product.images[0] : 'assets/images/placeholder.jpg';
+        const minPrice = product.minPrice || 0;
+        const maxPrice = product.maxPrice || 0;
+        const priceText = minPrice === maxPrice
+            ? `Rs.${minPrice.toFixed(2)}`
+            : `Rs.${minPrice.toFixed(2)} - Rs.${maxPrice.toFixed(2)}`;
+
+        return `
+            <a href="product.html?id=${product.productId}" class="search-result-row">
+                <img src="${image}" alt="${product.title}" onerror="this.src='assets/images/placeholder.jpg'">
+                <div class="search-result-info">
+                    <span class="search-result-title">${product.title}</span>
+                    <span class="search-result-category">${product.category || ''}</span>
+                </div>
+                <span class="search-result-price">${priceText}</span>
+            </a>
+        `;
+    }).join('');
+
+    resultsDropdown.innerHTML = rowsHtml;
+    resultsDropdown.classList.add('active');
+}
+
+function closeSearchResults() {
+    const resultsDropdown = document.getElementById('search-results-dropdown');
+    if (resultsDropdown) {
+        resultsDropdown.classList.remove('active');
+        resultsDropdown.innerHTML = '';
     }
 }
 
@@ -139,4 +261,3 @@ window.addEventListener('load', function() {
         window.cartCountInitialized = true;
     }
 });
-

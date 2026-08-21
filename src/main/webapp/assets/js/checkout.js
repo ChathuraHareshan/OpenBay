@@ -128,7 +128,7 @@
         summaryPanel.innerHTML += `<tr class="summary-subtotal">
           <td>Subtotal:</td>
             <td>Rs. ${NumberSubTotal.toFixed(2)}</td>
-              </tr><!-- End .summary-subtotal -->
+              </tr>
               <tr>
              <td>Shipping:</td>
             <td>${shippingData.label} <br> Rs. ${shippingPrice.toFixed(2)}</td>
@@ -136,14 +136,13 @@
               <tr class="summary-total">
               <td>Total:</td>
             <td>Rs. ${finalTotal.toFixed(2)}</td>
-              </tr><!-- End .summary-total -->`
+              </tr>`
 
     }
 
     function fillUserCurrentAddress(address) {
         const currentAddressTick = document.getElementById("checkout-use-primary");
 
-        // Auto-check the checkbox and load address on page load
         currentAddressTick.checked = true;
 
         let fname = document.getElementById("fname");
@@ -155,7 +154,6 @@
         let city = document.getElementById("citySelect");
         let mobile = document.getElementById("mobile");
 
-        // Load address immediately
         fname.value = address.firstName;
         lname.value = address.lastName;
         email.value = address.email;
@@ -165,7 +163,6 @@
         city.value = address.cityId;
         mobile.value = address.mobile;
 
-        // Disable fields
         fname.disabled = true;
         lname.disabled = true;
         email.disabled = true;
@@ -177,7 +174,7 @@
 
         city.dispatchEvent(new Event("change"));
 
-        // Add change listener for when user wants to uncheck
+
         currentAddressTick.addEventListener("change", () => {
             if (currentAddressTick.checked) {
                 fname.value = address.firstName;
@@ -280,7 +277,6 @@
             shippingFee: parseFloat(shippingData.price)
         }
 
-        console.log("Sending checkout data:", checkoutData); // Debugging
 
         try {
             Notiflix.Loading.pulse("Wait...", {
@@ -304,7 +300,6 @@
                 data = JSON.parse(responseText);
             } catch (e) {
                 console.error("Failed to parse JSON:", responseText);
-                // throw new Error("Invalid response from server");
             }
 
             if (response.ok) {
@@ -334,22 +329,17 @@
         }
     }
 
-    // Payment completed. It can be a successful failure.
     payhere.onCompleted = async function onCompleted(orderId) {
         console.log("Payment completed. OrderID:" + orderId);
-        // Note: validate the payment and show success or failure page to the customer
         await verifyOrder(orderId);
     };
 
-    // Payment window closed
     payhere.onDismissed = function onDismissed() {
-        // Note: Prompt user to pay again or show an error page
         console.log("Payment dismissed");
     };
 
-    // Error occurred
+
     payhere.onError = function onError(error) {
-        // Note: show an error page
         console.log("Error:" + error);
     };
 

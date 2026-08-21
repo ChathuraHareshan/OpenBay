@@ -45,7 +45,7 @@ function renderingCartPanel(cartItems) {
         cartContentContainer.style.display = 'none';
         GLOBAL_SUBTOTAL = 0;
         GLOBAL_TOTAL_QTY = 0;
-        renderShippingPanel(); // Update shipping for empty cart
+        renderShippingPanel();
         updateCartSummary();
         return;
     }
@@ -108,7 +108,7 @@ function renderingCartPanel(cartItems) {
     GLOBAL_TOTAL_QTY = totalQty;
     GLOBAL_SUBTOTAL = subtotal;
 
-    renderShippingPanel(); // Render shipping options based on total qty
+    renderShippingPanel();
     updateCartSummary();
 }
 
@@ -144,7 +144,7 @@ async function renderShippingPanel() {
                     disabled = "disabled";
                 }
             } else {
-                // Paid shipping
+
                 if (isFreeShippingAvailable) {
                     disabled = "disabled";
                 } else if (!paidChecked) {

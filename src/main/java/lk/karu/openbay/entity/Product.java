@@ -23,7 +23,6 @@ public class Product extends BaseEntity {
     @JoinColumn(name = "status_id")
     private Status status;
 
-    // ✅ Set instead of List — allows multiple JOIN FETCH without MultipleBagFetchException
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ProductVariant> variants = new HashSet<>();
 

@@ -4,6 +4,7 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import lk.karu.openbay.service.ContentService;
@@ -33,6 +34,14 @@ public class ContentController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response loadNewArrivals() {
         String responseJson = new ContentService().loadTopProduct();
+        return Response.ok().entity(responseJson).build();
+    }
+
+    @Path("/search")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response searchProducts(@QueryParam("q") String keyword) {
+        String responseJson = new ContentService().searchProducts(keyword);
         return Response.ok().entity(responseJson).build();
     }
 

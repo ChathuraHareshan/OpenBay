@@ -15,19 +15,7 @@ public class OrderItemDTO {
     private int variantSizeId;
     private String variantImageUrl;
 
-    // Constructors
-    public OrderItemDTO() {}
 
-    public OrderItemDTO(int id, int qty, double price, String size, String productTitle) {
-        this.id = id;
-        this.qty = qty;
-        this.price = price;
-        this.total = price * qty;
-        this.size = size;
-        this.productTitle = productTitle;
-    }
-
-    // Getters and Setters
     public int getId() {
         return id;
     }

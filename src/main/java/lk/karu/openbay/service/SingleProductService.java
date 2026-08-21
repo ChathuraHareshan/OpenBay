@@ -106,7 +106,7 @@ public class SingleProductService {
                     for (VariantImage image : variant.getImages()) {
                         variantImagePaths.add(image.getFilePath());
                     }
-                    colorDTO.setImages(variantImagePaths); // ← each color has its own images
+                    colorDTO.setImages(variantImagePaths);
 
                     colorDTOList.add(colorDTO);
                 }

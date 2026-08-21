@@ -19,8 +19,7 @@ public class ProductVariant {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    // ✅ Set instead of List — fixes MultipleBagFetchException
-    // Hibernate can JOIN FETCH multiple Sets simultaneously, but NOT multiple Lists (Bags)
+
     @OneToMany(mappedBy = "variant", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<VariantImage> images = new HashSet<>();
 

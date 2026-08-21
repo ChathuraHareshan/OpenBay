@@ -47,12 +47,18 @@
 
     <filter-mapping>
         <filter-name>AdminAccessControllerFilter</filter-name>
-        <url-pattern>/adminPanel.html</url-pattern>
+        <url-pattern>/adminIndex.html</url-pattern>
     </filter-mapping>
 
     <filter-mapping>
         <filter-name>AccessControllerFilter</filter-name>
         <url-pattern>/my-account.html</url-pattern>
+    </filter-mapping>
+
+
+    <filter-mapping>
+        <filter-name>AccessControllerFilter</filter-name>
+        <url-pattern>/checkout.html</url-pattern>
     </filter-mapping>
 
 </web-app>

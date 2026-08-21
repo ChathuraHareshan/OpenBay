@@ -4,8 +4,8 @@ public class ProductImageDTO {
 
     private String fileName;
     private String fileType;
-    private String base64Data;  // present only for NEW uploads
-    private String filePath;    // present only for EXISTING images (returned from server)
+    private String base64Data;
+    private String filePath;
 
     public String getFileName() { return fileName; }
     public void setFileName(String fileName) { this.fileName = fileName; }

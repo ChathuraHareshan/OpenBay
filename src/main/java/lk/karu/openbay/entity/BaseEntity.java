@@ -43,7 +43,7 @@ public abstract class BaseEntity {
         this.updatedAt = updatedAt;
     }
 
-    // Helper method to format date
+
     public String getFormattedCreatedAt() {
         if (createdAt == null) return "N/A";
         return createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));

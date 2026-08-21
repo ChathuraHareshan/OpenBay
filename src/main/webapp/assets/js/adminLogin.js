@@ -1,3 +1,4 @@
+
 async function sendVCode() {
     Notiflix.Loading.pulse("Wait...", {
         clickToClose: false,
@@ -20,7 +21,7 @@ async function sendVCode() {
         });
 
 
-        if (response.ok) { // 200
+        if (response.ok) {
             const data = await response.json();
             if (data.status) {
                 Notiflix.Notify.success(data.message, {
@@ -29,10 +30,6 @@ async function sendVCode() {
 
                 document.getElementById("enterCodeBtn").style.display = "block";
 
-
-                // document.querySelector('button[onclick="sendVCode();"]').disabled = true;
-
-                // Open verification modal after a short delay
                 setTimeout(() => {
                     openVerificationModal();
                 }, 1000);
@@ -59,24 +56,19 @@ async function sendVCode() {
 function openVerificationModal() {
 
 
-    // Display email in modal
-    // document.getElementById("emailDisplay").textContent = currentAdminEmail;
 
-    // Clear previous code
     document.getElementById("verificationCode").value = '';
 
-    // Show modal
     const modalElement = document.getElementById('verificationModal');
     const modal = new bootstrap.Modal(modalElement);
     modal.show();
 
-    // Focus on verification input after modal is shown
+
     modalElement.addEventListener('shown.bs.modal', function () {
         setTimeout(() => {
             const codeInput = document.getElementById("verificationCode");
             codeInput.focus();
 
-            // Auto-tab functionality
             codeInput.addEventListener('input', function(e) {
                 if (this.value.length === 6) {
                     verifyCode();
@@ -112,15 +104,15 @@ async function verifyCode(){
         });
 
 
-        if (response.ok) { // 200
+        if (response.ok) {
             const data = await response.json();
             if (data.status) {
                 Notiflix.Report.success(
                     'OpenBay',
                     data.message,
-                    'Okay', // button title
+                    'Okay',
                     () => {
-                        window.location = "adminPanel.html"
+                        window.location = "adminIndex.html"
                     },
                 );
 

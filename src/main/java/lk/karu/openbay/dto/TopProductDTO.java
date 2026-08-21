@@ -1,7 +1,5 @@
 package lk.karu.openbay.dto;
 
-import lk.karu.openbay.entity.Model;
-
 import java.util.List;
 
 public class TopProductDTO {
@@ -9,7 +7,7 @@ public class TopProductDTO {
     private String title;
     private String description;
     private String category;
-    private List<String> images; // only 2
+    private List<String> images;
     private Double minPrice;
     private Double maxPrice;
     private List<ColorDTO> colors;

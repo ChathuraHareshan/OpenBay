@@ -9,6 +9,10 @@ let priceSliderInstance = null;
 let originalMinPrice = 0;
 let originalMaxPrice = 0;
 
+const PRODUCTS_PER_PAGE = 10;
+let currentPage = 1;
+let currentDisplayedProducts = [];
+
 window.addEventListener("load", async () => {
     try {
         Notiflix.Loading.pulse("Loading...", {
@@ -48,7 +52,7 @@ async function LoadProducts() {
                 ...(data.productsObject.kids || [])
             ];
 
-            renderProductCard({ productsObject: { men: allProducts, women: [], kids: [] } });
+            displayProducts(allProducts);
             updateProductCount(allProducts.length);
         } else {
             Notiflix.Notify.failure("Product loading failed!", {
@@ -171,6 +175,113 @@ function renderProductCard(data) {
     });
 
     injectProductCardStyles();
+}
+
+function showNoProductsMessage() {
+    const productGrid = document.getElementById("product-grid");
+    if (!productGrid) return;
+
+    productGrid.innerHTML = `
+        <div class="col-12">
+            <div class="no-products-found">
+                <i class="fas fa-box-open"></i>
+                <h4>No products found</h4>
+                <p>Try adjusting your filters or search again.</p>
+            </div>
+        </div>
+    `;
+
+    injectProductCardStyles();
+
+    const paginationContainer = document.getElementById('shop-pagination');
+    if (paginationContainer) {
+        paginationContainer.innerHTML = '';
+    }
+}
+
+function displayProducts(products) {
+    currentDisplayedProducts = products;
+    renderPage(1, false);
+}
+
+function renderPage(page, isPageChange) {
+    const totalItems = currentDisplayedProducts.length;
+
+    if (totalItems === 0) {
+        showNoProductsMessage();
+        return;
+    }
+
+    const totalPages = Math.max(1, Math.ceil(totalItems / PRODUCTS_PER_PAGE));
+    currentPage = Math.min(Math.max(1, page), totalPages);
+
+    const start = (currentPage - 1) * PRODUCTS_PER_PAGE;
+    const pageProducts = currentDisplayedProducts.slice(start, start + PRODUCTS_PER_PAGE);
+
+    renderProductCard({ productsObject: { men: pageProducts, women: [], kids: [] } });
+    renderPagination(totalItems, totalPages, currentPage);
+
+    if (isPageChange) {
+        const productGrid = document.getElementById("product-grid");
+        if (productGrid) {
+            productGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+}
+
+function renderPagination(totalItems, totalPages, current) {
+    const paginationContainer = document.getElementById('shop-pagination');
+    if (!paginationContainer) return;
+
+    if (totalPages <= 1) {
+        paginationContainer.innerHTML = '';
+        return;
+    }
+
+    let html = `
+        <li class="page-item ${current === 1 ? 'disabled' : ''}">
+            <a class="page-link page-link-prev" href="#" data-page="${current - 1}" aria-label="Previous" ${current === 1 ? 'tabindex="-1" aria-disabled="true"' : ''}>
+                <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
+            </a>
+        </li>
+    `;
+
+    const maxButtons = 5;
+    let startPage = Math.max(1, current - Math.floor(maxButtons / 2));
+    let endPage = Math.min(totalPages, startPage + maxButtons - 1);
+    if (endPage - startPage + 1 < maxButtons) {
+        startPage = Math.max(1, endPage - maxButtons + 1);
+    }
+
+    for (let p = startPage; p <= endPage; p++) {
+        html += `
+            <li class="page-item ${p === current ? 'active' : ''}" ${p === current ? 'aria-current="page"' : ''}>
+                <a class="page-link" href="#" data-page="${p}">${p}</a>
+            </li>
+        `;
+    }
+
+    html += `<li class="page-item-total">of ${totalPages}</li>`;
+
+    html += `
+        <li class="page-item ${current === totalPages ? 'disabled' : ''}">
+            <a class="page-link page-link-next" href="#" data-page="${current + 1}" aria-label="Next" ${current === totalPages ? 'tabindex="-1" aria-disabled="true"' : ''}>
+                Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
+            </a>
+        </li>
+    `;
+
+    paginationContainer.innerHTML = html;
+
+    paginationContainer.querySelectorAll('.page-link').forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetPage = parseInt(this.dataset.page, 10);
+            if (!isNaN(targetPage) && targetPage >= 1 && targetPage <= totalPages && targetPage !== current) {
+                renderPage(targetPage, true);
+            }
+        });
+    });
 }
 
 function generateCarouselImages(images, carouselId, productId) {
@@ -577,12 +688,7 @@ function applyFiltersWithPrice(minPrice, maxPrice) {
     }
 
     updateProductCount(filteredProducts.length);
-
-    if (filteredProducts.length === 0) {
-        showNoProductsMessage();
-    } else {
-        renderProductCard({ productsObject: { men: filteredProducts, women: [], kids: [] } });
-    }
+    displayProducts(filteredProducts);
 }
 
 function applyFilters() {
@@ -628,24 +734,6 @@ function clearAllFilters() {
         priceSliderInstance.set([originalMinPrice, originalMaxPrice]);
     }
 
-    renderProductCard({ productsObject: { men: allProducts, women: [], kids: [] } });
+    displayProducts(allProducts);
     updateProductCount(allProducts.length);
-}
-
-function showNoProductsMessage() {
-    const productGrid = document.getElementById("product-grid");
-    if (productGrid) {
-        productGrid.innerHTML = `
-            <div class="col-12 text-center py-5">
-                <div class="no-products-found">
-                    <i class="fas fa-search"></i>
-                    <h4>No products found</h4>
-                    <p>Try adjusting your filters or clear all filters to see more products.</p>
-                    <button class="btn btn-primary mt-3" onclick="clearAllFilters()">
-                        <i class="fas fa-eraser"></i> Clear All Filters
-                    </button>
-                </div>
-            </div>
-        `;
-    }
 }

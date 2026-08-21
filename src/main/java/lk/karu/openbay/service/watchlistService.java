@@ -50,8 +50,10 @@ public class watchlistService {
     }
 
     public String getAllUserwatchlists(HttpServletRequest request) {
+        return "";
     }
 
     public String removeCartItem(int cartId, HttpServletRequest request) {
+        return "";
     }
 }

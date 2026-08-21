@@ -5,10 +5,8 @@ public class SizeDTO {
     private Double price;
     private Integer quantity;
 
-    // Constructors
     public SizeDTO() {}
 
-    // Getters and Setters
     public String getSize() { return size; }
     public void setSize(String size) { this.size = size; }
 

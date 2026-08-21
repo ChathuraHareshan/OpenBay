@@ -2,7 +2,6 @@ package lk.karu.openbay.entity;
 
 import jakarta.persistence.*;
 
-import java.io.Serializable;
 
 @Entity
 @Table(name = "variant_image")

@@ -36,6 +36,13 @@ public class ProductController {
         String responseJson = new ProductService().updateProduct(productDTO, request);
         return Response.ok().entity(responseJson).build();
     }
+
+    @IsAdmin
+    @Path("/statistics")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getProductStatistics() {
+        String responseJson = new ProductService().getProductStatistics();
+        return Response.ok().entity(responseJson).build();
+    }
 }
-
-

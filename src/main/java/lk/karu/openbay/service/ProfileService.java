@@ -14,8 +14,6 @@ import lk.karu.openbay.validation.Validator;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
-import javax.management.Query;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;

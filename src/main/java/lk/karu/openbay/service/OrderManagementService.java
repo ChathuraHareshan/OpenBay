@@ -2,7 +2,6 @@ package lk.karu.openbay.service;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import lk.karu.openbay.dto.OrderDetailsDTO;
 import lk.karu.openbay.entity.Order;
 import lk.karu.openbay.entity.OrderItem;
 import lk.karu.openbay.entity.Status;
@@ -12,18 +11,10 @@ import lk.karu.openbay.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class OrderManagementService {
 
-    /**
-     * Get all orders with user and status details
-     */
-    /**
-     * Get all orders with user and status details
-     */
     public String getAllOrders() {
         JsonObject response = new JsonObject();
         JsonArray ordersArray = new JsonArray();
@@ -42,7 +33,7 @@ public class OrderManagementService {
                 orderJson.addProperty("id", order.getId());
                 orderJson.addProperty("orderId", "ORD-" + String.format("%06d", order.getId()));
 
-                // User info
+
                 User user = order.getUser();
                 if (user != null) {
                     orderJson.addProperty("customerName", user.getFname() + " " + user.getLname());
@@ -54,14 +45,12 @@ public class OrderManagementService {
                     orderJson.addProperty("customerId", 0);
                 }
 
-                // Status
+
                 Status status = order.getStatus();
                 orderJson.addProperty("status", status != null ? status.getValue() : "PENDING");
 
-                // Shipping fee
                 orderJson.addProperty("shippingFee", order.getShippingFee());
 
-                // Order items count and total
                 List<OrderItem> items = order.getOrderItems();
                 int itemCount = items != null ? items.size() : 0;
                 orderJson.addProperty("itemCount", itemCount);
@@ -76,7 +65,6 @@ public class OrderManagementService {
                 }
                 orderJson.addProperty("totalAmount", Math.round(total * 100.0) / 100.0);
 
-                // Date - FIXED: Check for null and use the helper method
                 if (order.getCreatedAt() != null) {
                     orderJson.addProperty("createdAt", order.getFormattedCreatedAt());
                 } else {
@@ -99,9 +87,7 @@ public class OrderManagementService {
         return AppUtil.GSON.toJson(response);
     }
 
-    /**
-     * Get order details by ID with items and variant info
-     */
+
     public String getOrderDetails(int orderId) {
         JsonObject response = new JsonObject();
 
@@ -129,7 +115,6 @@ public class OrderManagementService {
             data.addProperty("id", order.getId());
             data.addProperty("orderId", "ORD-" + String.format("%06d", order.getId()));
 
-            // User info
             User user = order.getUser();
             if (user != null) {
                 data.addProperty("customerName", user.getFname() + " " + user.getLname());
@@ -139,14 +124,11 @@ public class OrderManagementService {
                 data.addProperty("customerEmail", "N/A");
             }
 
-            // Status
             Status status = order.getStatus();
             data.addProperty("status", status != null ? status.getValue() : "PENDING");
 
-            // Shipping
             data.addProperty("shippingFee", order.getShippingFee());
 
-            // Items
             JsonArray itemsArray = new JsonArray();
             double subtotal = 0;
 
@@ -185,7 +167,6 @@ public class OrderManagementService {
             data.addProperty("shippingFee", order.getShippingFee());
             data.addProperty("total", Math.round((subtotal + order.getShippingFee()) * 100.0) / 100.0);
 
-            // Date - FIXED: Use helper method
             if (order.getCreatedAt() != null) {
                 data.addProperty("createdAt", order.getFormattedCreatedAt());
             } else {
@@ -203,16 +184,8 @@ public class OrderManagementService {
 
         return AppUtil.GSON.toJson(response);
     }
-    /**
-     * Get order details by ID with items and variant info
-     */
-    /**
-     * Get order details by ID with items and variant info
-     */
 
-    /**
-     * Update order status
-     */
+
     public String updateOrderStatus(int orderId, String newStatus) {
         JsonObject response = new JsonObject();
 
@@ -227,7 +200,7 @@ public class OrderManagementService {
                     return AppUtil.GSON.toJson(response);
                 }
 
-                // Validate status
+
                 boolean validStatus = false;
                 for (Status.Type type : Status.Type.values()) {
                     if (type.name().equalsIgnoreCase(newStatus)) {
@@ -242,7 +215,7 @@ public class OrderManagementService {
                     return AppUtil.GSON.toJson(response);
                 }
 
-                // Get status entity
+
                 String hql = "FROM Status s WHERE s.value = :value";
                 Query<Status> query = session.createQuery(hql, Status.class);
                 query.setParameter("value", newStatus.toUpperCase());
@@ -276,17 +249,14 @@ public class OrderManagementService {
         return AppUtil.GSON.toJson(response);
     }
 
-    /**
-     * Get order statistics for dashboard
-     */
+
     public String getOrderStatistics() {
         JsonObject response = new JsonObject();
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            // Total orders
+
             Long totalOrders = session.createQuery("SELECT COUNT(o) FROM Order o", Long.class).uniqueResult();
 
-            // Orders by status
             String hql = "SELECT s.value, COUNT(o) FROM Order o JOIN o.status s GROUP BY s.value";
             Query<Object[]> query = session.createQuery(hql, Object[].class);
             List<Object[]> results = query.getResultList();
@@ -302,7 +272,6 @@ public class OrderManagementService {
             }
             stats.add("byStatus", statusCounts);
 
-            // Total revenue (completed orders only)
             String revenueHql = "SELECT SUM(oi.variantSize.price * oi.qty) FROM OrderItem oi " +
                     "JOIN oi.order o " +
                     "JOIN o.status s " +
@@ -322,12 +291,7 @@ public class OrderManagementService {
         return AppUtil.GSON.toJson(response);
     }
 
-    /**
-     * Search orders by keyword (customer name, email, order ID)
-     */
-    /**
-     * Search orders by keyword (customer name, email, order ID)
-     */
+
     public String searchOrders(String keyword) {
         JsonObject response = new JsonObject();
         JsonArray ordersArray = new JsonArray();
@@ -375,7 +339,6 @@ public class OrderManagementService {
                 }
                 orderJson.addProperty("totalAmount", Math.round(total * 100.0) / 100.0);
 
-                // Date - FIXED: Use helper method
                 if (order.getCreatedAt() != null) {
                     orderJson.addProperty("createdAt", order.getFormattedCreatedAt());
                 } else {

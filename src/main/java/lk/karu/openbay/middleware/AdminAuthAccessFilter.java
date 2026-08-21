@@ -19,7 +19,7 @@ public class AdminAuthAccessFilter implements Filter {
         HttpSession httpSession = request.getSession(false);
 
         if (httpSession != null && httpSession.getAttribute("admin") != null) {
-            response.sendRedirect("adminPanel.html");
+            response.sendRedirect("adminIndex.html");
 
         } else {
             filterChain.doFilter(servletRequest, servletResponse);

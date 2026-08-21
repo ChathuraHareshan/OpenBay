@@ -135,10 +135,10 @@ async function loadSingleProduct() {
                 addToCartBtn.addEventListener("click", async (evt) => {
                     evt.preventDefault();
                     const qtyInput = document.getElementById("qty");
-                    // Convert the value to a number
+
                     const quantity = parseInt(qtyInput.value) || 0;
 
-                    // Validate inputs
+
                     if (!selectedColor) {
                         Notiflix.Notify.warning("Please select a color first!");
                         return;
@@ -155,11 +155,7 @@ async function loadSingleProduct() {
                     await addToCart(product.productId, selectedColor, selectedSize, quantity);
                 });
 
-
-
-
                 initializeHorizontalScroll();
-
 
             } else {
                 Notiflix.Notify.failure(data.message, { position: 'center-top' });
@@ -195,7 +191,6 @@ function renderSizeOption(sizes) {
         sizes.forEach(item => {
             console.log("Processing size item:", item);
 
-            // Validate item structure
             if (item && item.size && item.price !== undefined) {
                 const option = document.createElement("option");
                 option.value = item.size;
@@ -203,7 +198,6 @@ function renderSizeOption(sizes) {
                 option.dataset.price = item.price;
                 option.dataset.stock = item.quantity || item.stock || 0;
 
-                // Auto-select if only one size
                 if (sizes.length === 1) {
                     option.selected = true;
                 }
@@ -216,19 +210,15 @@ function renderSizeOption(sizes) {
 
         sizeSelect.disabled = false;
 
-        // Show min/max price range for this color
         showPriceRangeForColor(sizes);
 
-        // If only one size, auto-select it and update UI
         if (sizes.length === 1) {
             const singleSize = sizes[0];
             selectedSize = singleSize.size;
 
-            // Update price for single size
             document.getElementById("product-price").innerHTML = `Rs.${singleSize.price}.00`;
             updateStockDisplay(singleSize.quantity || singleSize.stock || 0);
 
-            // Trigger change event
             const event = new Event('change');
             sizeSelect.dispatchEvent(event);
 
@@ -238,14 +228,11 @@ function renderSizeOption(sizes) {
             });
         }
 
-        // Remove any existing change event listeners
         const newSizeSelect = sizeSelect.cloneNode(true);
         sizeSelect.parentNode.replaceChild(newSizeSelect, sizeSelect);
 
-        // Get the new reference
         const updatedSizeSelect = document.getElementById("size");
 
-        // Add change event listener
         updatedSizeSelect.addEventListener("change", handleSizeChange);
 
     } else {
@@ -259,7 +246,7 @@ function renderSizeOption(sizes) {
         sizeSelect.appendChild(noSizeOption);
         sizeSelect.disabled = true;
 
-        // Reset price when no sizes
+
         document.getElementById("product-price").innerHTML = "No sizes available";
         updateStockDisplay(0);
     }
@@ -353,13 +340,13 @@ async function loadColorHasSize(productId, colorName) {
 
                 let sizeObjects = [];
 
-                // Check if data.sizes is already an array of objects
+
                 if (Array.isArray(data.sizes) && data.sizes.length > 0 && typeof data.sizes[0] === 'object') {
-                    // It's already an array of objects
+
                     console.log("Already array of objects:", data.sizes);
                     sizeObjects = data.sizes;
                 } else {
-                    // It's a flat array, convert to objects
+
                     const flatArray = data.sizes;
 
                     console.log("Flat array detected, length:", flatArray.length);
@@ -387,7 +374,6 @@ async function loadColorHasSize(productId, colorName) {
                 });
                 document.getElementById("size").disabled = true;
 
-                // Reset price when no sizes available
                 document.getElementById("product-price").innerHTML = "No sizes available";
                 updateStockDisplay(0);
             }
@@ -397,7 +383,6 @@ async function loadColorHasSize(productId, colorName) {
             });
             document.getElementById("size").disabled = true;
 
-            // Reset price on error
             document.getElementById("product-price").innerHTML = "Error loading sizes";
             updateStockDisplay(0);
         }
@@ -407,7 +392,6 @@ async function loadColorHasSize(productId, colorName) {
         });
         document.getElementById("size").disabled = true;
 
-        // Reset price on error
         document.getElementById("product-price").innerHTML = "Error loading sizes";
         updateStockDisplay(0);
     } finally {
@@ -426,10 +410,9 @@ function initColorSelection(productId) {
             this.classList.add("active");
 
             const colorName = this.dataset.name;
-            selectedColor = colorName; // Update selected color
-            selectedSize = null; // Reset selected size when color changes
+            selectedColor = colorName;
+            selectedSize = null;
 
-            // Show success message
             Notiflix.Notify.success(`Selected color: ${colorName}`, {
                 position: 'right-top',
                 timeout: 2000
@@ -494,7 +477,7 @@ function initializeSizeDropdown() {
         }
     });
 
-    // Add event listener for when size is enabled (after color selection)
+
     const observer = new MutationObserver(function (mutations) {
         mutations.forEach(function (mutation) {
             if (mutation.attributeName === 'disabled') {

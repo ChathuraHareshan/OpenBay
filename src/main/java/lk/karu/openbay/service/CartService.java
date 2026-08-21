@@ -23,8 +23,6 @@ public class CartService {
         JsonObject responseObject = new JsonObject();
         boolean status = false;
 
-
-
         try{
 
             Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
@@ -126,7 +124,7 @@ public class CartService {
             User sessionUser = (User) httpSession.getAttribute("user");
 
             if (sessionUser == null) {
-                // Guest user - update session cart
+
                 List<Cart> sessionCart = getSessionAttribute(httpSession);
                 if (sessionCart != null) {
                     for (Cart cart : sessionCart) {
@@ -134,7 +132,7 @@ public class CartService {
                             Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
                             VariantSize variantSize = hibernateSession.find(VariantSize.class, cart.getVariantSize().getId());
 
-                            int newQty = cart.getQty() + qty; // qty can be positive or negative
+                            int newQty = cart.getQty() + qty;
 
                             if (newQty < 1) {
                                 newQty = 1;
@@ -211,7 +209,7 @@ public class CartService {
             User sessionUser = (User) httpSession.getAttribute("user");
 
             if (sessionUser == null) {
-                // Guest user - get from session
+
                 List<Cart> sessionCart = getSessionAttribute(httpSession);
 
                 if (sessionCart == null || sessionCart.isEmpty()) {
@@ -226,7 +224,6 @@ public class CartService {
                         for (Cart cart : sessionCart) {
                             VariantSize variantSize = hibernateSession.find(VariantSize.class, cart.getVariantSize().getId());
 
-                            // Get the product variant to access color and image
                             ProductVariant variant = hibernateSession.find(ProductVariant.class,
                                     variantSize.getVariant().getId());
 
@@ -236,10 +233,6 @@ public class CartService {
                             cartDTO.setTitle(variantSize.getVariant().getProduct().getTitle());
                             cartDTO.setProductId(variantSize.getVariant().getProduct().getId());
 
-                            // Get variant image (color-specific image)
-//                            if (variant.getImages() != null) {
-//                                cartDTO.setImage(variant.getImages());
-//                            }
 
                             cartDTO.setQty(cart.getQty());
                             cartDTO.setPrice(variantSize.getPrice());
@@ -250,25 +243,11 @@ public class CartService {
                             }
 
 
-                            // Set color information
                             cartDTO.setColor(variant.getColorName());
 
-                            // Set size
                             cartDTO.setSize(variantSize.getSize());
 
-                            // Set product ID for reference
-
-                            // Calculate total for this item
                             cartDTO.setPrice(variantSize.getPrice());
-
-                            // Check stock availability
-//                            if (variantSize.getQuantity() < cart.getQty()) {
-//                                cartDTO.setAvailableStock(variantSize.getQuantity());
-//                                cartDTO.setOutOfStock(true);
-//                            } else {
-//                                cartDTO.setAvailableStock(variantSize.getQuantity());
-//                                cartDTO.setOutOfStock(false);
-//                            }
 
                             cartDTOList.add(cartDTO);
                         }
@@ -284,7 +263,7 @@ public class CartService {
                     }
                 }
             } else {
-                // Logged-in user - get from database
+
                 Session hibernateSession = null;
 
                 try {
@@ -301,7 +280,7 @@ public class CartService {
                         for (Cart cart : cartList) {
                             VariantSize variantSize = hibernateSession.find(VariantSize.class, cart.getVariantSize().getId());
 
-                            // Get the product variant to access color and image
+
                             ProductVariant variant = hibernateSession.find(ProductVariant.class,
                                     variantSize.getVariant().getId());
 
@@ -317,29 +296,14 @@ public class CartService {
                             }
 
 
-                            // Get variant image (color-specific image)
-//                            if (variant.getImages() != null) {
-//                                cartDTO.setImage(variant.getImages());
-//                            }
 
                             cartDTO.setQty(cart.getQty());
                             cartDTO.setPrice(variantSize.getPrice());
 
-                            // Set color information
                             cartDTO.setColor(variant.getColorHex());
 
-                            // Set size
                             cartDTO.setSize(variantSize.getSize());
 
-
-                            // Check stock availability
-//                            if (variantSize.getQuantity() < cart.getQty()) {
-//                                cartDTO.setAvailableStock(variantSize.getQuantity());
-//                                cartDTO.setOutOfStock(true);
-//                            } else {
-//                                cartDTO.setAvailableStock(variantSize.getQuantity());
-//                                cartDTO.setOutOfStock(false);
-//                            }
 
                             cartDTOList.add(cartDTO);
                         }
@@ -348,12 +312,6 @@ public class CartService {
                         status = true;
                         message = "Cart items loading success.";
 
-                        // Add summary information
-//                        double totalCartPrice = 0;
-//                        for (CartDTO cartDTO : cartDTOList) {
-//                            totalCartPrice += cartDTO.getTotalPrice();
-//                        }
-//                        responseObject.addProperty("totalCartPrice", totalCartPrice);
                         responseObject.addProperty("totalItems", cartDTOList.size());
                     }
 
@@ -390,7 +348,7 @@ public class CartService {
                     }
                 }
             } else {
-                // Logged user - database cart
+
                 Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
 
                 Long totalQty = hibernateSession.createQuery(
@@ -416,7 +374,9 @@ public class CartService {
     }
 
     public void mergeUserCarts(HttpServletRequest request){
+
         HttpSession httpSession = request.getSession();
+
         User sessionUser = (User) httpSession.getAttribute("user");
         if(sessionUser != null){
             List<Cart> sessionCart = getSessionAttribute(httpSession);

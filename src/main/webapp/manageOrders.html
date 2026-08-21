@@ -6,16 +6,18 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
     <title>Manage Orders - OpenBay</title>
 
+    <link rel='shortcut icon' type='image/x-icon' href='assets/images/icon.png'/>
+
+
     <link rel="stylesheet" href="assets/css/app.min.css">
     <link rel="stylesheet" href="assets/css/adminStyle.css">
     <link rel="stylesheet" href="assets/css/components.css">
     <link rel="stylesheet" href="assets/css/custom.css">
-    <link rel='shortcut icon' type='image/x-icon' href='assets/images/adminPanel/favicon.ico'/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/richtexteditor/rte_theme_default.css"/>
 
     <style>
-        /* Status Badge Colors */
+
         .status-badge {
             padding: 5px 12px;
             border-radius: 20px;
@@ -33,7 +35,6 @@
         .status-shipped { background: #007bff; color: #fff; }
         .status-delivered { background: #28a745; color: #fff; }
 
-        /* Order Table Enhancements */
         .order-row {
             cursor: pointer;
             transition: background-color 0.2s;
@@ -60,7 +61,7 @@
             color: #6c757d;
         }
 
-        /* Order Detail Modal */
+
         .detail-label {
             font-weight: 600;
             color: #4a5568;
@@ -134,7 +135,7 @@
             margin: 0 2px;
         }
 
-        /* Empty state */
+
         .empty-state {
             text-align: center;
             padding: 60px 20px;
@@ -151,7 +152,7 @@
             color: #a0aec0;
         }
 
-        /* Loading spinner */
+
         .loading-overlay {
             display: none;
             text-align: center;
@@ -162,7 +163,6 @@
             height: 3rem;
         }
 
-        /* Search filter */
         .filter-group {
             display: flex;
             gap: 10px;
@@ -172,7 +172,7 @@
             min-width: 200px;
         }
 
-        /* Responsive */
+
         @media (max-width: 768px) {
             .filter-group .form-control {
                 min-width: 100%;
@@ -188,7 +188,6 @@
     <div class="main-wrapper main-wrapper-1">
         <div class="navbar-bg"></div>
 
-        <!-- Navbar -->
         <nav class="navbar navbar-expand-lg main-navbar sticky">
             <div class="form-inline mr-auto">
                 <ul class="navbar-nav mr-3">
@@ -227,7 +226,6 @@
             </ul>
         </nav>
 
-        <!-- Sidebar -->
         <div class="main-sidebar sidebar-style-2">
             <aside id="sidebar-wrapper">
                 <div class="sidebar-brand">
@@ -260,7 +258,6 @@
             </aside>
         </div>
 
-        <!-- Main Content -->
         <div class="main-content">
             <section class="section">
                 <div class="section-header">
@@ -317,7 +314,7 @@
                                             </tr>
                                             </thead>
                                             <tbody id="ordersTableBody">
-                                            <!-- Populated by JS -->
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -326,7 +323,6 @@
                                     <div class="d-flex justify-content-between align-items-center">
                                         <span id="orderCount" class="text-muted">0 orders</span>
                                         <div id="paginationControls">
-                                            <!-- Pagination will be added here if needed -->
                                         </div>
                                     </div>
                                 </div>
@@ -346,7 +342,7 @@
     </div>
 </div>
 
-<!-- Order Detail Modal -->
+
 <div class="modal fade" id="orderDetailModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -359,7 +355,7 @@
                 </button>
             </div>
             <div class="modal-body" id="orderDetailBody">
-                <!-- Populated by JS -->
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -368,7 +364,7 @@
     </div>
 </div>
 
-<!-- Status Update Confirmation Modal -->
+
 <div class="modal fade" id="statusUpdateModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -400,21 +396,21 @@
     </div>
 </div>
 
-<!-- Scripts -->
+
 <script src="assets/js/app.min.js"></script>
 <script src="assets/js/adminPanel/scripts.js"></script>
 <script src="assets/js/custom.js"></script>
 <script src="assets/js/notiflix-aio-3.2.8.min.js"></script>
 
 <script>
-    // Global state
+
     let currentOrders = [];
     let selectedOrderId = null;
 
-    // Constants
+
     const API_BASE = '/openbay/api/admin/orders';
 
-    // Status color mapping
+
     const statusColors = {
         'PENDING': 'status-pending',
         'PROCESSING': 'status-processing',
@@ -425,7 +421,7 @@
         'DELIVERED': 'status-delivered'
     };
 
-    // Status label mapping
+
     const statusLabels = {
         'PENDING': 'Pending',
         'PROCESSING': 'Processing',
@@ -436,11 +432,10 @@
         'DELIVERED': 'Delivered'
     };
 
-    // Load orders on page load
+
     document.addEventListener('DOMContentLoaded', function() {
         loadOrders();
 
-        // Search input with debounce
         let searchTimeout;
         document.getElementById('searchInput').addEventListener('input', function() {
             clearTimeout(searchTimeout);
@@ -449,15 +444,12 @@
             }, 400);
         });
 
-        // Status filter
+
         document.getElementById('statusFilter').addEventListener('change', function() {
             filterByStatus(this.value);
         });
     });
 
-    /**
-     * Load all orders from the server
-     */
     function loadOrders() {
         showLoading(true);
 
@@ -487,9 +479,7 @@
             });
     }
 
-    /**
-     * Search orders by keyword
-     */
+
     function searchOrders(keyword) {
         if (!keyword || keyword.trim() === '') {
             loadOrders();
@@ -579,7 +569,7 @@
                         <span class="badge badge-secondary">${order.itemCount || 0} items</span>
                     </td>
                     <td>
-                        <span class="order-total">$${order.totalAmount ? order.totalAmount.toFixed(2) : '0.00'}</span>
+                        <span class="order-total">Rs.${order.totalAmount ? order.totalAmount.toFixed(2) : '0.00'}</span>
                     </td>
                     <td>
                         <span class="status-badge ${statusClass}">${statusLabel}</span>
@@ -662,10 +652,10 @@
                                 <span class="item-detail">Qty: ${item.qty || 0}</span>
                             </div>
                             <div class="col-md-2 text-center">
-                                <span class="item-detail">$${item.price ? item.price.toFixed(2) : '0.00'}</span>
+                                <span class="item-detail">Rs.${item.price ? item.price.toFixed(2) : '0.00'}</span>
                             </div>
                             <div class="col-md-2 text-right">
-                                <span class="font-weight-bold">$${item.total ? item.total.toFixed(2) : '0.00'}</span>
+                                <span class="font-weight-bold">Rs.${item.total ? item.total.toFixed(2) : '0.00'}</span>
                             </div>
                         </div>
                     </div>
@@ -697,15 +687,15 @@
                     <div class="order-summary-box">
                         <div class="summary-row">
                             <span>Subtotal</span>
-                            <span>$${order.subtotal ? order.subtotal.toFixed(2) : '0.00'}</span>
+                            <span>Rs.${order.subtotal ? order.subtotal.toFixed(2) : '0.00'}</span>
                         </div>
                         <div class="summary-row">
                             <span>Shipping Fee</span>
-                            <span>$${order.shippingFee ? order.shippingFee.toFixed(2) : '0.00'}</span>
+                            <span>Rs.${order.shippingFee ? order.shippingFee.toFixed(2) : '0.00'}</span>
                         </div>
                         <div class="summary-row total">
                             <span>Total</span>
-                            <span>$${order.total ? order.total.toFixed(2) : '0.00'}</span>
+                            <span>Rs.${order.total ? order.total.toFixed(2) : '0.00'}</span>
                         </div>
                     </div>
                 </div>

@@ -44,11 +44,11 @@ public class ContentService {
                 categoryArray.add(categoryObject);
 
                 List<Product> products = hibernateSession.createQuery("FROM Product p " +
-                        " left join fetch p.variants v " +
-                        "left join fetch v.sizes" +
-                        " left join v.images " +
-                        "WHERE p.category.id = :categoryId AND p.status.id=:status " +
-                        "order by p.id desc ", Product.class)
+                                " left join fetch p.variants v " +
+                                "left join fetch v.sizes" +
+                                " left join v.images " +
+                                "WHERE p.category.id = :categoryId AND p.status.id=:status " +
+                                "order by p.id desc ", Product.class)
                         .setParameter("categoryId", category.getId())
                         .setParameter("status", 1)
                         .setMaxResults(10)
@@ -78,8 +78,8 @@ public class ContentService {
 
 
         }catch (HibernateException e){
-             message = e.getMessage();
-             status = false;
+            message = e.getMessage();
+            status = false;
         }finally {
             hibernateSession.close();
         }
@@ -114,7 +114,7 @@ public class ContentService {
                 prices.add(size.getPrice());
             }
         }
-        
+
 
 
         if (prices.isEmpty()) {
@@ -136,7 +136,6 @@ public class ContentService {
         }
         dto.setImages(images);
 
-        // Colors
         List<ColorDTO> colorDTOList = new ArrayList<>();
         for (ProductVariant variant : products.getVariants()) {
             ColorDTO colorDTO = new ColorDTO();
@@ -281,6 +280,61 @@ public class ContentService {
         return AppUtil.GSON.toJson(responseObject);
     }
 
+    public String searchProducts(String keyword) {
+
+        JsonObject responseObject = new JsonObject();
+        boolean status = false;
+        String message;
+        JsonArray resultsArray = new JsonArray();
+
+        if (keyword == null || keyword.trim().isEmpty()) {
+            responseObject.addProperty("status", false);
+            responseObject.addProperty("message", "Search keyword is required");
+            responseObject.add("results", resultsArray);
+            return AppUtil.GSON.toJson(responseObject);
+        }
+
+        Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
+
+        try {
+
+            List<Product> products = hibernateSession.createQuery(
+                            "SELECT DISTINCT p FROM Product p " +
+                                    "LEFT JOIN FETCH p.variants v " +
+                                    "LEFT JOIN FETCH v.sizes " +
+                                    "LEFT JOIN FETCH v.images " +
+                                    "JOIN FETCH p.category c " +
+                                    "WHERE p.status.id = :statusId " +
+                                    "AND (LOWER(p.title) LIKE :keyword OR LOWER(c.name) LIKE :keyword) " +
+                                    "ORDER BY p.id DESC",
+                            Product.class
+                    )
+                    .setParameter("statusId", 1)
+                    .setParameter("keyword", "%" + keyword.trim().toLowerCase() + "%")
+                    .setMaxResults(20)
+                    .getResultList();
+
+            List<TopProductDTO> results = new ArrayList<>();
+            for (Product product : products) {
+                results.add(convertProductsToDTO(product));
+            }
+
+            resultsArray = AppUtil.GSON.toJsonTree(results).getAsJsonArray();
+            status = true;
+            message = "Search completed";
+
+        } catch (HibernateException e) {
+            message = e.getMessage();
+        } finally {
+            hibernateSession.close();
+        }
+
+        responseObject.addProperty("status", status);
+        responseObject.addProperty("message", message);
+        responseObject.add("results", resultsArray);
+        return AppUtil.GSON.toJson(responseObject);
+    }
+
     public String loadAllCities(){
         JsonObject responseObject = new JsonObject();
 
@@ -338,7 +392,6 @@ public class ContentService {
         try {
             Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
 
-            // Query to get all sizes (you might want to add status filter if needed)
             List<Size> sizeList = hibernateSession.createQuery(
                     "FROM Size s ORDER BY s.id",
                     Size.class

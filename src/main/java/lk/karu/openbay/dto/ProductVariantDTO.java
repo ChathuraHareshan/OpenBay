@@ -7,10 +7,7 @@ public class ProductVariantDTO {
     private List<SizeDTO> sizes;
     private List<ProductImageDTO> images;
 
-    // Constructors
-    public ProductVariantDTO() {}
 
-    // Getters and Setters
     public ColorDTO getColor() { return color; }
     public void setColor(ColorDTO color) { this.color = color; }
 

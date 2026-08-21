@@ -5,12 +5,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.ws.rs.core.Context;
 import lk.karu.openbay.dto.AdminDTO;
-import lk.karu.openbay.dto.UserDTO;
 import lk.karu.openbay.entity.Admin;
-import lk.karu.openbay.entity.Status;
-import lk.karu.openbay.entity.VariantSize;
 import lk.karu.openbay.mail.AdminVerificationMail;
-import lk.karu.openbay.mail.VerificationMail;
 import lk.karu.openbay.provider.MailServiceProvider;
 import lk.karu.openbay.util.AppUtil;
 import lk.karu.openbay.util.HibernateUtil;
@@ -31,9 +27,9 @@ public class adminService {
             message = "Email is required!";
         } else if (adminDTO.getEmail().isBlank()) {
             message = "Email can not be empty!";
-        }else if(!adminDTO.getEmail().matches(Validator.EMAIL_VALIDATION)){
+        } else if (!adminDTO.getEmail().matches(Validator.EMAIL_VALIDATION)) {
             message = "Invalid Email!";
-        }else {
+        } else {
             Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
             Admin singleAdmin = hibernateSession.createNamedQuery("Admin.getByEmail", Admin.class)
                     .setParameter("email", adminDTO.getEmail())
@@ -76,46 +72,46 @@ public class adminService {
         return AppUtil.GSON.toJson(responseObject);
     }
 
-    public String verifyAccount(AdminDTO adminDTO, @Context HttpServletRequest request){
+    public String verifyAccount(AdminDTO adminDTO, @Context HttpServletRequest request) {
 
         JsonObject responseObject = new JsonObject();
         boolean status = false;
         String message = "";
 
-        if(adminDTO.getEmail() == null){
+        if (adminDTO.getEmail() == null) {
             message = "Email is required.";
-        }else if(adminDTO.getEmail().isBlank()){
+        } else if (adminDTO.getEmail().isBlank()) {
             message = "Email cant be empty";
-        }else if(!adminDTO.getEmail().matches(Validator.EMAIL_VALIDATION)){
+        } else if (!adminDTO.getEmail().matches(Validator.EMAIL_VALIDATION)) {
             message = "Invalid Email";
-        }else if(adminDTO.getVerificationCode() == null){
+        } else if (adminDTO.getVerificationCode() == null) {
             message = "verification code is required.";
-        }else if(adminDTO.getVerificationCode().isBlank()){
+        } else if (adminDTO.getVerificationCode().isBlank()) {
             message = "Verification can't be empty";
-        }else if(!adminDTO.getVerificationCode().matches(Validator.VERIFICATION_CODE_VALIDATION)){
+        } else if (!adminDTO.getVerificationCode().matches(Validator.VERIFICATION_CODE_VALIDATION)) {
             message = "enter valid code";
-        }else{
+        } else {
             Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
             Admin admin = hibernateSession.createQuery("FROM Admin a WHERE a.email=:email AND a.verificationCode=:verificationCode", Admin.class)
                     .setParameter("email", adminDTO.getEmail())
                     .setParameter("verificationCode", adminDTO.getVerificationCode())
                     .getSingleResultOrNull();
 
-            if(admin == null){
+            if (admin == null) {
                 message = "Account not found.";
-            }else{
+            } else {
 
                 HttpSession httpSession = request.getSession();
                 httpSession.setAttribute("admin", admin);
                 admin.setVerificationCode("");
                 Transaction transaction = hibernateSession.beginTransaction();
 
-                try{
-                 hibernateSession.merge(admin);
-                 transaction.commit();
-                 status = true;
-                 message = "Account Verify Completed";
-                }catch(HibernateException e){
+                try {
+                    hibernateSession.merge(admin);
+                    transaction.commit();
+                    status = true;
+                    message = "Account Verify Completed";
+                } catch (HibernateException e) {
                     transaction.rollback();
                     message = "something went wronmg.";
 

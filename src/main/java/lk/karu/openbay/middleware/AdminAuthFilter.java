@@ -10,7 +10,6 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.Provider;
 import lk.karu.openbay.annotation.IsAdmin;
-import lk.karu.openbay.annotation.IsUser;
 
 import java.io.IOException;
 import java.net.URI;

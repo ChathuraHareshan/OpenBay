@@ -22,8 +22,7 @@ public class ProductDTO {
         this.colorName = colorName;
     }
 
-    // Constructors
-    public ProductDTO() {}
+
 
     public Long getProductId() {
         return productId;
@@ -50,7 +49,6 @@ public class ProductDTO {
         this.qty = qty;
     }
 
-    // Getters and Setters
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
 

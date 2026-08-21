@@ -84,7 +84,6 @@ async function loadCategories() {
 
             const productCategory = document.getElementById("productCategory");
 
-            // Clear existing options except the first one
             while (productCategory.options.length > 1) {
                 productCategory.remove(1);
             }
@@ -119,7 +118,6 @@ async function loadModels(){
             const modelSelect = document.getElementById("productModel");
             if (data.status) {
 
-                // Clear existing options except the first one
                 while (modelSelect.options.length > 1) {
                     modelSelect.remove(1);
                 }
@@ -156,10 +154,8 @@ function initializeColorOptions() {
     const colorGrid = document.getElementById('colorOptionsGrid');
     if (!colorGrid) return;
 
-    // Clear existing options
     colorGrid.innerHTML = '';
 
-    // Add colors from database
     colorOptions.forEach(color => {
         const colorOption = document.createElement('div');
         colorOption.className = 'color-option';
@@ -173,7 +169,7 @@ function initializeColorOptions() {
 }
 
 function setupEventListeners() {
-    // Color management
+
     const addColorBtn = document.getElementById('addColorBtn');
     if (addColorBtn) {
         addColorBtn.addEventListener('click', () => {
@@ -197,7 +193,6 @@ function setupEventListeners() {
         addCustomColorBtn.addEventListener('click', addCustomColor);
     }
 
-    // Form submission
     const saveProductBtn = document.getElementById('saveProductBtn');
     if (saveProductBtn) {
         saveProductBtn.addEventListener('click', saveProduct);
@@ -258,14 +253,13 @@ function saveBasicInfo() {
 }
 
 function selectColor(name, value) {
-    // Check if color already selected
+
     const existingColor = productData.colors.find(c => c.value === value);
     if (existingColor) {
         alert(`Color "${name}" already added`);
         return;
     }
 
-    // Add color to product data
     productData.colors.push({
         id: Date.now() + Math.random(),
         name: name,
@@ -274,7 +268,6 @@ function selectColor(name, value) {
         images: []
     });
 
-    // Update UI
     updateSelectedColorsList();
     generateSizeSections();
     generateImageSections();
@@ -398,7 +391,7 @@ function generateSizeSections() {
 
         container.appendChild(colorSection);
 
-        // If color already has sizes, re-render them
+
         if (color.sizes.length > 0) {
             updateSizeRows(colorIndex);
         }
@@ -601,7 +594,7 @@ function generateImageSections() {
                 </button>
             </div>
             
-            <!-- Image Upload Area -->
+       
             <div class="image-upload-area" onclick="document.getElementById('image-upload-${colorIndex}').click()">
                 <i class="fas fa-cloud-upload-alt fa-2x mb-3"></i>
                 <h5>Click to upload images for ${color.name}</h5>
@@ -613,7 +606,7 @@ function generateImageSections() {
                    style="display: none;"
                    onchange="handleImageUpload(${colorIndex}, this.files)">
             
-            <!-- Image Gallery -->
+         
             <div id="image-gallery-${colorIndex}" class="mt-3">
                 ${color.images.length === 0 ? `
                     <p class="text-muted text-center">No images uploaded yet</p>
@@ -648,16 +641,16 @@ function generateImageGallery(colorIndex) {
 
 function handleImageUpload(colorIndex, files) {
     const color = productData.colors[colorIndex];
-    const maxSize = 5 * 1024 * 1024; // 5MB
+    const maxSize = 5 * 1024 * 1024;
 
     Array.from(files).forEach(file => {
-        // Check file size
+
         if (file.size > maxSize) {
             Notiflix.Notify.failure(`"${file.name}" exceeds 5MB limit`);
             return;
         }
 
-        // Check file type
+
         if (!file.type.match('image.*')) {
             Notiflix.Notify.failure(`"${file.name}" is not a valid image`);
             return;
@@ -672,7 +665,7 @@ function handleImageUpload(colorIndex, files) {
                 type: file.type,
                 size: file.size,
                 preview: base64String,
-                base64Data: base64String // Keep full data URL for preview
+                base64Data: base64String
             });
 
             updateImageGallery(colorIndex);
@@ -682,7 +675,6 @@ function handleImageUpload(colorIndex, files) {
         reader.readAsDataURL(file);
     });
 
-    // Clear file input
     document.getElementById(`image-upload-${colorIndex}`).value = '';
 }
 
@@ -690,7 +682,6 @@ function updateImageGallery(colorIndex) {
     const gallery = document.getElementById(`image-gallery-${colorIndex}`);
     const color = productData.colors[colorIndex];
 
-    // Update gallery content
     if (gallery) {
         if (color.images.length === 0) {
             gallery.innerHTML = '<p class="text-muted text-center">No images uploaded yet</p>';
@@ -716,7 +707,7 @@ function removeImage(colorIndex, imageIndex) {
 }
 
 async function saveProduct() {
-    // Validate all steps
+
     if (!validateStep1()) return;
     if (!validateStep2()) return;
     if (!validateStep3()) return;
@@ -781,9 +772,7 @@ async function saveProduct() {
             if (data.status) {
                 Notiflix.Report.success('Success', data.message, 'Okay', () => {
                     resetForm();
-                    // showDashboard({
-                    //     preventDefault: () => {}
-                    // });
+
                 });
             } else {
                 Notiflix.Notify.failure("Error: " + (data.message || "Unknown error"), {
@@ -836,7 +825,7 @@ function resetForm() {
         currentStep: 1
     };
 
-    // Reset UI
+
     updateSelectedColorsList();
 
     const colorSizesContainer = document.getElementById('colorSizesContainer');
@@ -861,13 +850,3 @@ function resetForm() {
 }
 
 
-
-// document.addEventListener('DOMContentLoaded', function () {
-//     // Set dashboard as active by default
-//     showDashboard({preventDefault: () => {}});
-//
-//     // Initialize feather icons
-//     if (typeof feather !== 'undefined') {
-//         feather.replace();
-//     }
-// });

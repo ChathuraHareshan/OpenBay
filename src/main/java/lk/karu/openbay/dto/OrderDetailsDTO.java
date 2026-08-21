@@ -19,22 +19,7 @@ public class OrderDetailsDTO {
     private AddressDTO shippingAddress;
     private AddressDTO billingAddress;
 
-    // Constructors
-    public OrderDetailsDTO() {}
 
-    public OrderDetailsDTO(int id, String orderId, String customerName, String customerEmail,
-                           String status, double shippingFee, double total, String createdAt) {
-        this.id = id;
-        this.orderId = orderId;
-        this.customerName = customerName;
-        this.customerEmail = customerEmail;
-        this.status = status;
-        this.shippingFee = shippingFee;
-        this.total = total;
-        this.createdAt = createdAt;
-    }
-
-    // Getters and Setters
     public int getId() {
         return id;
     }

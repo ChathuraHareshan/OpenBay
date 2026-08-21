@@ -30,7 +30,6 @@ document.getElementById("address-anchor").addEventListener("click", async () => 
     try {
 
         await loadAddress();
-        // await getCities();
 
 
     } finally {
@@ -64,7 +63,6 @@ document.getElementById("address-anchor-mobile").addEventListener("click", async
     try {
 
         await loadAddress();
-        // await getCities();
 
     } finally {
         Notiflix.Loading.remove();
@@ -529,11 +527,6 @@ async function loadUserData() {
             console.log(data);
 
 
-            // document.getElementById("username").innerHTML = `Hello, ${data.user.firstName} ${data.user.lastName}`;
-
-            // let replacedText = String(data.user.sinceAt).replace("-", " ");
-            // let since = replacedText.split(" ");
-            // document.getElementById("since").innerHTML = `Smart Trade Member Since ${since[1]} ${since[0]}`;
             document.getElementById("firstName").value = data.user.fname ?? "";
             document.getElementById("lastName").value = data.user.lname ?? "";
             document.getElementById("primaryLineOne").value = data.user.lineOne ?? "";
@@ -542,9 +535,7 @@ async function loadUserData() {
             document.getElementById("PrimaryCity").value = data.user.cityId ?? 0;
             document.getElementById("primaryMobile").value = data.user.mobile ?? "";
 
-            // document.getElementById("currentPassword").value = data.user.password;
 
-            // console.log("USER DATA:", data.user);
 
         } else {
             Notiflix.Notify.failure("Profile data loading failed!", {

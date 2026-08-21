@@ -1,10 +1,8 @@
 package lk.karu.openbay.service;
 
 import com.google.gson.JsonObject;
-import lk.karu.openbay.dto.PayHereDTO;
 import lk.karu.openbay.entity.*;
 import lk.karu.openbay.util.AppUtil;
-import lk.karu.openbay.util.Env;
 import lk.karu.openbay.util.HibernateUtil;
 import lk.karu.openbay.validation.Validator;
 import org.hibernate.HibernateException;
@@ -14,6 +12,7 @@ import org.hibernate.Transaction;
 import java.util.List;
 
 public class OrderService {
+
     public Order createPendingOrder(User user, Session hibernateSession, double shippingFee) {
         try {
             Status pendingStatus = hibernateSession.createNamedQuery("Status.findByValue", Status.class)

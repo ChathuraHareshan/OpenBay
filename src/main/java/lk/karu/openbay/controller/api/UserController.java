@@ -8,6 +8,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import lk.karu.openbay.annotation.IsAdmin;
 import lk.karu.openbay.annotation.IsUser;
 import lk.karu.openbay.dto.UserDTO;
 import lk.karu.openbay.service.CartService;
@@ -93,6 +94,18 @@ public class UserController {
         UserDTO userDTO = AppUtil.GSON.fromJson(jsonData, UserDTO.class);
         String responseJson = new UserService().loginUser(userDTO, request);
         new CartService().mergeUserCarts(request);
+        return Response.ok().entity(responseJson).build();
+    }
+
+    @IsAdmin
+    @Path("/{id}/status")
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateUserStatus(@PathParam("id") int id, String jsonData) {
+        JsonObject json = AppUtil.GSON.fromJson(jsonData, JsonObject.class);
+        String newStatus = json.get("status").getAsString();
+        String responseJson = new UserService().updateUserStatus(id, newStatus);
         return Response.ok().entity(responseJson).build();
     }
 

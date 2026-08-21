@@ -41,7 +41,9 @@ function renderUserTable(users) {
     }
 
     users.forEach(user => {
-        const statusBadge = user.status === "VERIFIED"
+        const isActive = user.status === "VERIFIED";
+
+        const statusBadge = isActive
             ? `<div class="badge badge-success">Active</div>`
             : `<div class="badge badge-danger">Inactive</div>`;
 
@@ -66,6 +68,10 @@ function renderUserTable(users) {
                 <td>
                     <button class="btn btn-outline-primary btn-sm" onclick="openUserDetail(${user.id})">
                         <i class="fas fa-eye"></i> Detail
+                    </button>
+                    <button class="btn btn-outline-${isActive ? 'danger' : 'success'} btn-sm ml-1"
+                            onclick="toggleUserStatus(${user.id}, '${isActive ? 'PENDING' : 'VERIFIED'}')">
+                        <i class="fas fa-${isActive ? 'ban' : 'check'}"></i> ${isActive ? 'Deactivate' : 'Activate'}
                     </button>
                 </td>
             </tr>`;
@@ -101,11 +107,19 @@ function showUserModal(user, addresses) {
         ? new Date(user.sinceAt).toLocaleString()
         : 'N/A';
 
+    const isActive = user.status === "VERIFIED";
+
     document.getElementById("modal-username").textContent = `${user.fname} ${user.lname}`;
     document.getElementById("modal-email").textContent = user.email;
-    document.getElementById("modal-status").innerHTML = user.status === "VERIFIED"
-        ? `<span class="badge badge-success">Active</span>`
-        : `<span class="badge badge-danger">Inactive</span>`;
+    document.getElementById("modal-status").innerHTML = `
+        ${isActive
+        ? '<span class="badge badge-success">Active</span>'
+        : '<span class="badge badge-danger">Inactive</span>'}
+        <button class="btn btn-sm ${isActive ? 'btn-outline-danger' : 'btn-outline-success'} ml-2"
+                onclick="toggleUserStatus(${user.id}, '${isActive ? 'PENDING' : 'VERIFIED'}')">
+            ${isActive ? 'Deactivate' : 'Activate'}
+        </button>
+    `;
     document.getElementById("modal-since").textContent = formattedDate;
 
     const addrContainer = document.getElementById("modal-addresses");
@@ -134,4 +148,44 @@ function showUserModal(user, addresses) {
     }
 
     $('#userDetailModal').modal('show');
+}
+
+function toggleUserStatus(userId, newStatus) {
+    const actionLabel = newStatus === "VERIFIED" ? "activate" : "deactivate";
+
+    Notiflix.Confirm.show(
+        "Confirm Status Change",
+        `Are you sure you want to ${actionLabel} this user account?`,
+        "Yes",
+        "Cancel",
+        async function () {
+            try {
+                Notiflix.Loading.pulse("Updating status...", { svgColor: '#0284c7' });
+
+                const response = await fetch(`api/user/${userId}/status`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ status: newStatus })
+                });
+
+                Notiflix.Loading.remove();
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.status) {
+                        Notiflix.Notify.success(data.message || "User status updated", { position: 'center-top' });
+                        $('#userDetailModal').modal('hide');
+                        await loadAllUsers();
+                    } else {
+                        Notiflix.Notify.failure(data.message, { position: 'center-top' });
+                    }
+                } else {
+                    Notiflix.Notify.failure("Failed to update user status!", { position: 'center-top' });
+                }
+            } catch (error) {
+                Notiflix.Loading.remove();
+                Notiflix.Notify.failure("An error occurred while updating status.", { position: 'center-top' });
+            }
+        }
+    );
 }

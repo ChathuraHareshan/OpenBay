@@ -6,7 +6,6 @@ async function LoadProducts() {
             console.log(data);
             renderProductCard(data);
 
-            // Ensure product list section is visible on page load
             const productSection = document.getElementById('product-list-content');
             if (productSection && !productSection.classList.contains('active')) {
                 productSection.classList.add('active');
@@ -53,20 +52,14 @@ function renderProductCard(data) {
 
         const imageHtml = generateCarouselImages(images, carouselId, product.productId);
 
-        // Stock display logic
-        const stockClass = product.stock === 0 ? 'out' : product.stock < 10 ? 'low' : 'in';
-        const stockLabel = product.stock === 0
-            ? '<i class="fas fa-times-circle"></i> Out of Stock'
-            : product.stock < 10
-                ? `<i class="fas fa-exclamation-circle"></i> Low: ${product.stock}`
-                : `<i class="fas fa-check-circle"></i> ${product.stock} in stock`;
 
-        // Price display
+
+
         const priceDisplay = product.maxPrice === product.minPrice
             ? `Rs.${product.maxPrice?.toFixed(2) || '0.00'}`
             : `Rs.${product.minPrice?.toFixed(2) || '0.00'} – Rs.${product.maxPrice?.toFixed(2) || '0.00'}`;
 
-        // Status
+
         const isActive = product.status === 'active';
 
         const visibleColors = uniqueColors.slice(0, 4);
@@ -107,7 +100,7 @@ function renderProductCard(data) {
                         </div>
                     ` : ''}
 
-                    <!-- Hover actions -->
+                    
                     <div class="pc-hover-actions">
                         <button class="pc-action-icon" title="Quick View" onclick="quickView(${product.productId})">
                             <i class="fas fa-eye"></i>
@@ -118,7 +111,7 @@ function renderProductCard(data) {
                         
                     </div>
 
-                    <!-- Status badge top-left -->
+                   
                     <div class="pc-status-badge ${isActive ? 'active' : 'draft'}">
                         <span class="pc-status-dot"></span>
                         ${isActive ? 'Active' : 'Draft'}
@@ -127,13 +120,13 @@ function renderProductCard(data) {
 
                 <div class="pc-body">
 
-                    <!-- Category -->
+                   
                     <div class="pc-category">
                         <i class="fas fa-tag"></i>
                         ${product.category || 'Uncategorized'}
                     </div>
 
-                    <!-- Title -->
+                    
                     <h5 class="pc-title">
                         <a href="javascript:void(0)" onclick="viewProduct(${product.productId})">
                             ${product.title || 'Product Title'}
@@ -148,7 +141,6 @@ function renderProductCard(data) {
 
                     <div class="pc-price-row">
                         <span class="pc-price">${priceDisplay}</span>
-                        <span class="pc-stock-badge ${stockClass}">${stockLabel}</span>
                     </div>
 
                     <div class="pc-sizes">
@@ -161,10 +153,7 @@ function renderProductCard(data) {
                                     onclick="showEditProduct(null, ${product.productId})">
                                 <i class="fas fa-edit"></i> Edit
                             </button>
-                            <button class="pc-btn pc-btn-dup" title="Duplicate"
-                                    onclick="duplicateProduct(${product.productId})">
-                                <i class="fas fa-copy"></i>
-                            </button>
+                            
                             <button class="pc-btn pc-btn-del" title="Delete"
                                     onclick="deleteProduct(${product.productId})">
                                 <i class="fas fa-trash"></i>
@@ -252,7 +241,7 @@ function injectProductCardStyles() {
     style.id = 'pc-styles';
     style.textContent = `
 
-    /* ── Card shell ─────────────────────────────────────────── */
+
     .pc-card {
         background: #fff;
         border-radius: 14px;
@@ -268,7 +257,6 @@ function injectProductCardStyles() {
         border-color: #c5caff;
     }
 
-    /* ── Image area ─────────────────────────────────────────── */
     .pc-image-wrap {
         position: relative;
         height: 230px;
@@ -305,7 +293,7 @@ function injectProductCardStyles() {
     }
     .pc-no-image i { font-size: 40px; }
 
-    /* Nav arrows */
+    
     .pc-nav {
         position: absolute;
         top: 50%; transform: translateY(-50%);
@@ -322,7 +310,7 @@ function injectProductCardStyles() {
     .pc-nav-prev { left: 10px; }
     .pc-nav-next { right: 10px; }
 
-    /* Dots */
+
     .pc-dots {
         position: absolute; bottom: 10px; left: 50%;
         transform: translateX(-50%);
@@ -340,7 +328,7 @@ function injectProductCardStyles() {
         transform: scale(1.3);
     }
 
-    /* Hover action buttons */
+
     .pc-hover-actions {
         position: absolute; top: 12px; right: 12px;
         display: flex; flex-direction: column; gap: 7px;
@@ -365,7 +353,7 @@ function injectProductCardStyles() {
     .pc-action-icon:hover { background: #6777ef; color: #fff; transform: scale(1.12); }
     .pc-action-icon.danger:hover { background: #fc544b; }
 
-    /* Status badge */
+
     .pc-status-badge {
         position: absolute; top: 12px; left: 12px;
         display: flex; align-items: center; gap: 5px;
@@ -390,7 +378,6 @@ function injectProductCardStyles() {
         background: currentColor;
     }
 
-    /* ── Card body ──────────────────────────────────────────── */
     .pc-body {
         padding: 18px 18px 0;
         display: flex;
@@ -398,7 +385,7 @@ function injectProductCardStyles() {
         flex: 1;
     }
 
-    /* Category */
+
     .pc-category {
         font-size: 11px;
         font-weight: 600;
@@ -409,7 +396,7 @@ function injectProductCardStyles() {
         margin-bottom: 7px;
     }
 
-    /* Title */
+ 
     .pc-title {
         font-size: 15px;
         font-weight: 700;
@@ -427,7 +414,7 @@ function injectProductCardStyles() {
     }
     .pc-title a:hover { color: #6777ef; }
 
-    /* Color swatches */
+
     .pc-colors {
         display: flex; align-items: center; gap: 7px;
         flex-wrap: wrap;
@@ -449,14 +436,14 @@ function injectProductCardStyles() {
         padding: 3px 8px; border-radius: 30px;
     }
 
-    /* Divider */
+
     .pc-divider {
         height: 1px;
         background: #f0f2f5;
         margin-bottom: 14px;
     }
 
-    /* Price + Stock row */
+   
     .pc-price-row {
         display: flex;
         align-items: center;
@@ -482,7 +469,7 @@ function injectProductCardStyles() {
     .pc-stock-badge.low { background: #fff8e1; color: #f57f17; }
     .pc-stock-badge.out { background: #fdecea; color: #c62828; }
 
-    /* Size tags */
+    
     .pc-sizes {
         display: flex; flex-wrap: wrap; gap: 6px;edit
         margin-bottom: 16px;
@@ -506,10 +493,10 @@ function injectProductCardStyles() {
         font-size: 12px; font-weight: 600;
     }
 
-    /* Empty hint */
+
     .pc-empty-hint { font-size: 12px; color: #ced4da; font-style: italic; }
 
-    /* ── Footer ─────────────────────────────────────────────── */
+  
     .pc-footer {
         border-top: 1px solid #f0f2f5;
         padding: 12px 0;
@@ -551,9 +538,7 @@ function quickView(productId) {
     Notiflix.Notify.info(`Quick view for product ${productId}`);
 }
 
-function editProduct(productId) {
-    showEditProduct(null, productId);
-}
+
 
 function deleteProduct(productId) {
     Notiflix.Confirm.show(
@@ -565,9 +550,7 @@ function deleteProduct(productId) {
     );
 }
 
-function duplicateProduct(productId) {
-    Notiflix.Notify.info(`Duplicate product ${productId}`);
-}
+
 
 function viewProduct(productId) {
     Notiflix.Notify.info(`View product ${productId}`);
@@ -576,7 +559,7 @@ function viewProduct(productId) {
 function showProductList(event) {
     if (event) event.preventDefault();
 
-    // Hide edit section, show product list
+
     document.querySelectorAll('.dynamic-content').forEach(section => {
         section.classList.remove('active');
     });
@@ -586,30 +569,28 @@ function showProductList(event) {
         productListSection.classList.add('active');
     }
 
-    // Refresh products to ensure latest data
+
     LoadProducts();
 
-    // Update sidebar active state
+
     document.querySelectorAll('.sidebar-menu li').forEach(li => {
         li.classList.remove('active');
     });
 
-    // Find and activate the Product List menu item
+
     const productListLink = document.querySelector('.sidebar-menu a[href="productList.html"]');
     if (productListLink) {
         productListLink.closest('li').classList.add('active');
     }
 }
 
-// Initialize on page load
+
 document.addEventListener('DOMContentLoaded', function() {
-    // Show product list section, hide edit section
     const productSection = document.getElementById('product-list-content');
     const editSection = document.getElementById('edit-product-content');
 
     if (productSection) productSection.classList.add('active');
     if (editSection) editSection.classList.remove('active');
 
-    // Load products
     LoadProducts();
 });

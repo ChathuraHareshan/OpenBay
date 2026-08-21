@@ -10,13 +10,12 @@
     <link rel='shortcut icon' type='image/x-icon' href='assets/images/icon.png'/>
 
     <link rel="stylesheet" href="assets/vendor/line-awesome/line-awesome/line-awesome/css/line-awesome.min.css">
-    <!-- Plugins CSS File -->
+
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/plugins/owl-carousel/owl.carousel.css">
     <link rel="stylesheet" href="assets/css/plugins/magnific-popup/magnific-popup.css">
     <link rel="stylesheet" href="assets/css/plugins/jquery.countdown.css">
-    <!-- lk.karu.openbay.Main CSS File -->
-    <!--    <link rel="stylesheet" href="assets/css/style.css">-->
+
     <link rel="stylesheet" href="assets/css/header.css">
     <link rel="stylesheet" href="assets/css/home.css">
     <link rel="stylesheet" href="assets/css/skins/skin-demo-9.css">
@@ -50,7 +49,7 @@
 
     <main class="main">
 
-        <div class="mb-3 mb-lg-5"></div><!-- End .mb-3 mb-lg-5 -->
+        <div class="mb-3 mb-lg-5"></div>
 
 
 
@@ -71,7 +70,7 @@
                                     <a href="#" class="btn btn-outline-white banner-link">Discover Now</a>
                                 </div><!-- End .banner-content -->
                             </div><!-- End .banner -->
-                        </div><!-- End .col-lg-4 -->
+                        </div>
 
                         <div class="col-sm-6 col-lg-4 order-lg-last">
                             <div class="banner banner-overlay banner-lg">
@@ -273,7 +272,8 @@
                             </div>
                         </div>
 
-                        <button class="shop-button">Shop This Collection <i class="fas fa-arrow-right"></i></button>
+                        <a href="shop.html"> <button class="shop-button">Shop This Collection <i class="fas fa-arrow-right"></i></button></a>
+
                     </div>
                 </div>
             </div>
@@ -283,26 +283,21 @@
 
 
         <script>
-            // Timer functionality - Countdown to end of day
+
             function updateTimer() {
                 const timeValues = document.querySelectorAll('.time-value');
 
-                // Get current time
-                const now = new Date();
 
-                // Set end of day as target
+                const now = new Date();
                 const endOfDay = new Date();
                 endOfDay.setHours(23, 59, 59, 999);
 
-                // Calculate difference
                 const diff = endOfDay - now;
 
-                // Calculate hours, minutes, seconds
                 const hours = Math.floor(diff / (1000 * 60 * 60));
                 const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-                // Update display
                 if (timeValues.length >= 3) {
                     timeValues[0].textContent = hours.toString().padStart(2, '0');
                     timeValues[1].textContent = minutes.toString().padStart(2, '0');
@@ -310,24 +305,12 @@
                 }
             }
 
-            // Initialize timer and update every second
             updateTimer();
             setInterval(updateTimer, 1000);
 
-            // Add button interactivity
-            document.querySelector('.shop-button').addEventListener('click', function() {
-                alert('Redirecting to Premium Denim Collection...');
-                // In a real implementation:
-                // window.location.href = '/collections/denim';
-            });
 
-            document.querySelector('.choice-button').addEventListener('click', function() {
-                alert('Redirecting to Summer Essentials Collection...');
-                // In a real implementation:
-                // window.location.href = '/collections/summer-essentials';
-            });
 
-            // Image hover effect
+
             const productImage = document.querySelector('.product-image');
             if (productImage) {
                 productImage.addEventListener('mouseenter', function() {
@@ -358,7 +341,7 @@
             </div>
 
             <div class="more-container text-center mt-2">
-                <a href="" class="btn btn-primary btn-load-more"><span>View Shop</span><i
+                <a href="shop.html" class="btn btn-primary btn-load-more"><span>View Shop</span><i
                         class="icon-long-arrow-right"></i></a>
             </div>
 
@@ -459,7 +442,7 @@
                 <div class="row">
                     <div class="col-sm-12 col-lg-6">
                         <div class="widget widget-about">
-                            <img src="assets/images/demos/demo-2/logo.png" class="footer-logo" alt="Footer Logo"
+                            <img src="assets/images/logo.png" class="footer-logo" alt="Footer Logo"
                                  width="105" height="25">
                             <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu vulputate
                                 magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan
@@ -488,8 +471,8 @@
                             <h4 class="widget-title">Information</h4><!-- End .widget-title -->
 
                             <ul class="widget-list">
-                                <li><a href="about.html">About Molla</a></li>
-                                <li><a href="#">How to shop on Molla</a></li>
+                                <li><a href="about.html">About Openbay</a></li>
+                                <li><a href="#">How to shop on Openbay</a></li>
                                 <li><a href="#">FAQ</a></li>
                                 <li><a href="contact.html">Contact us</a></li>
                                 <li><a href="login.html">Log in</a></li>
@@ -531,7 +514,7 @@
 
         <div class="footer-bottom">
             <div class="container">
-                <p class="footer-copyright">Copyright © 2019 Molla Store. All Rights Reserved.</p>
+                <p class="footer-copyright">Copyright © 2019 Openbay Store. All Rights Reserved.</p>
                 <!-- End .footer-copyright -->
                 <ul class="footer-menu">
                     <li><a href="#">Terms Of Use</a></li>
@@ -557,43 +540,7 @@
 </div><!-- End .page-wrapper -->
 <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
 
-<!-- Mobile Menu -->
 
-
-<!-- <div class="container newsletter-popup-container mfp-hide" id="newsletter-popup-form">
-<div class="row justify-content-center">
-    <div class="col-10">
-        <div class="row no-gutters bg-white newsletter-popup-content">
-            <div class="col-xl-3-5col col-lg-7 banner-content-wrap">
-                <div class="banner-content text-center">
-                    <img src="assets/images/popup/newsletter/logo.png" class="logo" alt="logo" width="60"
-                        height="15">
-                    <h2 class="banner-title">get <span>25<light>%</light></span> off</h2>
-                    <p>Subscribe to the Molla eCommerce newsletter to receive timely updates from your favorite
-                        products.</p>
-                    <form action="#">
-                        <div class="input-group input-group-round">
-                            <input type="email" class="form-control form-control-white"
-                                placeholder="Your Email Address" aria-label="Email Adress" required>
-                            <div class="input-group-append">
-                                <button class="btn" type="submit"><span>go</span></button>
-                            </div>
-                        </div>
-                    </form>
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="register-policy-2" required>
-                        <label class="custom-control-label" for="register-policy-2">Do not show this popup
-                            again</label>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-2-5col col-lg-5 ">
-                <img src="assets/images/popup/newsletter/img-1.jpg" class="newsletter-img" alt="newsletter">
-            </div>
-        </div>
-    </div>
-</div>
-</div> -->
 <script src="assets/js/index.js"></script>
 
 

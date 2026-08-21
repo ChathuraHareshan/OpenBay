@@ -29,22 +29,6 @@ public class UserDTO implements Serializable {
 
     }
 
-    public UserDTO(int id, String firstName, String lastName, String email, String password, String verificationCode) {
-        this.id = id;
-        this.fname = fname;
-        this.lname = lname;
-        this.email = email;
-        this.password = password;
-        this.verificationCode = verificationCode;
-    }
-
-    public UserDTO(int id, String firstName, String lastName, String email, String password) {
-        this.id = id;
-        this.fname = fname;
-        this.lname = lname;
-        this.email = email;
-        this.password = password;
-    }
 
     public String getStatus() {
         return status;

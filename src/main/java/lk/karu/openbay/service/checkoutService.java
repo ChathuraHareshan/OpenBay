@@ -250,10 +250,6 @@ public class checkoutService {
 
     private PayHereDTO createPaymentDetails(Session hibernateSession, Order o, double shippingFee) {
         String orderId = "000" + o.getId();
-//        String returnURL = Env.get("app.public.url") + "/api/payments/return";
-//        String cancelURL = Env.get("app.public.url") + "/api/payments/cancel";
-//        String notifyURL = Env.get("app.public.url") + "/api/payments/notify";
-
 
         String baseUrl = Env.get("app.public.url");
         String returnURL = baseUrl + "/api/payments/return";

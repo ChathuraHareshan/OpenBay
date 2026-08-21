@@ -1,5 +1,3 @@
-
-
 <header class="header header-12 ">
     <div class="header-top">
         <div class="container mt-1">
@@ -8,7 +6,7 @@
                     <li>
                         <a href="#">Links</a>
                         <ul>
-                            <li><a href="tel:#"><i class="icon-phone"></i>Call: +0123 456 789</a></li>
+                            <li><a href="tel:#"><i class="icon-phone"></i>Call: +94 76 977 1090</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -49,7 +47,7 @@
                 </button>
 
                 <a href="index.html" class="logo">
-                    <img src="assets/2.png" alt="Cinex Logo" width="145" height="25">
+                    <img src="assets/2.png" width="145" height="25">
                 </a>
             </div><!-- End .header-left -->
 
@@ -57,13 +55,15 @@
 
                 <div class="header-search header-search-extended header-search-visible header-search-no-radius">
                     <a href="#" class="search-toggle" role="button"><i class="icon-search"></i></a>
-                    <form action="#" method="get">
+                    <form action="#" method="get" id="header-search-form" autocomplete="off">
                         <div class="header-search-wrapper search-wrapper-wide">
                             <label for="q" class="sr-only">Search</label>
-                            <input type="search" class="form-control" name="q" id="q"
+                            <input type="search" class="form-control" name="q" id="q" autocomplete="off"
                                    placeholder="Search product ..." required>
 
                             <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
+
+                            <div class="search-results-dropdown" id="search-results-dropdown"></div>
                         </div><!-- End .header-search-wrapper -->
                     </form>
                 </div><!-- End .header-search -->
@@ -121,19 +121,9 @@
 
                                 <ul class="menu-vertical sf-arrows sf-js-enabled" style="touch-action: pan-y;">
 
-                                    <li><a href="#"><i class="icon-laptop"></i>Electronics</a></li>
-                                    <li><a href="#"><i class="icon-couch"></i>Furniture</a></li>
-                                    <li><a href="#"><i class="icon-concierge-bell"></i>Cooking</a></li>
+
                                     <li><a href=""><i class="icon-tshirt"></i>Clothing</a></li>
-                                    <li><a href="#"><i class="icon-blender"></i>Home Appliances</a></li>
-                                    <li><a href="#"><i class="icon-heartbeat"></i>Healthy &amp; Beauty</a></li>
-                                    <li><a href="#"><i class="icon-shoe-prints"></i>Shoes &amp; Boots</a></li>
-                                    <li><a href="#"><i class="icon-map-signs"></i>Travel &amp; Outdoor</a></li>
-                                    <li><a href="#"><i class="icon-mobile-alt"></i>Smart Phones</a></li>
-                                    <li><a href="#"><i class="icon-tv"></i>TV &amp; Audio</a></li>
-                                    <li><a href="#"><i class="icon-shopping-bag"></i>Backpack &amp; Bag</a></li>
-                                    <li><a href="#"><i class="icon-music"></i>Musical Instruments</a></li>
-                                    <li><a href="#"><i class="icon-gift"></i>Gift Ideas</a></li>
+
                                 </ul>
 
 
@@ -194,5 +184,92 @@
         .mobile-menu-toggler {
             display: none;
         }
+    }
+
+    .header-search-wrapper {
+        position: relative;
+    }
+
+    .search-results-dropdown {
+        display: none;
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        right: 0;
+        max-height: 420px;
+        overflow-y: auto;
+        background: #fff;
+        border-radius: 4px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        z-index: 1050;
+    }
+
+    .search-results-dropdown.active {
+        display: block;
+    }
+
+    .search-result-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 14px;
+        text-decoration: none;
+        color: #333;
+        border-bottom: 1px solid #f0f0f0;
+        transition: background 0.15s;
+    }
+
+    .search-result-row:last-child {
+        border-bottom: none;
+    }
+
+    .search-result-row:hover {
+        background: #f7f7f7;
+        color: #333;
+    }
+
+    .search-result-row img {
+        width: 44px;
+        height: 44px;
+        object-fit: cover;
+        border-radius: 4px;
+        flex-shrink: 0;
+        background: #f0f0f0;
+    }
+
+    .search-result-info {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .search-result-title {
+        font-size: 13px;
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .search-result-category {
+        font-size: 11px;
+        color: #98a6ad;
+        text-transform: uppercase;
+    }
+
+    .search-result-price {
+        font-size: 13px;
+        font-weight: 700;
+        color: #6777ef;
+        white-space: nowrap;
+    }
+
+    .search-result-empty,
+    .search-result-loading {
+        padding: 16px 14px;
+        font-size: 13px;
+        color: #98a6ad;
+        text-align: center;
     }
 </style>
