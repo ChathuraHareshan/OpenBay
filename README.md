@@ -730,8 +730,6 @@ MySQL • REST APIs • HTML • CSS
 JavaScript • Bootstrap • Git • GitHub
 ```
 
----
-
 # ⭐ Support
 
 If you find this project useful or interesting, consider giving the repository a ⭐ on GitHub.
